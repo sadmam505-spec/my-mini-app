@@ -7,178 +7,84 @@
 				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 					<style>
-						/* মেইন বডি সেটআপ */
-						body {
-						margin: 0;
-						font-family: 'Segoe UI', sans-serif;
-						background-color: #ffffff; /* নিচের অংশ সাদা থাকবে */
-						display: flex;
-						justify-content: center;
-						}
+						body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; }
+						.app-container { width: 100%; max-width: 450px; min-height: 100vh; background: #ffffff; position: relative; }
 
-						.app-container {
-						width: 100%;
-						max-width: 450px;
-						min-height: 100vh;
-						background: #ffffff;
-						position: relative;
-						}
-
-						/* ------------------------------------------- */
-						/* DEPARTMENT 1: HEADER (সবুজ অংশ ও কার্ভ) */
-						/* ------------------------------------------- */
+						/* --- DEPARTMENT 1: HEADER --- */
 						.top-header {
-						background: linear-gradient(135deg, #033a2e, #044434); /* গাঢ় সবুজ গ্রেডিয়েন্ট */
-						padding: 30px 20px 80px 20px; /* নিচে বেশি জায়গা রাখা হয়েছে কার্ভের জন্য */
+						background: linear-gradient(135deg, #033a2e, #044434);
+						padding: 30px 20px 40px 20px; /* Padding ektu komanu hoyeche */
 						display: flex;
 						justify-content: space-between;
 						align-items: center;
-						position: relative;
 						}
+						.user-info p { margin: 0; font-size: 13px; color: #a0b3af; }
+						.user-info h2 { margin: 0; font-size: 20px; color: #ffffff; }
+						.exit-btn-circle { background: rgba(255,255,255,0.1); width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
-						.user-info p {
-						margin: 0;
-						font-size: 14px;
-						color: #a0b3af; /* হালকা ধুসর সবুজ টেক্সট */
-						}
-
-						.user-info h2 {
-						margin: 0;
-						font-size: 22px;
-						font-weight: bold;
-						color: #ffffff;
-						}
-
-						/* গোল এক্সিট বাটন */
-						.exit-btn-circle {
-						background: rgba(255, 255, 255, 0.1);
-						border: 1px solid rgba(255, 255, 255, 0.2);
-						width: 45px;
-						height: 45px;
-						border-radius: 50%;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						cursor: pointer;
-						}
-
-						/* সাদা কার্ভ শেপ */
-						.header-curve {
-						position: absolute;
-						bottom: -1px;
-						left: 0;
-						width: 100%;
-						height: 40px;
-						background: white;
-						border-top-left-radius: 40px;
-						border-top-right-radius: 40px;
-						}
-						/* DEPARTMENT 2: BALANCE & BONUS */
-						.balance-row {
-						padding: 0 20px;
+						/* --- DEPARTMENT 2: BALANCE & BONUS --- */
+						/* Ekhon amra curve er upor na tule sorasori nicher ongsho theke suru korbo jeno nosto na hoy */
+						.balance-bonus-section {
+						padding: 20px;
 						display: flex;
 						justify-content: space-between;
-						align-items: stretch;
-						margin-top: -30px; /* এটাকে কার্ভের ওপর তুলে দেওয়ার জন্য */
-						position: relative;
-						z-index: 5;
-						gap: 12px;
+						gap: 15px;
+						background: white; /* Header er porer ongsho sada hobe */
 						}
 
-						.balance-card {
-						flex: 1.2;
-						}
+						.balance-box { flex: 1; }
+						.balance-box p { margin: 0; font-size: 14px; color: #666; }
+						.balance-box h1 { margin: 5px 0; font-size: 36px; color: #1a7a5a; font-weight: 800; }
 
-						.balance-card p {
-						margin: 0;
-						font-size: 13px;
-						color: #666;
-						font-weight: 500;
-						}
-
-						.balance-card h1 {
-						margin: 5px 0;
-						font-size: 38px;
-						color: #1a7a5a;
-						font-weight: 800;
-						}
-
-						/* বোনাস কার্ড (অরেঞ্জ গ্রেডিয়েন্ট) */
 						.bonus-card {
 						flex: 1;
-						background: linear-gradient(145deg, #ffde59, #ff914d);
+						background: linear-gradient(135deg, #ffde59, #ff914d);
 						padding: 15px;
 						border-radius: 20px;
-						box-shadow: 0 5px 15px rgba(255, 145, 77, 0.3);
 						text-align: center;
 						color: #000;
 						}
-
-						.bonus-card strong {
-						font-size: 12px;
-						display: block;
-						margin-bottom: 5px;
-						}
-
-						.bonus-card p {
-						font-size: 10px;
-						margin: 0;
-						line-height: 1.2;
-						font-weight: 500;
-						}
-
-						.countdown-timer {
-						background: #000;
-						color: #ffde59;
-						padding: 5px 10px;
-						border-radius: 8px;
-						margin-top: 10px;
-						font-size: 12px;
-						font-weight: bold;
-						display: inline-block;
-						}
+						.bonus-card strong { font-size: 11px; display: block; }
+						.bonus-card p { font-size: 10px; margin: 5px 0; line-height: 1.2; }
+						.timer-box { background: #000; color: #ffde59; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; display: inline-block; }
 					</style>
 				</head>
 	<body>
 
 		<div class="app-container">
-
 			<div class="top-header">
 				<div class="user-info">
 					<p>Good morning!</p>
 					<h2>Muhtasin Sadmam</h2>
 				</div>
-
 				<div class="exit-btn-circle" onclick="closeApp()">
 					<i class="fa-solid fa-power-off" style="color: white; font-size: 18px;"></i>
 				</div>
+			</div>
 
-				<div class="header-curve"></div>
-				<div class="balance-row">
-					<div class="balance-card">
-						<p>Total Balance</p>
-						<h1>
-							450 <span style="font-size: 16px;">Pts</span>
-						</h1>
-						<p style="font-size: 11px; color: #999;">1,000 Pts = 1 USD</p>
-					</div>
+			<div class="balance-bonus-section">
+				<div class="balance-box">
+					<p>Total Balance</p>
+					<h1>
+						450 <small style="font-size: 16px;">Pts</small>
+					</h1>
+					<p style="font-size: 11px; color: #999;">1,000 Pts = 1 USD</p>
+				</div>
 
-					<div class="bonus-card">
-						<strong>10,000 PTS BONUS</strong>
-						<p>Earn 25,000 PTS and Get extra</p>
-						<div class="countdown-timer">14:23:59:59</div>
-					</div>
+				<div class="bonus-card">
+					<strong>10,000 PTS BONUS</strong>
+					<p>Earn 25,000 PTS and Get extra</p>
+					<div class="timer-box">14:23:59:59</div>
 				</div>
 			</div>
 		</div>
 
 		<script>
-			// অ্যাপ বন্ধ করার ফাংশন
 			function closeApp() {
 			if (window.Telegram && window.Telegram.WebApp) {
 			window.Telegram.WebApp.close();
 			} else {
-			alert("Closing App...");
+			alert("App Closing...");
 			}
 			}
 		</script>
