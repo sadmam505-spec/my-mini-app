@@ -29,6 +29,16 @@
 		.progress-bar-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px; width: 100%; overflow: hidden; }
 		.progress-fill { background: #4ade80; height: 100%; width: 45%; border-radius: 10px; }
 
+		/* এই নতুন অংশটুকু নিচে যোগ করুন */
+		.progress-text {
+		text-align: center;
+		font-size: 12px;
+		color: #ffffff;
+		margin-top: 8px;
+		font-weight: 500;
+		opacity: 0.9;
+		}
+
 		/* White Content Area */
 		.main-content { background: white; color: black; border-top-left-radius: 40px; border-top-right-radius: 40px; margin-top: 20px; padding: 25px 20px; padding-bottom: 90px; }
 
@@ -72,11 +82,12 @@
             </div>
         </div>
 
-        <div class="progress-section">
-            <div class="progress-bar-bg">
-                <div class="progress-fill"></div>
-            </div>
-        </div>
+		<div class="progress-section">
+			<div class="progress-bar-bg">
+				<div class="progress-fill"></div>
+			</div>
+			<p class="progress-text">0 / 25,000</p>
+		</div>
 
         <div class="main-content">
             <div class="task-grid">
