@@ -1,12 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jangia Premium Dashboard</title>
-</head>
-<body>
-    <h1>সালাম মুহতাসিন ভাই!</h1>
-    <p>এটি আপনার টেলিগ্রাম মিনি অ্যাপের প্রথম পেজ।</p>
-</body>
+	<head>
+		<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>Jangia Premium Dashboard</title>
+				<!-- ড্যাশবোর্ডের ডিজাইন (CSS) সরাসরি এখানে দিচ্ছি যেন আপনার সুবিধা হয় -->
+				<style>
+					body { margin: 0; font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; }
+					.app-container { width: 100%; max-width: 450px; background: #ffffff; min-height: 100vh; }
+					.header { background: linear-gradient(135deg, #0a4d3c, #1a7a5a); color: white; padding: 25px 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; display: flex; justify-content: space-between; align-items: center; }
+					.balance-card { background: white; margin: -20px 20px 20px 20px; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+					.balance-card h1 { font-size: 36px; margin: 10px 0; color: #1a7a5a; }
+					.exit-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 10px; cursor: pointer; }
+				</style>
+			</head>
+	<body>
+		<div class="app-container">
+			<div class="header">
+				<div>
+					<p style="margin:0; font-size: 14px; opacity: 0.8;">Welcome,</p>
+					<h2 style="margin:0;">Muhtasin Sadmam</h2>
+				</div>
+				<button class="exit-btn">Exit</button>
+			</div>
+
+			<div class="balance-card">
+				<p style="margin:0; color: #666;">Total Balance</p>
+				<h1>
+					450 <span style="font-size: 18px;">Pts</span>
+				</h1>
+				<p style="margin:0; font-size: 12px; color: #999;">1,000 Pts = 1 USD</p>
+			</div>
+
+			<div style="padding: 0 20px;">
+				<p>আপনার ড্যাশবোর্ডের বাকি অংশগুলো আমরা ধাপে ধাপে যোগ করবো।</p>
+			</div>
+		</div>
+	</body>
 </html>
