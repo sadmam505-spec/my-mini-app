@@ -1,92 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<title>Grifity Dashboard</title>
-				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grifity Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #044434; color: white; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 450px; background: #044434; min-height: 100vh; position: relative; overflow-x: hidden; }
+        
+        /* Header & Exit Button */
+        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .exit-btn { background: #ff4d4d; color: white; border: none; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: transform 0.1s; }
+        .exit-btn:active { transform: scale(0.9); }
 
-					<style>
-						body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; }
-						.app-container { width: 100%; max-width: 450px; min-height: 100vh; background: #ffffff; position: relative; }
+        /* Balance Info */
+        .top-info { padding: 0 20px; display: flex; justify-content: space-between; align-items: stretch; gap: 10px; }
+        .balance-box { flex: 1; }
+        .balance-box h1 { font-size: 42px; margin: 5px 0; color: #4ade80; }
+        
+        /* Bonus Card */
+        .bonus-card { background: linear-gradient(135deg, #ff914d, #ffde59); color: #222; padding: 15px; border-radius: 20px; width: 45%; text-align: center; }
+        .timer { background: #000; color: #ffde59; padding: 4px 8px; border-radius: 6px; margin-top: 8px; font-weight: bold; display: inline-block; font-size: 13px; }
 
-						/* --- DEPARTMENT 1: HEADER --- */
-						.top-header {
-						background: linear-gradient(135deg, #033a2e, #044434);
-						padding: 30px 20px 40px 20px; /* Padding ektu komanu hoyeche */
-						display: flex;
-						justify-content: space-between;
-						align-items: center;
-						}
-						.user-info p { margin: 0; font-size: 13px; color: #a0b3af; }
-						.user-info h2 { margin: 0; font-size: 20px; color: #ffffff; }
-						.exit-btn-circle { background: rgba(255,255,255,0.1); width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        /* Progress Bar Section */
+        .progress-section { padding: 15px 20px; }
+        .progress-info { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; opacity: 0.8; }
+        .progress-bar-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px; width: 100%; overflow: hidden; }
+        .progress-fill { background: #4ade80; height: 100%; width: 45%; border-radius: 10px; }
 
-						/* --- DEPARTMENT 2: BALANCE & BONUS --- */
-						/* Ekhon amra curve er upor na tule sorasori nicher ongsho theke suru korbo jeno nosto na hoy */
-						.balance-bonus-section {
-						padding: 20px;
-						display: flex;
-						justify-content: space-between;
-						gap: 15px;
-						background: white; /* Header er porer ongsho sada hobe */
-						}
+        /* White Content Area */
+        .main-content { background: white; color: black; border-top-left-radius: 40px; border-top-right-radius: 40px; margin-top: 20px; padding: 25px 20px; padding-bottom: 90px; }
 
-						.balance-box { flex: 1; }
-						.balance-box p { margin: 0; font-size: 14px; color: #666; }
-						.balance-box h1 { margin: 5px 0; font-size: 36px; color: #1a7a5a; font-weight: 800; }
+        /* Task Grid with Click Effect */
+        .task-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
+        .task-item { cursor: pointer; transition: transform 0.1s; }
+        .task-item:active { transform: scale(0.85); }
+        .task-item i { background: #f0f4f2; padding: 16px; border-radius: 50%; font-size: 22px; margin-bottom: 6px; color: #044434; display: inline-block; }
+        .task-item p { font-size: 11px; margin: 0; font-weight: 600; }
 
-						.bonus-card {
-						flex: 1;
-						background: linear-gradient(135deg, #ffde59, #ff914d);
-						padding: 15px;
-						border-radius: 20px;
-						text-align: center;
-						color: #000;
-						}
-						.bonus-card strong { font-size: 11px; display: block; }
-						.bonus-card p { font-size: 10px; margin: 5px 0; line-height: 1.2; }
-						.timer-box { background: #000; color: #ffde59; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; display: inline-block; }
-					</style>
-				</head>
-	<body>
+        /* Referral Banner with Image-like Look */
+        .ref-banner { background: #ffde59; padding: 15px 20px; border-radius: 25px; display: flex; align-items: center; justify-content: space-between; border: 2px solid #ff914d; margin-bottom: 20px; }
+        .ref-text h3 { margin: 0; color: #b45309; font-size: 18px; }
+        .ref-text p { margin: 2px 0; font-size: 12px; color: #92400e; font-weight: 500; }
+        .invite-btn { background: #044434; color: white; border: none; padding: 10px 18px; border-radius: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .invite-btn:active { transform: scale(0.95); }
 
-		<div class="app-container">
-			<div class="top-header">
-				<div class="user-info">
-					<p>Good morning!</p>
-					<h2>Muhtasin Sadmam</h2>
-				</div>
-				<div class="exit-btn-circle" onclick="closeApp()">
-					<i class="fa-solid fa-power-off" style="color: white; font-size: 18px;"></i>
-				</div>
-			</div>
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 450px; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; }
+        .nav-item { text-align: center; color: #044434; opacity: 0.5; cursor: pointer; flex: 1; }
+        .nav-item.active { opacity: 1; font-weight: bold; }
+        .nav-item i { font-size: 20px; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div>
+                <p style="margin:0; opacity: 0.7; font-size: 13px;">Good morning!</p>
+                <h3 style="margin:0; font-size: 20px;">Muhtasin Sadmam</h3>
+            </div>
+            <button class="exit-btn" onclick="closeApp()">Exit</button>
+        </div>
 
-			<div class="balance-bonus-section">
-				<div class="balance-box">
-					<p>Total Balance</p>
-					<h1>
-						450 <small style="font-size: 16px;">Pts</small>
-					</h1>
-					<p style="font-size: 11px; color: #999;">1,000 Pts = 1 USD</p>
-				</div>
+        <div class="top-info">
+            <div class="balance-box">
+                <p style="margin:0; opacity: 0.8; font-size: 14px;">Total Balance</p>
+                <h1>450 <small style="font-size: 16px;">Pts</small></h1>
+                <p style="font-size: 11px; opacity: 0.6;">1,000 = 1 USD</p>
+            </div>
+            <div class="bonus-card">
+                <strong style="font-size: 13px;">10,000 PTS BONUS</strong>
+                <p style="margin:5px 0; font-size: 10px; line-height: 1.2;">Earn 25,000 PTS and Get extra</p>
+                <div class="timer">14:23:59:59</div>
+            </div>
+        </div>
 
-				<div class="bonus-card">
-					<strong>10,000 PTS BONUS</strong>
-					<p>Earn 25,000 PTS and Get extra</p>
-					<div class="timer-box">14:23:59:59</div>
-				</div>
-			</div>
-		</div>
+        <div class="progress-section">
+            <div class="progress-info">
+                <span>Last 7 days : <strong>1,250</strong> Pts</span>
+                <span>45%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
 
-		<script>
-			function closeApp() {
-			if (window.Telegram && window.Telegram.WebApp) {
-			window.Telegram.WebApp.close();
-			} else {
-			alert("App Closing...");
-			}
-			}
-		</script>
-	</body>
+        <div class="main-content">
+            <div class="task-grid">
+                <div class="task-item"><i class="fa-brands fa-youtube"></i><p>Daily Reward</p></div>
+                <div class="task-item"><i class="fa-solid fa-fire"></i><p>Hot Offers</p></div>
+                <div class="task-item"><i class="fa-solid fa-bolt"></i><p>Quick Tasks</p></div>
+                <div class="task-item"><i class="fa-solid fa-poll-h"></i><p>Survey</p></div>
+                <div class="task-item"><i class="fa-solid fa-users"></i><p>Referral</p></div>
+                <div class="task-item"><i class="fa-solid fa-keyboard"></i><p>Captcha</p></div>
+                <div class="task-item"><i class="fa-solid fa-gem"></i><p>Diamond</p></div>
+                <div class="task-item"><i class="fa-solid fa-headset"></i><p>Support</p></div>
+            </div>
+
+            <div class="ref-banner">
+                <div class="ref-text">
+                    <h3>10% Lifetime Income</h3>
+                    <p>Refer more, Earn more.</p>
+                </div>
+                <button class="invite-btn">Invite Now</button>
+            </div>
+
+            <h3 style="font-size: 16px; margin-bottom: 15px;">Live Withdrawals</h3>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                    <tr><td style="padding:10px 0; border-bottom: 1px solid #eee;">User: 506***</td><td style="color:green; font-weight:bold;">$32.00</td><td style="text-align:right;"><span style="color:green; background:#eafaf1; padding:3px 8px; border-radius:5px;">Paid</span></td></tr>
+                    <tr><td style="padding:10px 0; border-bottom: 1px solid #eee;">User: 465***</td><td style="color:green; font-weight:bold;">$180.00</td><td style="text-align:right;"><span style="color:green; background:#eafaf1; padding:3px 8px; border-radius:5px;">Paid</span></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item"><i class="fa-solid fa-history"></i><p style="margin:0; font-size:10px;">History</p></div>
+            <div class="nav-item active"><i class="fa-solid fa-house"></i><p style="margin:0; font-size:10px;">Home</p></div>
+            <div class="nav-item"><i class="fa-solid fa-user"></i><p style="margin:0; font-size:10px;">Profile</p></div>
+        </div>
+    </div>
+
+    <script>
+        function closeApp() {
+            // টেলিগ্রাম মিনি অ্যাপ বন্ধ করার জন্য
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.close();
+            } else {
+                alert("App will close in Telegram Bot");
+            }
+        }
+    </script>
+</body>
 </html>
