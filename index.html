@@ -3,76 +3,153 @@
 	<head>
 		<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<title>Jangia Premium Dashboard</title>
-				<!-- Icons এর জন্য লাইব্রেরি -->
+				<title>Grifity Dashboard</title>
 				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 					<style>
-						body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; }
-						.app-container { width: 100%; max-width: 450px; background: #ffffff; min-height: 100vh; padding-bottom: 20px; }
-						.header { background: linear-gradient(135deg, #0a4d3c, #1a7a5a); color: white; padding: 25px 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; display: flex; justify-content: space-between; align-items: center; }
-						.balance-card { background: white; margin: -20px 20px 20px 20px; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
-						.balance-card h1 { font-size: 36px; margin: 10px 0; color: #1a7a5a; }
+						body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #044434; color: white; display: flex; justify-content: center; }
+						.app-container { width: 100%; max-width: 450px; background: #044434; min-height: 100vh; position: relative; }
 
-						/* টাস্ক গ্রিড ডিজাইন */
-						.task-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; }
-						.task-item { text-align: center; cursor: pointer; }
-						.task-item i {
-						font-size: 24px;
-						background: #e8f3f0;
-						color: #1a7a5a;
-						padding: 15px;
-						border-radius: 50%;
-						margin-bottom: 8px;
-						transition: 0.3s;
-						}
-						.task-item:hover i { background: #1a7a5a; color: white; }
-						.task-item p { margin: 0; font-size: 12px; color: #333; font-weight: 500; }
+						/* Header */
+						.header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+						.bell-icon { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 50%; font-size: 20px; }
 
-						.exit-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 10px; }
+						/* Balance Info */
+						.top-info { padding: 0 20px; display: flex; justify-content: space-between; align-items: flex-start; }
+						.balance-box h1 { font-size: 42px; margin: 5px 0; color: #4ade80; }
+						.bonus-card { background: linear-gradient(to bottom, #ffcc33, #f39c12); color: black; padding: 15px; border-radius: 20px; width: 45%; text-align: center; font-size: 12px; }
+						.timer { background: black; color: #ffcc33; padding: 5px; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+
+						/* White Section Starts */
+						.main-content { background: white; color: black; border-top-left-radius: 40px; border-top-right-radius: 40px; margin-top: 20px; padding: 20px; padding-bottom: 80px; }
+
+						/* Task Grid */
+						.task-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
+						.task-item i { background: #f0f0f0; padding: 15px; border-radius: 50%; font-size: 22px; margin-bottom: 5px; color: #333; }
+						.task-item p { font-size: 11px; margin: 0; font-weight: 600; }
+
+						/* Referral Banner */
+						.ref-banner { background: linear-gradient(90deg, #ffde59, #ff914d); padding: 20px; border-radius: 30px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+						.invite-btn { background: #8b733c; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; }
+
+						/* Live Withdrawals Table */
+						.withdraw-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+						.withdraw-table th { text-align: left; color: #777; padding-bottom: 10px; }
+						.withdraw-table td { padding: 10px 0; border-bottom: 1px solid #eee; }
+						.status-paid { color: #2ecc71; font-weight: bold; background: #eafaf1; padding: 3px 8px; border-radius: 5px; }
+
+						/* Bottom Nav */
+						.bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 450px; background: white; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #eee; }
+						.nav-item { text-align: center; color: #044434; opacity: 0.6; }
+						.nav-item.active { opacity: 1; font-weight: bold; }
 					</style>
 				</head>
 	<body>
 		<div class="app-container">
 			<div class="header">
 				<div>
-					<p style="margin:0; font-size: 14px; opacity: 0.8;">Welcome,</p>
-					<h2 style="margin:0;">Muhtasin Sadmam</h2>
+					<p style="margin:0; opacity: 0.7;">Good morning!</p>
+					<h3 style="margin:0;">Muhtasin Sadmam</h3>
 				</div>
-				<button class="exit-btn">Exit</button>
-			</div>
-
-			<div class="balance-card">
-				<p style="margin:0; color: #666;">Total Balance</p>
-				<h1>
-					450 <span style="font-size: 18px;">Pts</span>
-				</h1>
-				<p style="margin:0; font-size: 12px; color: #999;">1,000 Pts = 1 USD</p>
-			</div>
-
-			<!-- নতুন টাস্ক গ্রিড -->
-			<div class="task-grid">
-				<div class="task-item">
-					<i class="fa-solid fa-gift"></i>
-					<p>Reward</p>
-				</div>
-				<div class="task-item">
-					<i class="fa-solid fa-fire"></i>
-					<p>Hot Offers</p>
-				</div>
-				<div class="task-item">
-					<i class="fa-solid fa-bolt"></i>
-					<p>Quick</p>
-				</div>
-				<div class="task-item">
-					<i class="fa-solid fa-keyboard"></i>
-					<p>Captcha</p>
+				<div class="bell-icon">
+					<i class="fa-regular fa-bell"></i>
 				</div>
 			</div>
 
-			<div style="padding: 20px;">
-				<p style="font-weight: bold; color: #1a7a5a;">Top Earners Today</p>
-				<div style="background: #f9f9f9; padding: 10px; border-radius: 10px; font-size: 14px; color: #666;">
-					বাকি কাজগুলো আমরা পরের ধাপে করবো...
+			<div class="top-info">
+				<div class="balance-box">
+					<p style="margin:0; opacity: 0.8;">Total Balance</p>
+					<h1>
+						450 <small style="font-size: 16px;">Pts</small>
+					</h1>
+					<p style="font-size: 12px; opacity: 0.6;">1,000 = 1 USD</p>
+				</div>
+				<div class="bonus-card">
+					<strong>10,000 PTS BONUS</strong>
+					<p>Earn 25,000 PTS and Get extra</p>
+					<div class="timer">14:23:59:59</div>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<div class="task-grid">
+					<div class="task-item">
+						<i class="fa-brands fa-youtube"></i>
+						<p>Daily Reward</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-fire"></i>
+						<p>Hot Offers</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-bolt"></i>
+						<p>Quick Tasks</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-poll-h"></i>
+						<p>Survey</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-users"></i>
+						<p>Referral</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-keyboard"></i>
+						<p>Captcha</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-gem"></i>
+						<p>Diamond</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-headset"></i>
+						<p>Support</p>
+					</div>
+				</div>
+
+				<div class="ref-banner">
+					<div>
+						<h3 style="margin:0;">10% Lifetime Income</h3>
+						<p style="margin:5px 0; font-size: 11px;">Refer more, Earn more.</p>
+					</div>
+					<button class="invite-btn">Invite Now</button>
+				</div>
+
+				<h3>Live Withdrawals</h3>
+				<table class="withdraw-table">
+					<tr>
+						<th>UserID</th>
+						<th>Amount</th>
+						<th>Status</th>
+					</tr>
+					<tr>
+						<td>506***</td>
+						<td style="color:green; font-weight:bold;">$32.00</td>
+						<td>
+							<span class="status-paid">Paid</span>
+						</td>
+					</tr>
+					<tr>
+						<td>465***</td>
+						<td style="color:green; font-weight:bold;">$180.00</td>
+						<td>
+							<span class="status-paid">Paid</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="bottom-nav">
+				<div class="nav-item">
+					<i class="fa-solid fa-clock-rotate-left"></i>
+					<p style="margin:0; font-size:10px;">History</p>
+				</div>
+				<div class="nav-item active">
+					<i class="fa-solid fa-table-cells-large"></i>
+					<p style="margin:0; font-size:10px;">Dashboard</p>
+				</div>
+				<div class="nav-item">
+					<i class="fa-solid fa-user"></i>
+					<p style="margin:0; font-size:10px;">Profile</p>
 				</div>
 			</div>
 		</div>
