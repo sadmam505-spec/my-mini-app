@@ -49,12 +49,117 @@
 		.task-item i { background: #f0f4f2; padding: 16px; border-radius: 50%; font-size: 22px; margin-bottom: 6px; color: #044434; display: inline-block; }
 		.task-item p { font-size: 11px; margin: 0; font-weight: 600; }
 
-		/* Referral Banner with Image-like Look */
-		.ref-banner { background: #ffde59; padding: 15px 20px; border-radius: 25px; display: flex; align-items: center; justify-content: space-between; border: 2px solid #ff914d; margin-bottom: 20px; }
-		.ref-text h3 { margin: 0; color: #b45309; font-size: 18px; }
-		.ref-text p { margin: 2px 0; font-size: 12px; color: #92400e; font-weight: 500; }
-		.invite-btn { background: #044434; color: white; border: none; padding: 10px 18px; border-radius: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
-		.invite-btn:active { transform: scale(0.95); }
+		/* Refer & Earn Card Premium Styling */
+		.refer-card {
+		background: linear-gradient(145deg, #1a1a1a, #252525);
+		border: 1px solid #2ecc71; /* আপনার থিমের গ্রিন কালার */
+		border-radius: 20px;
+		padding: 20px;
+		margin: 15px;
+		color: white;
+		font-family: 'Poppins', sans-serif;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+		}
+
+		.refer-header h2 {
+		color: #2ecc71;
+		margin: 0;
+		font-size: 22px;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		}
+
+		.refer-header p {
+		color: #ccc;
+		font-size: 13px;
+		margin-top: 5px;
+		line-height: 1.4;
+		font-weight: 300;
+		}
+
+		.refer-stats {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 15px;
+		margin: 20px 0;
+		}
+
+		.stat-box {
+		background: rgba(46, 204, 113, 0.05);
+		border: 1px dashed rgba(46, 204, 113, 0.4);
+		padding: 12px;
+		border-radius: 15px;
+		text-align: center;
+		transition: 0.3s;
+		}
+
+		.stat-box:hover {
+		background: rgba(46, 204, 113, 0.1);
+		border-color: #2ecc71;
+		}
+
+		.stat-value {
+		display: block;
+		font-size: 22px;
+		font-weight: bold;
+		color: #fff;
+		}
+
+		.stat-label {
+		font-size: 10px;
+		color: #2ecc71;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		}
+
+		.refer-link-section label {
+		font-size: 12px;
+		color: #888;
+		margin-left: 5px;
+		display: block;
+		margin-bottom: 5px;
+		}
+
+		.link-wrapper {
+		display: flex;
+		background: #0f0f0f;
+		border-radius: 12px;
+		padding: 6px;
+		border: 1px solid #333;
+		}
+
+		#refer-link {
+		background: transparent;
+		border: none;
+		color: #2ecc71;
+		padding: 10px;
+		width: 100%;
+		font-size: 13px;
+		outline: none;
+		font-weight: 500;
+		}
+
+		.copy-btn {
+		background: #2ecc71;
+		border: none;
+		color: #000;
+		padding: 0 20px;
+		border-radius: 10px;
+		font-weight: 700;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		text-transform: uppercase;
+		font-size: 12px;
+		}
+
+		.copy-btn:hover {
+		background: #27ae60;
+		box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+		}
+
+		.copy-btn:active {
+		transform: scale(0.92);
+		}
 
 
 	</style>
@@ -101,13 +206,31 @@
                 <div class="task-item"><i class="fa-solid fa-headset"></i><p>Support</p></div>
             </div>
 
-            <div class="ref-banner">
-                <div class="ref-text">
-                    <h3>10% Lifetime Income</h3>
-                    <p>Refer more, Earn more.</p>
-                </div>
-                <button class="invite-btn">Invite Now</button>
-            </div>
+			<div class="refer-card">
+				<div class="refer-header">
+					<h2>Refer & Earn</h2>
+					<p>Get 10% Commission every time your friend completes a task</p>
+				</div>
+
+				<div class="refer-stats">
+					<div class="stat-box">
+						<span class="stat-value" id="total-refer">0</span>
+						<span class="stat-label">Total Refer</span>
+					</div>
+					<div class="stat-box">
+						<span class="stat-value" id="refer-income">0</span>
+						<span class="stat-label">Total Income</span>
+					</div>
+				</div>
+
+				<div class="refer-link-section">
+					<label>Your Referral Link</label>
+					<div class="link-wrapper">
+						<input type="text" id="refer-link" value="t.me/your_bot?start=USER_ID" readonly="">
+							<button onclick="copyReferLink()" class="copy-btn">Copy</button>
+						</div>
+				</div>
+			</div>
 			
         </div>
     </div>
