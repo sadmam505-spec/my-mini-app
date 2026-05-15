@@ -236,67 +236,8 @@
     </div>
 
     <script>
-
-		<div class="redemption-container">
-			<h3 class="section-title">Recent Redemptions</h3>
-			<div class="table-wrapper">
-				<table class="redemption-table">
-					<thead>
-						<tr>
-							<th>User ID</th>
-							<th>Date</th>
-							<th>Amount</th>
-							<th>Status</th>
-						</tr>
-					</thead>
-					<tbody id="redemption-body">
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<style>
-			.redemption-container {
-			margin: 20px 10px;
-			background: #1a1a1a; /* আপনার থিমের সাথে মিলিয়ে ডার্ক ব্যাকগ্রাউন্ড */
-			border-radius: 10px;
-			padding: 15px;
-			border: 1px solid #333;
-			}
-			.section-title {
-			color: #ffcc00; /* গোল্ডেন বা হলুদ কালার */
-			font-size: 1.2rem;
-			margin-bottom: 15px;
-			text-align: center;
-			text-transform: uppercase;
-			}
-			.table-wrapper {
-			max-height: 400px; /* ৩০টা রো থাকলে স্ক্রলিং সুবিধা দেবে */
-			overflow-y: auto;
-			}
-			.redemption-table {
-			width: 100%;
-			border-collapse: collapse;
-			font-size: 14px;
-			text-align: left;
-			}
-			.redemption-table th {
-			background: #333;
-			color: #fff;
-			padding: 10px;
-			position: sticky;
-			top: 0;
-			}
-			.redemption-table td {
-			padding: 10px;
-			border-bottom: 1px solid #222;
-			color: #ddd;
-			}
-			.status-success {
-			color: #00ff00; /* সাকসেস গ্রিন */
-			font-weight: bold;
-			}
-		</style>
+		
+		
         function closeApp() {
             // টেলিগ্রাম মিনি অ্যাপ বন্ধ করার জন্য
             if (window.Telegram && window.Telegram.WebApp) {
