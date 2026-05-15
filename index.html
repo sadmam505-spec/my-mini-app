@@ -165,7 +165,7 @@
 	</style>
 </head>
 <body>
-    <div class="app-container"/>
+     <div class="app-container">
         <div class="header">
             <div>
                 <p style="margin:0; opacity: 0.7; font-size: 13px;">Good morning!</p>
@@ -226,9 +226,9 @@
 				<div class="refer-link-section">
 					<label>Your Referral Link</label>
 					<div class="link-wrapper">
-						<input type="text" id="refer-link" value="t.me/your_bot?start=USER_ID" readonly="">
+						<input type="text" id="refer-link" value="t.me/your_bot?start=USER_ID" readonly=""/>
 							<button onclick="copyReferLink()" class="copy-btn">Copy</button>
-						</input>
+						</div>
 				</div>
 			</div>
 			
@@ -238,12 +238,13 @@
     <script>
         function closeApp() {
             // টেলিগ্রাম মিনি অ্যাপ বন্ধ করার জন্য
-            if (window.Telegram  window.Telegram.WebApp) {
+            if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.close();
             } else {
                 alert("App will close in Telegram Bot");
             }
         }
     </script>
+	 </div>
 </body>
 </html>
