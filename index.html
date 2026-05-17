@@ -1,255 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Grifity Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-    <style>
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #044434; color: white; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 450px; background: #044434; min-height: 100vh; position: relative; overflow-x: hidden; }
-        
-        /* Header and Exit Button */
-		.header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-		.exit-btn { background: #ff4d4d; color: white; border: none; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: transform 0.1s; }
-		.exit-btn:active { transform: scale(0.9); }
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<title>Grifity Dashboard</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+		<style>
+			/* ==========================================================================
+			1. BASE CORE & PREMIUM THEME RESET
+			========================================================================== */
+			* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+			body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; background-color: #044434; color: white; display: flex; justify-content: center; }
+			.app-container { width: 100%; max-width: 450px; background: #044434; min-height: 100vh; position: relative; overflow-x: hidden; display: flex; flex-direction: column; }
 
-		/* Balance Info */
-		.top-info { padding: 0 20px; display: flex; justify-content: space-between; align-items: stretch; gap: 10px; }
-		.balance-box { flex: 1; }
-		.balance-box h1 { font-size: 42px; margin: 5px 0; color: #4ade80; }
+			/* Header and Exit Button */
+			.header { padding: 24px 20px 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+			.exit-btn { background: #ff4d4d; color: white; border: none; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: transform 0.1s; }
+			.exit-btn:active { transform: scale(0.9); }
 
-		/* Bonus Card */
-		.bonus-card { background: linear-gradient(135deg, #ff914d, #ffde59); color: #222; padding: 15px; border-radius: 20px; width: 45%; text-align: center; }
-		.timer { background: #000; color: #ffde59; padding: 4px 8px; border-radius: 6px; margin-top: 8px; font-weight: bold; display: inline-block; font-size: 13px; }
+			/* ==========================================================================
+			2. PREMIUM GLASSMORPHISM BALANCE BOX (HERO)
+			========================================================================== */
+			.top-info { padding: 0 20px; display: flex; flex-direction: column; gap: 15px; }
 
-		/* Progress Bar Section */
-		.progress-section { padding: 15px 20px; }
-		.progress-info { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; opacity: 0.8; }
-		.progress-bar-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px; width: 100%; overflow: hidden; }
-		.progress-fill { background: #4ade80; height: 100%; width: 45%; border-radius: 10px; }
+			/* ব্যালেন্সের ফাঁকা জায়গা দূর করে তৈরি করা স্পেশাল ডাইনামিক বক্স */
+			.premium-balance-vault {
+			background: rgba(255, 255, 255, 0.07);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			border-radius: 24px;
+			padding: 25px 20px;
+			text-align: center;
+			box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+			position: relative;
+			overflow: hidden;
+			}
 
-		.progress-text {
-		text-align: center;
-		font-size: 12px;
-		color: #ffffff;
-		margin-top: 3px;    /* এই লাইনটি ৮ থেকে কমিয়ে ২ করে দিন */
-		margin-bottom: 0px; /* নিচের গ্যাপ বন্ধ করতে এটা যোগ করতে পারেন */
-		font-weight: 500;
-		opacity: 0.9;
-		}
+			/* ভেতরের হালকা লাইটিং গ্লো */
+			.premium-balance-vault::after {
+			content: '';
+			position: absolute;
+			top: -50%;
+			left: -50%;
+			width: 200%;
+			height: 200%;
+			background: radial-gradient(circle, rgba(74, 222, 128, 0.1) 0%, rgba(0,0,0,0) 60%);
+			pointer-events: none;
+			}
 
-		/* White Content Area */
-		.main-content { background: white; color: black; border-top-left-radius: 40px; border-top-right-radius: 40px; margin-top: 5px; padding: 25px 20px; padding-bottom: 90px; }
+			.balance-label { font-size: 13px; color: #a0b3af; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 2px; }
+			.balance-amount { font-size: 46px; font-weight: 800; color: #ffffff; margin: 0; letter-spacing: -0.5px; }
+			.balance-amount span { color: #4ade80; font-size: 18px; font-weight: 700; margin-left: 5px; }
 
-		/* Task Grid with Click Effect */
-		.task-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
-		.task-item { cursor: pointer; transition: transform 0.1s; -webkit-tap-highlight-color: transparent; }
-		.task-item:active { transform: scale(0.85); }
-		.task-item i { background: #f0f4f2; padding: 16px; border-radius: 50%; font-size: 22px; margin-bottom: 6px; color: #044434; display: inline-block; }
-		.task-item p { font-size: 11px; margin: 0; font-weight: 600; }
+			/* Bonus Card */
+			.bonus-card { background: linear-gradient(135deg, #ff914d, #ffde59); color: #222; padding: 16px; border-radius: 22px; width: 100%; text-align: left; position: relative; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+			.bonus-card strong { display: block; font-size: 16px; font-weight: 800; letter-spacing: 0.2px; }
+			.timer { background: #000; color: #ffde59; padding: 5px 10px; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 12px; position: absolute; top: 14px; right: 16px; font-family: monospace; }
 
-		/* Refer and Earn Card Premium Styling */
-		.refer-card {
-		background: linear-gradient(145deg, #1a1a1a, #252525);
-		border: 1px solid #2ecc71; /* আপনার থিমের গ্রিন কালার */
-		border-radius: 20px;
-		padding: 20px;
-		margin: 15px;
-		color: white;
-		font-family: 'Poppins', sans-serif;
-		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-		}
+			/* Progress Bar Section */
+			.progress-section { padding: 5px 20px 20px 20px; }
+			.progress-bar-bg { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.05); height: 10px; border-radius: 10px; width: 100%; overflow: hidden; }
+			.progress-fill { background: linear-gradient(90deg, #4ade80, #2ecc71); height: 100%; width: 45%; border-radius: 10px; box-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
+			.progress-text { text-align: center; font-size: 11px; color: #a0b3af; margin-top: 5px; font-weight: 600; opacity: 0.9; }
 
-		.refer-header h2 {
-		color: #2ecc71;
-		margin: 0;
-		font-size: 22px;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		}
+			/* ==========================================================================
+			3. WHITE CONTENT STATION (CLEAN INTERFACE)
+			========================================================================== */
+			.main-content { background: white; color: black; border-top-left-radius: 40px; border-top-right-radius: 40px; margin-top: 5px; padding: 30px 20px 50px 20px; flex-grow: 1; }
 
-		.refer-header p {
-		color: #ccc;
-		font-size: 13px;
-		margin-top: 5px;
-		line-height: 1.4;
-		font-weight: 300;
-		}
+			/* Task Grid with Click Effect */
+			.task-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; text-align: center; margin-bottom: 25px; }
+			.task-item { cursor: pointer; transition: transform 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+			.task-item:active { transform: scale(0.85); }
+			.task-item i { background: #f0f4f2; padding: 16px; border-radius: 50%; font-size: 22px; margin-bottom: 6px; color: #044434; display: inline-block; width: 54px; height: 54px; line-height: 22px; }
+			.task-item p { font-size: 11px; margin: 0; font-weight: 600; color: #333; }
 
-		.refer-stats {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 15px;
-		margin: 20px 0;
-		}
+			/* Redeem বাটনটিকে স্পেশাল ও ডিরেক্ট ভাইব দেওয়ার জন্য হাইলাইট স্টাইল */
+			.task-item.redeem-btn i { background: rgba(74, 222, 128, 0.15); color: #044434; border: 1px dashed rgba(4, 68, 52, 0.3); }
+			.task-item.redeem-btn p { color: #044434; font-weight: 700; }
 
-		.stat-box {
-		background: rgba(46, 204, 113, 0.05);
-		border: 1px dashed rgba(46, 204, 113, 0.4);
-		padding: 12px;
-		border-radius: 15px;
-		text-align: center;
-		transition: 0.3s;
-		}
+			/* Refer and Earn Card Premium Styling */
+			.refer-card {
+			background: linear-gradient(145deg, #1a1a1a, #252525);
+			border: 1px solid #4ade80;
+			border-radius: 20px;
+			padding: 20px;
+			margin: 0;
+			color: white;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+			}
 
-		.stat-box:hover {
-		background: rgba(46, 204, 113, 0.1);
-		border-color: #2ecc71;
-		}
+			.refer-header h2 { color: #4ade80; margin: 0; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+			.refer-header p { color: #ccc; font-size: 13px; margin-top: 5px; line-height: 1.4; font-weight: 300; }
 
-		.stat-value {
-		display: block;
-		font-size: 22px;
-		font-weight: bold;
-		color: #fff;
-		}
+			.refer-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+			.stat-box { background: rgba(74, 222, 128, 0.05); border: 1px dashed rgba(74, 222, 128, 0.4); padding: 12px; border-radius: 15px; text-align: center; }
 
-		.stat-label {
-		font-size: 10px;
-		color: #2ecc71;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-		}
+			.stat-value { display: block; font-size: 22px; font-weight: bold; color: #fff; }
+			.stat-label { font-size: 10px; color: #4ade80; text-transform: uppercase; letter-spacing: 0.5px; }
 
-		.refer-link-section label {
-		font-size: 12px;
-		color: #888;
-		margin-left: 5px;
-		display: block;
-		margin-bottom: 5px;
-		}
+			.refer-link-section label { font-size: 12px; color: #888; margin-left: 5px; display: block; margin-bottom: 5px; }
+			.link-wrapper { display: flex; background: #0f0f0f; border-radius: 12px; padding: 6px; border: 1px solid #333; }
+			#refer-link { background: transparent; border: none; color: #4ade80; padding: 10px; width: 100%; font-size: 13px; outline: none; font-weight: 500; }
 
-		.link-wrapper {
-		display: flex;
-		background: #0f0f0f;
-		border-radius: 12px;
-		padding: 6px;
-		border: 1px solid #333;
-		}
+			.copy-btn { background: #4ade80; border: none; color: #000; padding: 0 20px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; font-size: 12px; }
+			.copy-btn:hover { background: #2ecc71; box-shadow: 0 0 15px rgba(74, 222, 128, 0.4); }
+			.copy-btn:active { transform: scale(0.92); }
+		</style>
+	</head>
+	<body>
 
-		#refer-link {
-		background: transparent;
-		border: none;
-		color: #2ecc71;
-		padding: 10px;
-		width: 100%;
-		font-size: 13px;
-		outline: none;
-		font-weight: 500;
-		}
+		<div class="app-container">
 
-		.copy-btn {
-		background: #2ecc71;
-		border: none;
-		color: #000;
-		padding: 0 20px;
-		border-radius: 10px;
-		font-weight: 700;
-		cursor: pointer;
-		transition: all 0.3s ease;
-		text-transform: uppercase;
-		font-size: 12px;
-		}
-
-		.copy-btn:hover {
-		background: #27ae60;
-		box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
-		}
-
-		.copy-btn:active {
-		transform: scale(0.92);
-		}
-
-
-	</style>
-</head>
-<body>
-     <div class="app-container">
-        <div class="header">
-            <div>
-                <p style="margin:0; opacity: 0.7; font-size: 13px;">Good morning!</p>
-                <h3 style="margin:0; font-size: 20px;">Muhtasin Sadmam</h3>
-            </div>
-            <button class="exit-btn" onclick="closeApp()">Exit</button>
-        </div>
-
-        <div class="top-info">
-            <div class="balance-box">
-                <p style="margin:0; opacity: 0.8; font-size: 14px;">Total Balance</p>
-                <h1>450 <small style="font-size: 16px;">Pts</small></h1>
-      
-            </div>
-            <div class="bonus-card">
-                <strong style="font-size: 17px;">10,000 PTS BONUS</strong>
-                <p style="margin:5px 0; font-size: 11px; line-height: 1.2;">Earn 25,000 pts within 15 days and get a 10,000 pts bonus!</p>
-                <div class="timer">14:23:59:59</div>
-            </div>
-        </div>
-
-		<div class="progress-section">
-			<div class="progress-bar-bg">
-				<div class="progress-fill"></div>
+			<div class="header">
+				<div>
+					<p style="margin:0; opacity: 0.7; font-size: 13px;">Good morning!</p>
+					<h3 style="margin:0; font-size: 20px;">Muhtasin Sadmam</h3>
+				</div>
+				<button class="exit-btn" onclick="closeApp()">Exit</button>
 			</div>
-			<p style="margin: 0; padding: 0; text-align: center; font-size: 12px; color: #a0b3af;">0 / 25,000</p>
+
+			<div class="top-info">
+
+				<div class="premium-balance-vault">
+					<div class="balance-label">Total Balance</div>
+					<h1 class="balance-amount">
+						450<span>Pts</span>
+					</h1>
+				</div>
+
+				<div class="bonus-card">
+					<strong>10,000 PTS BONUS</strong>
+					<p style="margin:5px 0 0 0; font-size: 11px; line-height: 1.3; opacity: 0.9; max-width: 70%;">Earn 25,000 pts within 15 days and get a 10,000 pts bonus!</p>
+					<div class="timer">14:23:59:59</div>
+				</div>
+
+			</div>
+
+			<div class="progress-section">
+				<div class="progress-bar-bg">
+					<div class="progress-fill"></div>
+				</div>
+				<div class="progress-text">0 / 25,000</div>
+			</div>
+
+			<div class="main-content">
+
+				<div class="task-grid">
+					<div class="task-item">
+						<i class="fa-solid fa-fire"></i>
+						<p>Quick Tasks</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-dice"></i>
+						<p>Dice</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-dharmachakra"></i>
+						<p>Spin</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-spell-check"></i>
+						<p>Word Craft</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-layer-group"></i>
+						<p>Tier Spire</p>
+					</div>
+					<div class="task-item">
+						<i class="fa-solid fa-clapperboard"></i>
+						<p>Creator Rewards</p>
+					</div>
+
+					<div class="task-item redeem-btn" onclick="window.location.href='vault.html'">
+						<i class="fa-solid fa-wallet"></i>
+						<p>Redeem</p>
+					</div>
+
+					<div class="task-item">
+						<i class="fa-solid fa-headset"></i>
+						<p>Support</p>
+					</div>
+				</div>
+
+				<div class="refer-card">
+					<div class="refer-header">
+						<h2>10% Lifetime</h2>
+						<p>Get 10% Reward every time your friend completes a task</p>
+					</div>
+					<div class="refer-stats">
+						<div class="stat-box">
+							<span class="stat-value" id="total-refer">0</span>
+							<span class="stat-label">Total Refer</span>
+						</div>
+						<div class="stat-box">
+							<span class="stat-value" id="refer-income">0</span>
+							<span class="stat-label">Total Reward</span>
+						</div>
+					</div>
+					<div class="refer-link-section">
+						<label>Your Referral Link</label>
+						<div class="link-wrapper">
+							<input type="text" id="refer-link" value="t.me/your_bot?start=USER_ID" readonly="" />
+							<button type="button" onclick="copyReferLink()" class="copy-btn">Copy</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
 		</div>
 
-        <div class="main-content">
-            <div class="task-grid">
-				<div class="task-item"><i class="fa-solid fa-fire"></i><p>Quick Tasks</p></div>
-                <div class="task-item"><i class="fa-solid fa-dice"></i><p>Dice</p></div>
-				<div class="task-item"><i class="fa-solid fa-dharmachakra fa-spin-hover"></i><p>Lucky Spin</p></div>
-				<div class="task-item"><i class="fa-solid fa-spell-check"></i><p>Word Craft</p></div>
-				<div class="task-item">
-					<i class="fa-solid fa-bars-staggered"></i>
-					<p>Grit Tower</p>
-				</div>
-                <div class="task-item"><i class="fa-solid fa-users"></i><p>Referral</p></div>
-                <div class="task-item"><i class="fa-solid fa-wallet"></i><p>Redeem</p></div>
-				<div class="task-item"><i class="fa-solid fa-headset"></i><p>Support</p></div>
-                
-            </div>
+		<script>
+			function closeApp() {
+			if (window.Telegram && window.Telegram.WebApp) {
+			window.Telegram.WebApp.close();
+			} else {
+			alert("App will close in Telegram Bot");
+			}
+			}
 
-			<div class="refer-card">
-				<div class="refer-header">
-					<h2>10% Lifetime</h2>
-					<p>Get 10% Reward every time your friend completes a task</p>
-				</div>
+			function copyReferLink() {
+			const copyText = document.getElementById("refer-link");
+			copyText.select();
+			copyText.setSelectionRange(0, 99999);
+			navigator.clipboard.writeText(copyText.value);
 
-				<div class="refer-stats">
-					<div class="stat-box">
-						<span class="stat-value" id="total-refer">0</span>
-						<span class="stat-label">Total Refer</span>
-					</div>
-					<div class="stat-box">
-						<span class="stat-value" id="refer-income">0</span>
-						<span class="stat-label">Total Reward</span>
-					</div>
-				</div>
-
-				<div class="refer-link-section">
-					<label>Your Referral Link</label>
-					<div class="link-wrapper">
-						<input type="text" id="refer-link" value="t.me/your_bot?start=USER_ID" readonly="">
-						</input>
-						<button type="button" onclick="copyReferLink()" class="copy-btn">Copy</button>
-					</div> 
-				</div>
-			</div>	
-        </div>
-    </div>
-
-    <script>
-		
-		
-        function closeApp() {
-            // টেলিগ্রাম মিনি অ্যাপ বন্ধ করার জন্য
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.close();
-            } else {
-                alert("App will close in Telegram Bot");
-            }
-        }
-    </script>
-</body>
+			const copyBtn = document.querySelector(".copy-btn");
+			copyBtn.innerText = "Copied!";
+			setTimeout(() => {
+			copyBtn.innerText = "Copy";
+			}, 2000);
+			}
+		</script>
+	</body>
 </html>
