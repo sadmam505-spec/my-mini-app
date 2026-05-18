@@ -85,10 +85,9 @@
 			}
 
 			.bonus-card {
-			/* স্ক্রিনশটের কালার স্কিম অনুযায়ী এক্স্যাক্ট ম্যাট গ্রেডিয়েন্ট */
 			background: linear-gradient(135deg, #ff914d 0%, #ffbd4a 50%, #ffd700 100%);
 			border: 1.5px solid rgba(255, 215, 0, 0.4);
-			color: #044434; /* ডার্ক গ্রিন টেক্সট যাতে স্ক্রিনশটের মতো নিখুঁত রিডিবিলিটি আসে */
+			color: #044434;
 			padding: 18px 16px;
 			border-radius: 18px;
 			width: 100%;
@@ -98,7 +97,6 @@
 			overflow: hidden;
 			}
 
-			/* প্রিমিয়াম শিমার এফেক্ট */
 			.bonus-card::before {
 			content: '';
 			position: absolute;
@@ -130,7 +128,6 @@
 			font-weight: 700;
 			}
 
-			/* ডার্ক ওএলইডি স্টাইল প্রিমিয়াম টাইমার কাউন্টার */
 			.timer {
 			background: #000000;
 			color: #ffd700;
@@ -153,14 +150,12 @@
 			.progress-section { padding: 4px 20px 22px 20px; }
 			.progress-bar-bg { background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.04); height: 8px; border-radius: 10px; width: 100%; overflow: hidden; position: relative; }
 
-			/* অ্যানিমেশন রিভার্সড: ব্যাকগ্রাউন্ড পজিশন এখন পজিটিভ থেকে নেগেটিভের দিকে যাবে, যা ফ্লো বাম থেকে ডানে সরাবে */
 			@keyframes energy-flow-right {
 			0% { background-position: 200% 50%; }
 			100% { background-position: 0% 50%; }
 			}
 
 			.progress-fill {
-			/* সুপার-চার্জড কাইনেটিক নিওন গ্রিন লিনিয়ার গ্রেডিয়েন্ট */
 			background: linear-gradient(90deg, #4ade80 0%, #a7f3d0 25%, #2ecc71 50%, #4ade80 75%, #a7f3d0 100%);
 			background-size: 200% auto;
 			height: 100%;
@@ -200,15 +195,6 @@
 			}
 			.task-item p { font-size: 11px; margin: 0; font-weight: 600; color: #cbd5e1; letter-spacing: 0.1px; }
 
-			/* গোল্ডেন মিস্ট্রি বক্স স্টাইলিং */
-			.task-item.mystery-btn i {
-			background: rgba(255, 215, 0, 0.15);
-			color: #ffd700;
-			border: 1px solid rgba(255, 215, 0, 0.4);
-			box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
-			}
-			.task-item.mystery-btn p { color: #ffd700; font-weight: 700; }
-
 			/* Refer and Earn Card */
 			.refer-card {
 			background: rgba(255, 255, 255, 0.02);
@@ -231,6 +217,101 @@
 
 			.copy-btn { background: #4ade80; border: none; color: #044434; padding: 0 18px; border-radius: 9px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; font-size: 11px; }
 			.copy-btn:active { transform: scale(0.93); }
+
+			/* ==========================================================================
+			6. PREMIUM DYNAMIC POPUP / MODAL (DIAMOND OFFERS)
+			========================================================================== */
+			.modal-overlay {
+			position: fixed;
+			top: 0; left: 0; width: 100%; height: 100%;
+			background: rgba(2, 23, 18, 0.75);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			display: flex; justify-content: center; align-items: center;
+			z-index: 1000;
+			opacity: 0; pointer-events: none;
+			transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+			}
+
+			.modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+			.modal-box {
+			background: linear-gradient(145deg, #044434 0%, #02231c 100%);
+			border: 1.5px solid rgba(255, 215, 0, 0.25);
+			width: 88%; max-width: 380px;
+			border-radius: 24px;
+			padding: 30px 24px 26px 24px;
+			text-align: center;
+			position: relative;
+			box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.05);
+			transform: scale(0.85);
+			transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+			}
+
+			.modal-overlay.active .modal-box { transform: scale(1); }
+
+			/* ক্লোজ বাটন (Top Right Cross) */
+			.modal-close-btn {
+			position: absolute;
+			top: 16px; right: 16px;
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			color: #a0b3af;
+			width: 32px; height: 32px;
+			border-radius: 50%;
+			display: flex; justify-content: center; align-items: center;
+			cursor: pointer;
+			font-size: 14px;
+			transition: all 0.2s ease;
+			}
+			.modal-close-btn:hover { background: rgba(255, 77, 77, 0.2); color: #ff4d4d; border-color: rgba(255, 77, 77, 0.3); }
+			.modal-close-btn:active { transform: scale(0.9); }
+
+			/* ডায়মন্ড আইকন অ্যানিমেশন */
+			@keyframes diamond-pulse {
+			0% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4)); }
+			50% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.7)); }
+			100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4)); }
+			}
+
+			.modal-icon-wrapper {
+			width: 70px; height: 70px;
+			background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 145, 77, 0.05) 100%);
+			border: 1.5px solid #ffd700;
+			border-radius: 50%;
+			display: flex; justify-content: center; align-items: center;
+			margin: 0 auto 18px auto;
+			animation: diamond-pulse 3s infinite ease-in-out;
+			}
+			.modal-icon-wrapper i { color: #ffd700; font-size: 30px; }
+
+			.modal-title { font-size: 20px; font-weight: 800; color: #ffffff; margin: 0 0 10px 0; letter-spacing: 0.5px; text-transform: uppercase; }
+			.modal-subtitle { font-size: 11px; color: #ffd700; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
+
+			.modal-description {
+			font-size: 13.5px;
+			color: #cbd5e1;
+			line-height: 1.6;
+			margin: 0 0 22px 0;
+			font-weight: 500;
+			}
+
+			.modal-action-btn {
+			background: linear-gradient(135deg, #4ade80 0%, #2ecc71 100%);
+			color: #044434;
+			border: none;
+			width: 100%;
+			padding: 12px;
+			border-radius: 12px;
+			font-size: 13px;
+			font-weight: 800;
+			cursor: pointer;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			box-shadow: 0 6px 20px rgba(74, 222, 128, 0.2);
+			transition: transform 0.1s;
+			}
+			.modal-action-btn:active { transform: scale(0.96); }
 		</style>
 	</head>
 	<body>
@@ -302,9 +383,9 @@
 						<p>Creator Rewards</p>
 					</div>
 
-					<div class="task-item mystery-btn" onclick="openMysteryBox()">
-						<i class="fa-solid fa-box-open"></i>
-						<p>Mystery Box</p>
+					<div class="task-item" onclick="openDiamondOffers()">
+						<i class="fa-solid fa-gem"></i>
+						<p>Diamond Offers</p>
 					</div>
 
 					<div class="task-item">
@@ -340,6 +421,27 @@
 			</div>
 		</div>
 
+		<div class="modal-overlay" id="diamondModal">
+			<div class="modal-box">
+				<div class="modal-close-btn" onclick="closeDiamondOffers()">
+					<i class="fa-solid fa-xmark"></i>
+				</div>
+
+				<div class="modal-icon-wrapper">
+					<i class="fa-solid fa-gem"></i>
+				</div>
+
+				<h2 class="modal-title">Exclusive Access</h2>
+				<div class="modal-subtitle">Premium Offers Only</div>
+
+				<p class="modal-description">
+					Thank you for your interest! These elite high-reward diamond tasks are currently tailored for selected accounts. Keep actively completing tasks to unlock your personalized invitation soon.
+				</p>
+
+				<button class="modal-action-btn" onclick="closeDiamondOffers()">Understood</button>
+			</div>
+		</div>
+
 		<script>
 			function closeApp() {
 			if (window.Telegram && window.Telegram.WebApp) {
@@ -349,8 +451,15 @@
 			}
 			}
 
-			function openMysteryBox() {
-			alert("Mystery Box Opening Animation Triggered! Win random rewards!");
+			/* পপআপ ওপেন এবং ক্লোজ করার ডাইনামিক ফাংশন */
+			function openDiamondOffers() {
+			const modal = document.getElementById("diamondModal");
+			modal.classList.add("active");
+			}
+
+			function closeDiamondOffers() {
+			const modal = document.getElementById("diamondModal");
+			modal.classList.remove("active");
 			}
 
 			function copyReferLink() {
