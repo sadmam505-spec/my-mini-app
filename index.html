@@ -320,10 +320,10 @@
 
 			<div class="header">
 				<div>
-					<p style="margin:0; opacity: 0.5; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Good morning!</p>
+					<p style="margin:0; opacity: 0.5; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">hello...</p>
 					<h3 style="margin:0; font-size: 18px; font-weight: 700;">Muhtasin Sadmam</h3>
 				</div>
-				<button class="exit-btn" onclick="closeApp()">Exit</button>
+				<button class="exit-btn" onclick="showExitModal()">Exit</button>
 			</div>
 
 			<div class="top-info">
@@ -335,9 +335,9 @@
 							434350 <span>PTS</span>
 						</h1>
 					</div>
-					<button class="top-redeem-btn" onclick="window.location.href='vault.html'">
+					<a href="https://redeem.gritorax.com" class="top-redeem-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
 						<i class="fa-solid fa-wallet"></i> Redeem
-					</button>
+					</a>
 				</div>
 
 				<div class="bonus-card">
@@ -358,40 +358,40 @@
 			<div class="main-content">
 
 				<div class="task-grid">
-					<div class="task-item">
+					<a href="https://quick.gritorax.com" class="task-item" style="text-decoration: none; color: inherit;">
 						<i class="fa-solid fa-fire"></i>
 						<p>Quick Tasks</p>
-					</div>
-					<div class="task-item">
+					</a>
+					<a href="https://dice.gritorax.com" class="task-item" style="text-decoration: none; color: inherit;">
 						<i class="fa-solid fa-dice"></i>
 						<p>Dice</p>
-					</div>
-					<div class="task-item">
-						<i class="fa-solid fa-dharmachakra"></i>
-						<p>Spin</p>
-					</div>
-					<div class="task-item">
+					</a>
+					<a href="https://cargame.gritorax.com" class="task-item" style="text-decoration: none; color: inherit;">
+						<i class="fa-solid fa-car-side"></i>
+						<p>Car Game</p>
+					</a>
+					<a href="https://word.gritorax.com" class="task-item" style="text-decoration: none; color: inherit;">
 						<i class="fa-solid fa-spell-check"></i>
 						<p>Word Craft</p>
-					</div>
-					<div class="task-item">
-						<i class="fa-solid fa-layer-group"></i>
-						<p>Tier Spire</p>
-					</div>
-					<div class="task-item">
+					</a>
+					<a href="https://drewards.gritorax.com" class="task-item" style="text-decoration: none; color: inherit;">
+						<i class="fa-solid fa-gift"></i>
+						<p>Daily Rewards</p>
+					</a>
+					<a href="https://crewards.gritorax.com" class="task-item" style="text-decoration: none; color: inherit;">
 						<i class="fa-solid fa-clapperboard"></i>
 						<p>Creator Rewards</p>
-					</div>
+					</a>
 
 					<div class="task-item" onclick="openDiamondOffers()">
 						<i class="fa-solid fa-gem"></i>
 						<p>Diamond Offers</p>
 					</div>
 
-					<div class="task-item">
+					<a href="https://support.gritorax.com" class="task-item" style="text-decoration: none; color: inherit;">
 						<i class="fa-solid fa-headset"></i>
 						<p>Support</p>
-					</div>
+					</a>
 				</div>
 
 				<div class="refer-card">
@@ -432,7 +432,7 @@
 				</div>
 
 				<h2 class="modal-title">Exclusive Access</h2>
-				<div class="modal-subtitle">Premium Offers Only</div>
+				<div class="modal-subtitle">Premium Members Only</div>
 
 				<p class="modal-description">
 					Thank you for your interest! These elite high-reward diamond tasks are currently tailored for selected accounts. Keep actively completing tasks to unlock your personalized invitation soon.
@@ -442,20 +442,43 @@
 			</div>
 		</div>
 
+		<div class="modal-overlay" id="exitModal">
+			<div class="modal-box">
+				<h2 style="color:#ffffff; margin-top:0;">Exit App?</h2>
+				<p style="color:#a0b3af; margin-bottom: 25px;">Are you sure you want to close the app? You can always come back anytime.</p>
+				<div style="display: flex; gap: 10px;">
+					<button onclick="hideExitModal()" style="flex:1; padding:12px; border-radius:12px; border:1px solid #4ade80; background:transparent; color:#4ade80; font-weight:bold; cursor:pointer;">No</button>
+					<button onclick="closeApp()" style="flex:1; padding:12px; border-radius:12px; border:none; background:#ff4d4d; color:white; font-weight:bold; cursor:pointer;">Yes</button>
+				</div>
+			</div>
+		</div>
+
 		<script>
+			// Exit Modal Logic
+			function showExitModal() {
+			document.getElementById("exitModal").classList.add("active");
+			}
+
+			function hideExitModal() {
+			document.getElementById("exitModal").classList.remove("active");
+			}
+
+			// Exit Button ফাংশন
 			function closeApp() {
-			if (window.Telegram && window.Telegram.WebApp) {
+			if (window.Telegram?.WebApp) {
 			window.Telegram.WebApp.close();
 			} else {
-			alert("App will close in Telegram Bot");
+			window.close(); // সাধারণ ব্রাউজারের জন্য
 			}
 			}
 
-			/* পপআপ ওপেন এবং ক্লোজ করার ডাইনামিক ফাংশন */
-			function openDiamondOffers() {
-			const modal = document.getElementById("diamondModal");
-			modal.classList.add("active");
-			}
+			// ফোনের Back Navigation হ্যান্ডেল করার জন্য
+			window.addEventListener('popstate', function(event) {
+			showExitModal();
+			history.pushState(null, null, window.location.href); // যাতে ব্যাক বাটন চাপলে সরাসরি ক্লোজ না হয়
+			});
+
+			history.pushState(null, null, window.location.href);
 
 			function closeDiamondOffers() {
 			const modal = document.getElementById("diamondModal");
