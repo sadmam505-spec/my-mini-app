@@ -312,6 +312,8 @@
 			transition: transform 0.1s;
 			}
 			.modal-action-btn:active { transform: scale(0.96); }
+
+
 		</style>
 	</head>
 	<body>
@@ -453,6 +455,8 @@
 			</div>
 		</div>
 
+
+
 		<script>
 			// Exit Modal Logic
 			function showExitModal() {
@@ -496,6 +500,11 @@
 			setTimeout(() => {
 			copyBtn.innerText = "Copy";
 			}, 2000);
+			}
+
+			// এই ফাংশনটি আপনার স্ক্রিপ্টের শেষে যোগ করুন
+			function openDiamondOffers() {
+			document.getElementById("diamondModal").classList.add("active");
 			}
 		</script>
 	</body>
