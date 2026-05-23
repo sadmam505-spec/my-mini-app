@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>Creator Rewards - Premium Dashboard</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<style>
+			* {
+			box-sizing: border-box;
+			-webkit-tap-highlight-color: transparent;
+			}
+
+			body {
+			background-color: #000;
+			color: #fff;
+			font-family: 'Inter', sans-serif;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			overflow: hidden;
+			}
+
+			.phone-container {
+			width: 100%;
+			height: 100%;
+			max-width: 400px;
+			background-color: #000;
+			border: 2px solid #222;
+			border-radius: 30px;
+			overflow-y: auto;
+			display: flex;
+			flex-direction: column;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+			padding: 20px 16px 80px 16px;
+			position: relative;
+			}
+
+			.phone-container::-webkit-scrollbar { width: 4px; }
+			.phone-container::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+
+			/* ==========================================================================
+			1. PREMIUM HEADER STATION
+			========================================================================== */
+			.header-station {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			margin-bottom: 20px;
+			padding: 5px;
+			}
+
+			.back-link {
+			color: #f39c12;
+			font-size: 1.2rem;
+			text-decoration: none;
+			width: 40px;
+			outline: none;
+			transition: transform 0.1s;
+			}
+			.back-link:active { transform: scale(0.95); }
+
+			.header-title-block {
+			flex: 1;
+			text-align: center;
+			margin-right: 40px;
+			}
+
+			.header-title-block h1 {
+			margin: 0;
+			font-size: 1.3rem;
+			font-weight: 850;
+			letter-spacing: 1px;
+			color: #f39c12;
+			text-transform: uppercase;
+			}
+
+			.header-title-block p {
+			margin: 4px 0 0 0;
+			font-size: 0.75rem;
+			color: #666;
+			font-weight: 500;
+			}
+
+			/* ==========================================================================
+			2. REFERRAL MILESTONE SECTION
+			========================================================================== */
+			.referral-section {
+			background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+			border: 1px solid #1a1a1a;
+			border-radius: 20px;
+			padding: 20px 16px;
+			margin-bottom: 24px;
+			}
+
+			.ref-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			margin-bottom: 14px;
+			}
+
+			.ref-title h3 {
+			margin: 0;
+			font-size: 0.95rem;
+			font-weight: 800;
+			letter-spacing: 0.5px;
+			color: #fff;
+			}
+
+			.ref-title p {
+			margin: 4px 0 0 0;
+			font-size: 0.7rem;
+			color: #666;
+			line-height: 1.3;
+			}
+
+			.ref-points { font-size: 0.9rem; font-weight: 900; color: #2ec4b6; letter-spacing: 0.5px; }
+
+			.progress-container {
+			width: 100%;
+			background: #111;
+			border: 1px solid #222;
+			height: 12px;
+			border-radius: 20px;
+			overflow: hidden;
+			position: relative;
+			margin-top: 15px;
+			}
+
+			.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #2ec4b6, #208b81); border-radius: 20px; }
+			.progress-stats { display: flex; justify-content: space-between; font-size: 0.7rem; color: #555; font-weight: 700; margin-top: 8px; }
+			.progress-stats span b { color: #2ec4b6; }
+
+			/* ==========================================================================
+			3. TASKS CONTAINER & CARDS
+			========================================================================== */
+			.tasks-container { display: flex; flex-direction: column; gap: 16px; }
+
+			.task-card {
+			position: relative;
+			background: #0a0a0a;
+			border: 1px solid #1a1a1a;
+			border-radius: 16px;
+			padding: 16px;
+			display: flex;
+			flex-direction: column;
+			gap: 14px;
+			transition: border-color 0.3s ease;
+			}
+
+			.task-card-main { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+
+			.brand-logo-frame {
+			width: 44px;
+			height: 44px;
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.4rem;
+			}
+
+			.fb-theme { background: rgba(24, 119, 242, 0.1); color: #1877f2; border: 1px solid rgba(24, 119, 242, 0.15); }
+			.tt-theme { background: rgba(255, 255, 255, 0.05); color: #00f2fe; border: 1px solid rgba(255, 0, 127, 0.3); }
+			.yt-theme { background: rgba(255, 0, 0, 0.1); color: #ff0000; border: 1px solid rgba(255, 0, 0, 0.15); }
+
+			.task-meta-info { flex: 1; padding: 0 14px; }
+			.task-meta-info h2 { margin: 0; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.5px; color: #ffffff; }
+			.task-meta-info p { margin: 4px 0 0 0; font-size: 0.7rem; color: #555; font-weight: 600; }
+
+			.points-badge {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			font-size: 0.85rem;
+			font-weight: 800;
+			background: linear-gradient(135deg, #ffe066 0%, #f39c12 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			letter-spacing: 0.5px;
+			text-align: right;
+			}
+
+			.up-to-text { font-size: 0.6rem; font-weight: 700; color: #555; -webkit-text-fill-color: #555; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+
+			.task-action-row { display: flex; gap: 10px; width: 100%; }
+
+			.task-btn {
+			flex: 1;
+			padding: 10px 12px;
+			font-size: 0.75rem;
+			font-weight: 700;
+			border-radius: 10px;
+			cursor: pointer;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			outline: none;
+			border: none;
+			transition: all 0.2s ease;
+			}
+
+			.btn-details { background: #111; color: #aaa; border: 1px solid #222; }
+			.btn-details:active { background: #161616; transform: scale(0.97); }
+
+			.btn-submit { background: #e0e0e0; color: #111; }
+			.btn-submit:active { background: #c8c8c8; transform: scale(0.97); }
+
+			/* ==========================================================================
+			4. PREMIUM POPUP MODAL STYLING (COMMON BASE)
+			========================================================================== */
+			.modal-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.85);
+			backdrop-filter: blur(8px);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 9999;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s ease;
+			padding: 0 16px;
+			}
+
+			.modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+			.premium-popup {
+			width: 100%;
+			max-width: 368px;
+			background: #0d0d0d;
+			border: 1px solid #222;
+			border-radius: 24px;
+			padding: 24px 20px;
+			position: relative;
+			box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+			transform: scale(0.85);
+			transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+			max-height: 85vh;
+			overflow-y: auto;
+			}
+
+			.modal-overlay.active .premium-popup { transform: scale(1); }
+			.premium-popup::-webkit-scrollbar { width: 3px; }
+			.premium-popup::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+			.popup-close-btn {
+			position: absolute;
+			top: 18px;
+			right: 18px;
+			background: #161616;
+			border: 1px solid #2a2a2a;
+			color: #888;
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			font-size: 0.85rem;
+			transition: all 0.2s ease;
+			}
+			.popup-close-btn:active { transform: scale(0.9); background: #222; color: #fff; }
+
+			.popup-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid #1a1a1a; padding-bottom: 14px; }
+			.popup-header i { font-size: 1.5rem; }
+			.popup-header h3 { margin: 0; font-size: 1.1rem; font-weight: 850; letter-spacing: 0.5px; color: #fff; text-transform: uppercase; }
+
+			.popup-body { display: flex; flex-direction: column; gap: 12px; }
+
+			.step-item { display: flex; gap: 12px; align-items: flex-start; background: #121212; padding: 12px 14px; border-radius: 12px; border: 1px solid #161616; }
+			.step-number { background: rgba(243, 156, 18, 0.1); color: #f39c12; font-size: 0.75rem; font-weight: 900; min-width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+			.step-text { font-size: 0.78rem; color: #ccc; line-height: 1.45; font-weight: 500; }
+			.step-text b { color: #fff; font-weight: 700; }
+
+			.warning-zone { background: rgba(217, 4, 41, 0.05); border: 1px solid rgba(217, 4, 41, 0.2); border-radius: 14px; padding: 14px; margin-top: 8px; }
+			.warning-title { display: flex; align-items: center; gap: 8px; color: #d90429; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+			.warning-text { font-size: 0.72rem; color: #a6a6a6; line-height: 1.4; font-weight: 500; margin: 0; }
+
+			/* ==========================================================================
+			5. EXCLUSIVE SUBMISSION MODAL STYLING ELEMENTS
+			========================================================================== */
+			.input-wrapper { width: 100%; margin-top: 5px; }
+
+			.premium-url-input {
+			width: 100%;
+			background: #111;
+			border: 1px solid #252525;
+			border-radius: 12px;
+			padding: 14px 16px;
+			color: #fff;
+			font-family: 'Inter', sans-serif;
+			font-size: 0.85rem;
+			font-weight: 500;
+			outline: none;
+			transition: all 0.3s ease;
+			}
+
+			.premium-url-input:focus { border-color: #f39c12; background: #141414; box-shadow: 0 0 10px rgba(243, 156, 18, 0.1); }
+			.audit-notice { font-size: 0.76rem; color: #999; line-height: 1.45; background: #111; padding: 12px 14px; border-radius: 12px; border: 1px solid #1a1a1a; margin-bottom: 4px; }
+			.audit-notice i { color: #2ec4b6; margin-right: 4px; }
+
+			.btn-action-submit {
+			width: 100%;
+			background: linear-gradient(90deg, #f39c12, #d35400);
+			color: #fff;
+			padding: 14px;
+			font-size: 0.82rem;
+			font-weight: 800;
+			border-radius: 12px;
+			border: none;
+			cursor: pointer;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			margin-top: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			transition: all 0.2s ease;
+			}
+			.btn-action-submit:active { transform: scale(0.97); opacity: 0.9; }
+
+			/* Premium Inline Toast Messages Styling */
+			.status-toast-wrapper {
+			width: 100%;
+			margin-top: 12px;
+			display: none; /* Controlled via JS */
+			animation: fadeInToast 0.3s ease-out forwards;
+			}
+
+			.status-toast {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 12px 14px;
+			border-radius: 12px;
+			font-size: 0.76rem;
+			font-weight: 600;
+			line-height: 1.4;
+			}
+
+			.status-toast.success { background: rgba(46, 196, 182, 0.08); border: 1px solid rgba(46, 196, 182, 0.3); color: #2ec4b6; }
+			.status-toast.error { background: rgba(217, 4, 41, 0.08); border: 1px solid rgba(217, 4, 41, 0.3); color: #ff3333; }
+
+			@keyframes fadeInToast {
+			from { opacity: 0; transform: translateY(6px); }
+			to { opacity: 1; transform: translateY(0); }
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="phone-container">
+
+			<div class="header-station">
+				<a href="https://dashboard.gritorax.com" class="back-link">
+					<i class="fa-solid fa-house"></i>
+				</a>
+				<div class="header-title-block">
+					<h1>Creator Rewards</h1>
+					<p>Monetize your content instantly</p>
+				</div>
+			</div>
+
+			<div class="referral-section">
+				<div class="ref-header">
+					<div class="ref-title">
+						<h3>ELITE REFERRAL MILESTONE</h3>
+						<p>Get 10 referrals to make their 1st successful withdrawal to trigger this bonus.</p>
+					</div>
+					<div class="ref-points">+50,000 PTS</div>
+				</div>
+
+				<div class="progress-container">
+					<div class="progress-bar"></div>
+				</div>
+				<div class="progress-stats">
+					<span>Progress Tracker</span>
+					<span>
+						<b>0</b> / 10 Confirmed
+					</span>
+				</div>
+			</div>
+
+			<div class="tasks-container">
+
+				<div class="task-card" id="task-fb-post">
+					<div class="task-card-main">
+						<div class="brand-logo-frame fb-theme">
+							<i class="fa-brands fa-facebook-f"></i>
+						</div>
+						<div class="task-meta-info">
+							<h2>FACEBOOK POST</h2>
+							<p>Status: Available</p>
+						</div>
+						<div class="points-badge">
+							<span class="up-to-text">Up To</span>
+							+15,000 PTS
+						</div>
+					</div>
+					<div class="task-action-row">
+						<button class="task-btn btn-details" onclick="openDetails('fb-post')">
+							<i class="fa-solid fa-circle-info"></i> Task Details
+						</button>
+						<button class="task-btn btn-submit" onclick="openSubmit('fb-post')">
+							<i class="fa-solid fa-link"></i> Submit URL
+						</button>
+					</div>
+				</div>
+
+				<div class="task-card" id="task-fb-reel">
+					<div class="task-card-main">
+						<div class="brand-logo-frame fb-theme">
+							<i class="fa-solid fa-film"></i>
+						</div>
+						<div class="task-meta-info">
+							<h2>FACEBOOK REEL</h2>
+							<p>Status: Available</p>
+						</div>
+						<div class="points-badge">
+							<span class="up-to-text">Up To</span>
+							+25,000 PTS
+						</div>
+					</div>
+					<div class="task-action-row">
+						<button class="task-btn btn-details" onclick="openDetails('fb-reel')">
+							<i class="fa-solid fa-circle-info"></i> Task Details
+						</button>
+						<button class="task-btn btn-submit" onclick="openSubmit('fb-reel')">
+							<i class="fa-solid fa-link"></i> Submit URL
+						</button>
+					</div>
+				</div>
+
+				<div class="task-card" id="task-tiktok">
+					<div class="task-card-main">
+						<div class="brand-logo-frame tt-theme">
+							<i class="fa-brands fa-tiktok"></i>
+						</div>
+						<div class="task-meta-info">
+							<h2>TIKTOK VIDEO</h2>
+							<p>Status: Available</p>
+						</div>
+						<div class="points-badge">
+							<span class="up-to-text">Up To</span>
+							+25,000 PTS
+						</div>
+					</div>
+					<div class="task-action-row">
+						<button class="task-btn btn-details" onclick="openDetails('tiktok')">
+							<i class="fa-solid fa-circle-info"></i> Task Details
+						</button>
+						<button class="task-btn btn-submit" onclick="openSubmit('tiktok')">
+							<i class="fa-solid fa-link"></i> Submit URL
+						</button>
+					</div>
+				</div>
+
+				<div class="task-card" id="task-yt-shorts">
+					<div class="task-card-main">
+						<div class="brand-logo-frame yt-theme">
+							<i class="fa-solid fa-bolt"></i>
+						</div>
+						<div class="task-meta-info">
+							<h2>YOUTUBE SHORTS</h2>
+							<p>Status: Available</p>
+						</div>
+						<div class="points-badge">
+							<span class="up-to-text">Up To</span>
+							+25,000 PTS
+						</div>
+					</div>
+					<div class="task-action-row">
+						<button class="task-btn btn-details" onclick="openDetails('yt-shorts')">
+							<i class="fa-solid fa-circle-info"></i> Task Details
+						</button>
+						<button class="task-btn btn-submit" onclick="openSubmit('yt-shorts')">
+							<i class="fa-solid fa-link"></i> Submit URL
+						</button>
+					</div>
+				</div>
+
+				<div class="task-card" id="task-yt-long">
+					<div class="task-card-main">
+						<div class="brand-logo-frame yt-theme">
+							<i class="fa-brands fa-youtube"></i>
+						</div>
+						<div class="task-meta-info">
+							<h2>YOUTUBE LONG VIDEO</h2>
+							<p>Status: Available</p>
+						</div>
+						<div class="points-badge">
+							<span class="up-to-text">Up To</span>
+							+40,000 PTS
+						</div>
+					</div>
+					<div class="task-action-row">
+						<button class="task-btn btn-details" onclick="openDetails('yt-long')">
+							<i class="fa-solid fa-circle-info"></i> Task Details
+						</button>
+						<button class="task-btn btn-submit" onclick="openSubmit('yt-long')">
+							<i class="fa-solid fa-link"></i> Submit URL
+						</button>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="modal-overlay" id="details-modal">
+			<div class="premium-popup">
+				<button class="popup-close-btn" onclick="closeDetailsModal()">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+				<div class="popup-header" id="modal-header-icon-title"></div>
+				<div class="popup-body" id="modal-body-content"></div>
+			</div>
+		</div>
+
+		<div class="modal-overlay" id="submit-modal">
+			<div class="premium-popup">
+				<button class="popup-close-btn" onclick="closeSubmitModal()">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+
+				<div class="popup-header" id="submit-header-info"></div>
+
+				<div class="popup-body">
+					<div class="warning-zone" style="margin-top: 0; background: rgba(217, 4, 41, 0.08); border-color: rgba(217, 4, 41, 0.35);">
+						<div class="warning-title" style="color: #ff3333;">
+							<i class="fa-solid fa-shield-halved"></i> Anti-Fraud Security Detection
+						</div>
+						<p class="warning-text" style="color: #e5e5e5; font-weight: 600;">
+							Submitting another individual's link or a duplicate URL is strictly prohibited. Doing so will result in <b>zero points earned</b> and temporary or <b>permanent account suspension</b>.
+						</p>
+					</div>
+
+					<div class="audit-notice">
+						<i class="fa-solid fa-clock-history"></i> Please submit your valid URL and wait. Our automated system and <b>manual audit team will verify your content within 7 days</b>. Points will be dynamically allocated depending on your organic user engagement.
+					</div>
+
+					<div class="input-wrapper">
+						<input type="url" id="task-submission-url" class="premium-url-input" placeholder="https://example.com/your-content-link" required="" autocomplete="off"/>
+					</div>
+
+					<button class="btn-action-submit" onclick="executeUrlSubmission()">
+						<i class="fa-solid fa-cloud-arrow-up"></i> Verify & Submit URL
+					</button>
+
+					<div id="inline-status-toast" class="status-toast-wrapper"></div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			let activeSubmissionTaskType = '';
+
+			// টাস্ক ডেটা ম্যাপ অবজেক্ট যা ডাইনামিকলি সঠিক তথ্য লোড করবে
+			const taskDetailsMap = {
+			'fb-post': {
+			icon: '<i class="fa-brands fa-facebook" style="color: #1877f2;"></i>',
+			title: 'Mission Briefing',
+			submitTitle: 'Submit Facebook Post',
+			labelName: 'post URL',
+			steps: [
+			'Go to your <b>Personal Facebook Profile</b> and prepare a new public post.',
+			'Write a creative and genuine post about our app. The text <b>must be written in your country\'s local language</b>. Feel free to attach any app-related graphics or screenshots to boost appeal!',
+			'Once published, copy your unique <b>Referral Link</b>, paste it as the first comment under your post, and <b>Pin the comment to the top</b>.',
+			'Earn dynamic rewards <b>up to 15,000 Points</b>! Distribution is highly scaled based on your post\'s overall organic Reach, Reacts, Comments, and Shares.'
+			],
+			warning: 'You cannot edit or delete this post for the next <b>7 days</b>. Our audit team will manually verify your submission link after the countdown. Any trace of fraud, automated bots, or edited/deleted posts will lead to immediate disqualification and account flag.'
+			},
+			'fb-reel': {
+			icon: '<i class="fa-solid fa-film" style="color: #1877f2;"></i>',
+			title: 'Reels Briefing',
+			submitTitle: 'Submit Facebook Reel',
+			labelName: 'reel URL',
+			steps: [
+			'Go to your <b>Personal Facebook Profile</b> and prepare a new public reel.',
+			'Upload a positive video about our app or an <b>app screen recording with your own voiceover</b> explaining our features clearly.',
+			'Once published, add your unique <b>Referral Link in the description</b> along with relevant hashtags, and also <b>Pin your referral link as the first comment</b>.',
+			'Earn dynamic rewards <b>up to 25,000 Points</b>! Distribution is highly scaled based on your reel\'s overall organic Views, Reach, Reacts, and Comments.'
+			],
+			warning: 'You cannot edit or delete this reel for the next <b>7 days</b>. Our audit team will manually verify your submission link after the countdown. Any trace of fraud, automated bots, or edited/deleted reels will lead to immediate disqualification and account flag.'
+			},
+			'tiktok': {
+			icon: '<i class="fa-brands fa-tiktok" style="color: #00f2fe;"></i>',
+			title: 'TikTok Briefing',
+			submitTitle: 'Submit TikTok Video',
+			labelName: 'tiktok video URL',
+			steps: [
+			'Open your <b>TikTok App</b> and prepare a new public video submission.',
+			'Upload a high-quality positive video about our app or an <b>app screen recording with your own clear voiceover</b> guiding users through the core benefits.',
+			'Once published, make sure to add your unique <b>Referral Link in the video description</b> using trending hashtags, and <b>Pin your referral link as the first comment</b>.',
+			'Earn massive dynamic rewards <b>up to 25,000 Points</b>! Distribution is strictly calibrated based on real organic TikTok Views, Likes, and Shares.'
+			],
+			warning: 'You cannot edit or delete this video for the next <b>7 days</b>. Our audit team will manually verify your submission link after the countdown. Any trace of fraud, bot engagement, or hidden/deleted videos will result in immediate disqualification and account flag.'
+			},
+			'yt-shorts': {
+			icon: '<i class="fa-solid fa-bolt" style="color: #ff0000;"></i>',
+			title: 'Shorts Briefing',
+			submitTitle: 'Submit YouTube Short',
+			labelName: 'youtube shorts URL',
+			steps: [
+			'Open your <b>YouTube Channel</b> and prepare a new public Shorts upload (under 60 seconds).',
+			'Create an engaging vertical short video about the app or an <b>interactive screen recording with a professional voiceover</b>.',
+			'Include your unique <b>Referral Link in the description</b>, use the official hashtag <b>#Shorts</b>, and <b>Pin your referral link in the comment section</b>.',
+			'Earn ultimate rewards <b>up to 25,000 Points</b>! Calculations are fully weighted by real organic YouTube Shorts views and audience engagement.'
+			],
+			warning: 'You cannot delete or set this short video to private for the next <b>7 days</b>. Our moderation team will strictly verify the video URL. Using bots or fake traffic will cause immediate account suspension.'
+			},
+			'yt-long': {
+			icon: '<i class="fa-brands fa-youtube" style="color: #ff0000;"></i>',
+			title: 'YouTube Briefing',
+			submitTitle: 'Submit YouTube Video',
+			labelName: 'youtube long video URL',
+			steps: [
+			'Create a comprehensive video on your <b>YouTube Channel</b> with a <b>minimum length of 3 to 5 minutes</b>.',
+			'Provide a deep-dive tutorial, full app review, or proof of withdrawal. The content must include <b>clear voice evaluation or face-cam explanation</b>.',
+			'Place your unique <b>Referral Link at the very top of the video description</b>, use clean chapters/tags, and <b>Pin the link as the top comment</b>.',
+			'Earn a massive jackpot reward of <b>up to 40,000 Points</b>! Reward validation is deeply scaled based on real watch time, organic views, and genuine user clicks.'
+			],
+			warning: 'You cannot delete, unlist, or change this video status to private for the next <b>7 days</b>. Total manual tracking is applied by our audit system. Any artificial views or misleading data will block your profile.'
+			}
+			};
+
+			/* ==========================================================================
+			DETAILS MODAL CONTROLLERS WITH DYNAMIC 5TH POINT
+			========================================================================== */
+			function openDetails(taskType) {
+			console.log("Opening details modal for: " + taskType);
+			const taskData = taskDetailsMap[taskType];
+
+			if (taskData) {
+			const headerHTML = `${taskData.icon} <h3>${taskData.title}</h3>`;
+			document.getElementById('modal-header-icon-title').innerHTML = headerHTML;
+
+			// ক্লোন তৈরি করে ডাইনামিকলি ৫ম পয়েন্ট পুশ করা হচ্ছে
+			let currentSteps = [...taskData.steps];
+			currentSteps.push(`Submit your completed <b>${taskData.labelName}</b> inside the tracking form to initiate validation.`);
+
+			let stepsHTML = '';
+			currentSteps.forEach((text, index) => {
+			stepsHTML += `
+			<div class="step-item">
+				<div class="step-number">${index + 1}</div>
+				<div class="step-text">${text}</div>
+			</div>
+			`;
+			});
+
+			const bodyHTML = `
+			${stepsHTML}
+			<div class="warning-zone">
+				<div class="warning-title">
+					<i class="fa-solid fa-triangle-exclamation"></i> Strict Warning Zone
+				</div>
+				<p class="warning-text">${taskData.warning}</p>
+			</div>
+			`;
+			document.getElementById('modal-body-content').innerHTML = bodyHTML;
+			document.getElementById('details-modal').classList.add('active');
+			}
+			}
+
+			function closeDetailsModal() {
+			document.getElementById('details-modal').classList.remove('active');
+			}
+
+			/* ==========================================================================
+			SUBMISSION MODAL CONTROLLERS (FIXED TOAST SYSTEM)
+			========================================================================== */
+			function openSubmit(taskType) {
+			const taskData = taskDetailsMap[taskType];
+
+			if(taskData) {
+			activeSubmissionTaskType = taskType;
+
+			// ইনপুট এবং টোস্ট নোটিফিকেশন রিসেট
+			document.getElementById('task-submission-url').value = '';
+			const toastContainer = document.getElementById('inline-status-toast');
+			toastContainer.style.display = 'none';
+			toastContainer.innerHTML = '';
+
+			const submissionHeaderHTML = `${taskData.icon} <h3>${taskData.submitTitle}</h3>`;
+			document.getElementById('submit-header-info').innerHTML = submissionHeaderHTML;
+
+			document.getElementById('submit-modal').classList.add('active');
+			}
+			}
+
+			function closeSubmitModal() {
+			document.getElementById('submit-modal').classList.remove('active');
+			}
+
+			function executeUrlSubmission() {
+			const linkInputValue = document.getElementById('task-submission-url').value.trim();
+			const toastContainer = document.getElementById('inline-status-toast');
+
+			// ১. ফাঁকা ইনপুট চেক এর জন্য ইন-লাইন এরর টোস্ট
+			if(linkInputValue === '') {
+			toastContainer.innerHTML = `
+			<div class="status-toast error">
+				<i class="fa-solid fa-circle-exclamation"></i>
+				Error: Action denied! Please paste a valid URL before submitting.
+			</div>
+			`;
+			toastContainer.style.display = 'block';
+			return;
+			}
+
+			// ২. সাকসেসফুলি ইন-লাইন প্রিমিয়াম টোস্ট রেন্ডার (কোনো ব্রাউজার পপ-আপ আসবে না)
+			toastContainer.innerHTML = `
+			<div class="status-toast success">
+				<i class="fa-solid fa-circle-check"></i>
+				URL Received Successfully! Your submission has been securely queued under manual audit tracking protocols.
+			</div>
+			`;
+			toastContainer.style.display = 'block';
+
+			console.log("Secure Audit System Logs: Authorized via " + activeSubmissionTaskType);
+			console.log("Captured Content Vector: " + linkInputValue);
+
+			// ইউজার যেন সাকসেস মেসেজটি দেখতে পারে তাই ১.৫ সেকেন্ড পর পপ-আপ অটো ক্লোজ হবে
+			setTimeout(() => {
+			closeSubmitModal();
+			}, 1800);
+			}
+
+			/* ==========================================================================
+			GLOBAL WINDOW SYSTEM CONTROLLERS
+			========================================================================== */
+			window.onclick = function(event) {
+			let detailsModal = document.getElementById('details-modal');
+			let submitModal = document.getElementById('submit-modal');
+
+			if (event.target == detailsModal) { detailsModal.classList.remove('active'); }
+			if (event.target == submitModal) { submitModal.classList.remove('active'); }
+			}
+
+			// ফোনের ব্যাক বাটন চাপলে ড্যাশবোর্ডে নিয়ে যাবে
+			history.pushState(null, null, window.location.href);
+			window.addEventListener('popstate', function(event) {
+			window.location.href = "https://dashboard.gritorax.com";
+			});
+		</script>
+	</body>
+</html>
