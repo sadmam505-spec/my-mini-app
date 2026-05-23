@@ -385,12 +385,12 @@
 				</div>
 
 				<div class="progress-container">
-					<div class="progress-bar"></div>
+					<div class="progress-bar" id="creator-progress-bar"></div>
 				</div>
 				<div class="progress-stats">
 					<span>Progress Tracker</span>
 					<span>
-						<b>0</b> / 10 Confirmed
+						<b id="creator-progress-text">0</b> / 10 Confirmed
 					</span>
 				</div>
 			</div>
@@ -757,6 +757,28 @@
 			window.addEventListener('popstate', function(event) {
 			window.location.href = "https://dashboard.gritorax.com";
 			});
+
+			// ১. ড্যাশবোর্ড পেজ থেকে সেভ হওয়া পুরো ডাটার ঝুড়িটা মেমোরি থেকে তুলে আনা হলো
+			let localData = JSON.parse(localStorage.getItem('userData'));
+
+			if (localData) {
+			// ২. পিএইচপি যে নামে ডাটা দিয়েছিল, ঠিক সেই নামেই মেমোরি থেকে ডাটা নেওয়া হলো (ডাটা না থাকলে ০ ধরবে)
+			let withdrawCount = localData.refer_success_withdraw_count || 0;
+			let maxTarget = 10; // আমাদের ফিক্সড টার্গেট ১০
+
+			// ৩. '0' এর জায়গায় ডাটাবেজের রিয়েল কাউন্ট বসানো (যেমন: ১, ২ বা ৫)
+			document.getElementById('creator-progress-text').innerText = withdrawCount;
+
+			// ৪. ব্যালেন্সের অ্যামাউন্ট অনুযায়ী পার্সেন্টেজ হিসাব করা (সূত্র: (বর্তমান উইথড্র / ১০) * ১০০)
+			let percentage = (withdrawCount / maxTarget) * 100;
+
+			// সেফটি চেক: ডাটা যদি কোনো কারণে ১০ এর বেশি হয়ে যায়, বার যেন ১০০% এর বাইরে না যায়
+			if (percentage > 100) percentage = 100;
+			if (percentage < 0) percentage = 0;
+
+    // ৫. প্রোগ্রেস বারের উইডথ (Width) সেই হিসেবে বাড়িয়ে দেওয়া
+    document.getElementById('creator-progress-bar').style.width = percentage + "%";
+}
 		</script>
 	</body>
 </html>
