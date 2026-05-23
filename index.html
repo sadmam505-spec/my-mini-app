@@ -329,8 +329,8 @@
 				</div>
 
 				<div class="bonus-card">
-					<strong>10,000 PTS BONUS</strong>
-					<p>Earn 25,000 pts within 15 days and get a 10,000 pts bonus!</p>
+					<strong>10,000 COINS BONUS</strong>
+					<p>Earn 100,000 coins within 15 days and get a 10,000 coins bonus!</p>
 					<!-- ID যোগ করা হয়েছে -->
 					<div class="timer" id="countdown-timer-display">Loading...</div>
 				</div>
@@ -513,6 +513,8 @@
 			// শুরুতেই লোডিং স্ক্রিন
 			showLoading();
 
+
+
 			const user = tg.initDataUnsafe?.user;
 			const userid = user?.id;
 			const firstName = user?.first_name || "Guest";
@@ -567,7 +569,7 @@
 			}
 
 			// রেফারেল লিংক আপডেট
-			document.getElementById('refer-link').value = `https://t.me/gritorax_bot?start=${userid}`;
+			document.getElementById('refer-link').value = `https://t.me/gritorax_bot/app?startapp=${userid}`;
 
 			// ১৫ দিনের কাউন্টডাউন
 			if (data.countdown_15_days) {
