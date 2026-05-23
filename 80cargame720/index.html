@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+				<title>Pro Racing Game</title>
+				<style>
+					/* এটি সব বাটন এবং ক্লিকযোগ্য এলিমেন্টের হাইলাইট কালার বন্ধ করবে */
+					button, div {
+					-webkit-tap-highlight-color: transparent;
+					-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+					outline: none;
+					}
+
+					body { margin: 0; background: #1a1a1a; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; font-family: sans-serif; }
+					#gameContainer { width: 100%; max-width: 400px; height: 100%; display: flex; flex-direction: column; background: #281F1F; position: relative; border: 2px solid #000; }
+
+					/* Header */
+					#header { height: 60px; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; color: #fff; }
+					.bal-section { font-size: 14px; }
+					.collect-btn { background: #2ecc71; border: 2px solid #27ae60; padding: 6px 15px; color: white; border-radius: 20px; cursor: pointer; }
+					.collect-btn:active { transform: scale(0.95); }
+
+					/* Reward Section */
+					#rewardSection {
+					height: 50px;
+					background: #281F1F;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					}
+
+					.reward-btn {
+					background: linear-gradient(45deg, #f1c40f, #e67e22);
+					padding: 8px 20px;
+					border-radius: 25px;
+					font-weight: bold;
+					font-size: 12px;
+					color: white;
+					border: 2px solid #fff;
+					cursor: pointer;
+					box-shadow: 0 0 10px #f1c40f, 0 0 20px #f1c40f;
+					animation: pulseGlow 1.5s infinite;
+					text-transform: uppercase;
+					letter-spacing: 1px;
+					}
+
+					.reward-btn:active {
+					transform: scale(0.9);
+					}
+
+					@keyframes pulseGlow {
+					0% { box-shadow: 0 0 5px #f1c40f, 0 0 10px #f1c40f; }
+					50% { box-shadow: 0 0 20px #f39c12, 0 0 30px #f39c12; }
+					100% { box-shadow: 0 0 5px #f1c40f, 0 0 10px #f1c40f; }
+					}
+
+					/* Game Area */
+					{
+					position: relative; /* এটি খুবই গুরুত্বপূর্ণ, যাতে টাইমারটি গেম এরিয়ার ভেতরে থাকে */
+					overflow: hidden;   /* যাতে গেমের বাইরে কিছু না যায় */
+					/* আপনার অন্যান্য প্রপার্টি এখানে থাকবে */
+					}
+					#gameArea { flex: 0.90; position: relative; overflow: hidden; background: #281F1F; touch-action: none; }
+					#liveScore { position: absolute; top: 10px; left: 15px; color: white; font-size: 18px; font-weight: bold; z-index: 10; }
+					.road-line { position: absolute; width: 6px; height: 55px; background: rgba(255,255,255,0.3); left: 50%; animation: moveLines 1s linear infinite; }
+					@keyframes moveLines { from { top: -100px; } to { top: 100%; } }
+
+					.obj { width: 50px; height: 80px; position: absolute; background-size: contain; background-repeat: no-repeat; transition: left 0.05s; }
+					#userCar { background-image: url('user.png'); bottom: 20px; left: 160px; z-index: 10; }
+					.enemy { background-image: url('enime.png'); }
+					.reward {
+					background-image: url('reward.png');
+					/* গ্লোয়িং ইফেক্ট শুরু */
+					filter: drop-shadow(0 0 10px rgba(241, 196, 15, 0.8))
+					drop-shadow(0 0 20px rgba(241, 196, 15, 0.6));
+					animation: rewardPulse 1.5s infinite alternate;
+					}
+
+					@keyframes rewardPulse {
+					from {
+					filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.5));
+					}
+					to {
+					filter: drop-shadow(0 0 15px rgba(241, 196, 15, 1))
+					drop-shadow(0 0 25px rgba(241, 196, 15, 0.8));
+					}
+					}
+
+					.plusOne { position: absolute; color: #2ecc71; font-size: 24px; font-weight: bold; z-index: 20; animation: floatUp 1s ease-out forwards; }
+					@keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-50px); } }
+
+					/* Controls */
+					.controls { height: 60px; display: flex; background: #000; padding-bottom: env(safe-area-inset-bottom); padding-top: 0.5px; }
+					.controls button { flex: 1; background: #005411; border: 1.5px solid #000000; color: #25B02E; font-size: 30px; }
+					.controls button:active { background: #097310; }
+
+					#startBtn {
+					padding: 20px 50px;
+					background: linear-gradient(135deg, #2ecc71, #27ae60);
+					color: white;
+					font-size: 15px;
+					font-weight: 900;
+					text-transform: uppercase;
+					letter-spacing: 2px;
+					border: none;
+					border-radius: 50px;
+					cursor: pointer;
+					box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 15px #2ecc71;
+					transition: all 0.3s ease;
+					text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+					}
+
+					#startBtn:hover {
+					transform: scale(1.05);
+					box-shadow: 0 0 30px #2ecc71;
+					}
+
+					/* Popups */
+					#gameOverPopup, #startScreen, #messagePopup { display: flex; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); flex-direction: column; justify-content: center; align-items: center; z-index: 200; color: white; }
+					/* Game Over Popup */
+					#gameOverPopup {
+					display: none; /* শুরুতে লুকানো থাকবে */
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: rgba(0, 0, 0, 0.9); /* কালো ব্যাকগ্রাউন্ড */
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					z-index: 200;
+					color: white;
+					}
+
+					#gameOverPopup .game-over-card {
+					background: linear-gradient(135deg, #2c3e50, #000000); /* কালো ও নীল গ্রেডিয়েন্ট */
+					border: 4px solid #e74c3c; /* লাল বর্ডার */
+					border-radius: 20px;
+					padding: 30px;
+					text-align: center;
+					box-shadow: 0 0 30px rgba(231, 76, 60, 0.5); /* গ্লোয়িং লাল শেডো */
+					max-width: 80%;
+					}
+
+					#gameOverPopup h2 {
+					font-size: 32px;
+					font-weight: 900;
+					margin-top: 0;
+					margin-bottom: 10px;
+					color: #e74c3c; /* লাল রং */
+					text-transform: uppercase;
+					text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+					}
+
+					#gameOverPopup .final-score {
+					font-size: 24px;
+					font-weight: bold;
+					color: #f1c40f; /* গোল্ডেন রং */
+					margin-bottom: 20px;
+					text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+					}
+
+					#gameOverPopup .play-again-btn {
+					padding: 15px 40px;
+					background: linear-gradient(135deg, #e74c3c, #c0392b); /* লাল গ্রেডিয়েন্ট */
+					color: white;
+					font-size: 20px;
+					font-weight: bold;
+					text-transform: uppercase;
+					border: none;
+					border-radius: 50px; /* একদম রাউন্ডেড বাটন */
+					cursor: pointer;
+					box-shadow: 0 5px 15px rgba(0,0,0,0.5), 0 0 10px #e74c3c;
+					transition: all 0.3s ease;
+					text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+					}
+
+					#gameOverPopup .play-again-btn:hover {
+					transform: scale(1.05); /* মাউস নিলে একটু বড় হবে */
+					box-shadow: 0 0 20px #e74c3c; /* গ্লো বাড়াবে */
+					}
+
+					#timerDisplay {
+					position: absolute;
+					top: 10px;
+					right: 15px; /* ডান দিকে রাখার জন্য */
+					color: red;
+					font-weight: 900;
+					font-size: 13px;
+					background: black;
+					padding: 5px 10px;
+					border-radius: 8px;
+					border: 2px solid red;
+					z-index: 1000;
+					box-shadow: 0 0 10px red;
+					}
+
+					@keyframes blink {
+					from { opacity: 0.7; }
+					to { opacity: 1; }
+					}
+
+					.home-icon-btn {
+					background: rgba(255, 255, 255, 0.1); /* ব্যাকগ্রাউন্ড একটু উজ্জ্বল করলাম */
+					border: 1.5px solid rgba(255, 255, 255, 0.2); /* বর্ডার একটু মোটা করলাম যাতে স্পষ্টভাবে বোঝা যায় */
+					color: #ffffff; /* একদম স্পষ্ট দেখার জন্য সাদা দিলাম, প্রয়োজনে rgba(255,255,255,0.9) দিতে পারেন */
+					width: 38px;
+					height: 38px;
+					border-radius: 50%;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					cursor: pointer;
+					transition: all 0.2s;
+					font-size: 16px;
+					box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* একটু শ্যাডো দিলাম যেন ব্যাকগ্রাউন্ড থেকে আলাদা মনে হয় */
+					}
+
+					.home-icon-btn:active {
+					transform: scale(0.9);
+					background: rgba(74, 222, 128, 0.3);
+					color: #4ade80;
+					border-color: #4ade80;
+					}
+
+				</style>
+
+
+			</head>
+	<body>
+		<div id="gameContainer">
+			<div id="header">
+				<div class="home-icon-btn" onclick="goToDashboard()">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+						<polyline points="9 22 9 12 15 12 15 22"></polyline>
+					</svg>
+				</div>
+				<div class="bal-section">
+					Balance: <span id="mainBalance">0</span>
+				</div>
+				<button class="collect-btn" onclick="collectPoints()">Collect</button>
+			</div>
+			<div id="rewardSection">
+				<button class="reward-btn">Get 2x Reward for 5 minutes</button>
+			</div>
+			<div id="gameArea">
+				<div id="liveScore">Score: 0</div>
+
+					<div id="timerDisplay" style="display:block;">05:00</div>
+
+					<div class="road-line" style="left: 20%;"></div>
+				
+				
+				<div class="road-line" style="left: 20%;"></div>
+				<div class="road-line" style="left: 80%;"></div>
+				<div id="userCar" class="obj"></div>
+				<div id="startScreen">
+					<button id="startBtn">START GAME</button>
+				</div>
+				<div id="gameOverPopup" style="display:none;">
+					<div class="game-over-card">
+						<h2>GAME OVER</h2>
+						<p class="final-score">
+							Score: <span id="finalScoreDisplay">0</span>
+						</p>
+						<button class="play-again-btn" onclick="restartGame()">PLAY AGAIN</button>
+					</div>
+				</div>
+				<div id="messagePopup" style="display:none;">
+					<p style="text-align:center; padding:20px;">Minimum 500 points required to claim. Keep playing to collect more points!</p>
+					<button onclick="document.getElementById('messagePopup').style.display='none'">OK</button>
+				</div>
+			</div>
+			<div class="controls">
+				<button id="leftBtn">◀</button>
+				<button id="rightBtn">▶</button>
+			</div>
+		</div>
+
+		<script>
+			let userCar = document.getElementById('userCar'), gameArea = document.getElementById('gameArea');
+			let score = 0, mainBalance = 0, gameActive = false, carX = 160, speed = 8;
+
+			function moveUserCar(dir) {
+			const containerWidth = document.getElementById('gameArea').offsetWidth;
+			const carWidth = 50; // গাড়ির সাইজ
+			const limit = containerWidth - carWidth;
+
+			if (dir === 'left') {
+			carX -= 10;
+			if (carX < 0) carX = 0;
+    }
+    if (dir === 'right') {
+        carX += 10;
+        if (carX > limit) carX = limit;
+    }
+    userCar.style.left = carX + 'px';
+}
+        
+
+        function bindButton(id, dir) {
+            const btn = document.getElementById(id);
+            let interval;
+            btn.addEventListener('touchstart', (e) => { e.preventDefault(); interval = setInterval(() => moveUserCar(dir), 30); });
+            btn.addEventListener('touchend', () => clearInterval(interval));
+            btn.addEventListener('mousedown', () => { interval = setInterval(() => moveUserCar(dir), 30); });
+            btn.addEventListener('mouseup', () => clearInterval(interval));
+        }
+        bindButton('leftBtn', 'left'); bindButton('rightBtn', 'right');
+
+        function collectPoints() {
+            if (score < 500) { document.getElementById('messagePopup').style.display = 'flex'; }
+            else { mainBalance += score; score = 0; document.getElementById('mainBalance').innerText = mainBalance; document.getElementById('liveScore').innerText = "Score: 0"; }
+        }
+
+        function restartGame() { location.reload(); }
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            document.getElementById('startScreen').style.display = 'none';
+            gameActive = true;
+            setInterval(() => { if(gameActive) spawnObject('enemy'); }, 1000);
+            setInterval(() => { if(gameActive) spawnObject('reward'); }, 2500);
+        });
+
+      function spawnObject(type) {
+    let el = document.createElement('div'), attempts = 0, isOverlapping, x;
+    
+    // স্পনিং লুপ: গাড়ি যাতে ওভারল্যাপ না করে
+    do {
+        isOverlapping = false;
+        x = Math.floor(Math.random() * 320); 
+        document.querySelectorAll('.obj').forEach(o => {
+            if (o !== el && Math.abs(parseInt(o.style.left) - x) < 65 && parseInt(o.style.top) < 180) {
+                isOverlapping = true;
+            }
+        });
+        attempts++;
+    } while (isOverlapping && attempts < 15);
+
+    // যদি ১৫ বার চেষ্টার পরও ফাঁকা জায়গা না পায়, তবে গাড়িটি আর তৈরি হবে না
+    if (isOverlapping) return;
+
+    el.className = 'obj ' + type;
+    el.style.left = x + 'px';
+    el.style.top = '-80px';
+    gameArea.appendChild(el);
+
+    let move = setInterval(() => {
+        if(!gameActive) { clearInterval(move); el.remove(); return; }
+        el.style.top = (parseInt(el.style.top) + speed) + 'px';
+        
+        let uR = userCar.getBoundingClientRect(), eR = el.getBoundingClientRect();
+        
+        // কলিশন লজিক
+        // কলিশন লজিক
+    if (eR.bottom > uR.top + 15 && eR.top < uR.bottom - 15 && eR.right > uR.left + 15 && eR.left < uR.right - 15) {
+        if(type === 'enemy') { 
+            gameActive = false; 
+            
+            // --- নতুন কোড শুরু ---
+            // ১. স্কোর পপআপে দেখানো
+            document.getElementById('finalScoreDisplay').innerText = score;
+            
+            // ২. ব্যালেন্সে স্কোর যোগ করা
+            mainBalance += score;
+            document.getElementById('mainBalance').innerText = mainBalance;
+            
+            // ৩. গেম ওভার পপআপ দেখানো
+            document.getElementById('gameOverPopup').style.display = 'flex'; 
+            // --- নতুন কোড শেষ ---
+            
+            clearInterval(move); 
+        } else {
+            // ... (আপনার আগের রিওয়ার্ড পাওয়ার কোড যেমন আছে তেমনই থাকবে)
+            score++; 
+            document.getElementById('liveScore').innerText = "Score: " + score;
+            let p = document.createElement('div'); 
+            p.className = "plusOne"; 
+            p.innerText = "+1";
+            p.style.left = el.style.left; 
+            p.style.top = el.style.top;
+            gameArea.appendChild(p); 
+            setTimeout(() => p.remove(), 1000);
+            el.remove(); 
+            clearInterval(move);
+        }
+    }
+        // স্ক্রিন থেকে বেরিয়ে গেলে রিমুভ
+        if(parseInt(el.style.top) > 700) { el.remove(); clearInterval(move); }
+    }, 20);
+}
+
+		// ড্যাশবোর্ডে যাওয়ার ফাংশন
+		function goToDashboard() {
+		window.location.href = "https://dashboard.gritorax.com";
+		}
+
+		// ফোনের ব্যাক বাটন চাপলে ড্যাশবোর্ডে নিয়ে যাবে
+		history.pushState(null, null, window.location.href);
+		window.addEventListener('popstate', function(event) {
+		window.location.href = "https://dashboard.gritorax.com";
+		});
+	
+		
+		
+		</script>
+	</body>
+</html>
