@@ -140,7 +140,7 @@
 			display: inline-block;
 			font-size: 12px;
 			position: absolute;
-			top: 16px;
+			top: 69px;
 			right: 14px;
 			font-family: monospace;
 			box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -570,6 +570,12 @@
 
 			// রেফারেল লিংক আপডেট
 			document.getElementById('refer-link').value = `https://t.me/gritorax_bot/app?startapp=${userid}`;
+
+			// ১. ডাটাবেজের 'total_refer' ডাটাটি HTML-এর 'total-refer' আইডিতে শো করা হলো
+			document.getElementById('total-refer').innerText = data.total_refer;
+
+			// ২. ডাটাবেজের 'total_refer_commission' ডাটাটি HTML-এর 'refer-income' আইডিতে শো করা হলো
+			document.getElementById('refer-income').innerText = data.total_refer_commission;
 
 			// ১৫ দিনের কাউন্টডাউন
 			if (data.countdown_15_days) {
