@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>3D Lucky Roller - Premium</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<style>
+
+			html, body {
+			-webkit-tap-highlight-color: transparent !important;
+			}
+			* { box-sizing: border-box; }
+
+			body {
+			background-color: #000;
+			color: #fff;
+			font-family: 'Inter', sans-serif;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			overflow: hidden;
+			}
+
+			.phone-container {
+			width: 100%;
+			height: 100%;
+			max-width: 400px;
+			background-color: #000;
+			border: 2px solid #333;
+			border-radius: 30px;
+			overflow-y: auto;
+			display: flex;
+			flex-direction: column;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+			padding: 24px 18px; /* একটু বেশি ব্রিদিং স্পেস দেওয়া হয়েছে */
+			}
+
+			.phone-container::-webkit-scrollbar {
+			width: 0px;
+			}
+
+			/* ==========================================================================
+			1. TOP SECTION (Balance & Claim Bar)
+			========================================================================== */
+			.stats-container {
+			width: 100%;
+			background: #111;
+			border: 1px solid #333;
+			border-radius: 15px;
+			padding: 12px 15px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 25px; /* নিচের রুলস থেকে গ্যাপ বাড়ানো হয়েছে */
+			}
+
+			.point-box { color: #f39c12; font-weight: bold; }
+
+			.claim-btn {
+			background: #27ae60;
+			color: white;
+			border: none;
+			padding: 8px 15px;
+			border-radius: 20px;
+			font-size: 0.8rem;
+			font-weight: bold;
+			cursor: pointer;
+			transition: transform 0.1s;
+			}
+			.claim-btn:active { transform: scale(0.9); }
+
+			/* ==========================================================================
+			2. MIDDLE SECTION (Game Rules & Badges)
+			========================================================================== */
+			.game-rules {
+			width: 100%;
+			text-align: center;
+			margin-bottom: 30px; /* [FIX] গেম সেকশনকে নিচে নামানোর জন্য মার্জিন বাড়ানো হলো */
+			padding: 0 10px;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			}
+
+			/* ==========================================================================
+			3. GAME PLAY AREA (3D Dice Stage) - এখন নিচে নেমে পারফেক্ট পজিশনে থাকবে
+			========================================================================== */
+			.game-area {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			perspective: 1200px;
+			padding: 40px 0;
+			background: rgba(255, 255, 255, 0.02);
+			border-radius: 24px;
+			border: 1px solid rgba(255, 255, 255, 0.03);
+			}
+
+			.dice-wrapper {
+			display: flex;
+			gap: 40px;
+			height: 80px;
+			align-items: center;
+			}
+
+			.dice-container {
+			width: 60px;
+			height: 60px;
+			position: relative;
+			transform-style: preserve-3d;
+			transition: transform 1.5s cubic-bezier(0.1, 0.5, 0.3, 1);
+			}
+
+			.initial-pos { transform: translateY(-500px) rotateX(45deg) rotateY(45deg); }
+
+			.face {
+			position: absolute;
+			width: 60px;
+			height: 60px;
+			background: #fff;
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-rows: repeat(3, 1fr);
+			padding: 6px;
+			box-shadow: inset 0 0 10px rgba(0,0,0,0.15);
+			backface-visibility: hidden;
+			}
+
+			.dot { width: 10px; height: 10px; background: #000; border-radius: 50%; justify-self: center; align-self: center; }
+
+			.front  { transform: rotateY(0deg) translateZ(30px); }
+			.back   { transform: rotateY(180deg) translateZ(30px); }
+			.right  { transform: rotateY(90deg) translateZ(30px); }
+			.left   { transform: rotateY(-90deg) translateZ(30px); }
+			.top    { transform: rotateX(90deg) translateZ(30px); }
+			.bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+			.rolling-fast {
+			animation: fastSpin 0.3s infinite linear;
+			}
+
+			@keyframes fastSpin {
+			0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+			100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+			}
+
+			#status { color: #888; font-size: 0.9rem; margin-top: 25px; font-weight: 500; }
+
+			/* ==========================================================================
+			4. CONTROLS SECTION (গেম সেকশনের ঠিক নিচে মাউন্টেড)
+			========================================================================== */
+			.controls {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 16px;
+			background: transparent;
+
+			/* [⚓ IMPORTANT] বাটন গেম সেকশন থেকে কতটুকু নিচে নামবে তা এখান থেকে কন্ট্রোল করবেন */
+			margin-top: 35px;
+
+			padding-bottom: 15px;
+			}
+
+			.roll-action-row {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+			}
+
+			.roll-btn {
+			background: linear-gradient(45deg, #f39c12, #e67e22);
+			color: white;
+			border: none;
+			padding: 15px 40px;
+			font-size: 1.1rem;
+			border-radius: 30px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: transform 0.1s;
+			min-width: 180px;
+			box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+			}
+			.roll-btn:active { transform: scale(0.9); }
+			.roll-btn:disabled { background: #333; cursor: not-allowed; box-shadow: none; }
+
+			.life-box {
+			position: absolute;
+			right: 5px;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 1.1rem;
+			font-weight: bold;
+			background: rgba(255, 255, 255, 0.05);
+			padding: 6px 12px;
+			border-radius: 20px;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			}
+			.fa-heart { color: #e74c3c; }
+
+			/* WATCH ADS FOR FREE LIVES BUTTON STYLE */
+			.ad-reward-trigger-btn {
+			width: 85%;
+			padding: 11px 14px;
+			background: linear-gradient(135deg, #ff9f43 0%, #ff6b6b 100%);
+			color: #ffffff;
+			border: none;
+			border-radius: 15px;
+			font-size: 11px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
+			transition: all 0.25s ease;
+			}
+
+			.ad-reward-trigger-btn:disabled {
+			opacity: 0.25;
+			background: linear-gradient(135deg, #57606f 0%, #2f3542 100%);
+			color: rgba(255, 255, 255, 0.3);
+			box-shadow: none;
+			cursor: not-allowed;
+			pointer-events: none;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="phone-container">
+
+			<div class="stats-container">
+				<a href="https://dashboard.gritorax.com" id="dashboard-link" style="color: #f39c12; font-size: 1.2rem; text-decoration: none; display: flex; align-items: center; width: 40px;">
+					<i class="fa-solid fa-house"></i>
+				</a>
+				<div class="point-box" style="flex: 1; display: flex; justify-content: center; align-items: center; gap: 6px; font-size: 1.1rem;">
+					<i class="fa-solid fa-coins"></i>
+					<span id="user-points-display">0 </span>
+				</div>
+				<button class="claim-btn" id="claimRewardBtn">
+					Claim
+				</button>
+			</div>
+
+			<div class="game-rules">
+				<p style="color: #aaa; font-size: 0.8rem; margin: 0; font-weight: 500; letter-spacing: 0.5px; line-height: 1.4;">
+					✨ Match <b>numbers</b> OR <b>roll evens</b> to win rewards!
+				</p>
+				<div style="background: rgba(46, 196, 182, 0.1); border: 1px dashed #2ec4b6; border-radius: 8px; padding: 6px 12px; margin-top: 4px; display: inline-block; align-self: center;">
+					<p style="color: #2ec4b6; font-size: 0.85rem; margin: 0; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">
+						🔥 Roll <b>Double 6</b> for 2X Rewards! 🔥
+					</p>
+				</div>
+			</div>
+
+			<div class="game-area">
+				<div id="drop-zone" style="transition: transform 1s;">
+					<div class="dice-wrapper">
+						<div id="dice1" class="dice-container initial-pos">
+							<div class="face front"></div>
+							<div class="face back"></div>
+							<div class="face right"></div>
+							<div class="face left"></div>
+							<div class="face top"></div>
+							<div class="face bottom"></div>
+						</div>
+						<div id="dice2" class="dice-container initial-pos">
+							<div class="face front"></div>
+							<div class="face back"></div>
+							<div class="face right"></div>
+							<div class="face left"></div>
+							<div class="face top"></div>
+							<div class="face bottom"></div>
+						</div>
+					</div>
+				</div>
+				<p id="status">Feeling lucky? Roll the dice!</p>
+			</div>
+
+			<div class="controls">
+				<div class="roll-action-row">
+					<button class="roll-btn" onclick="startRoll()">ROLL DICE</button>
+					<div class="life-box">
+						<i class="fa-solid fa-heart"></i>
+						<span id="life-count">5</span>
+					</div>
+				</div>
+
+				<button class="ad-reward-trigger-btn" id="watch-rewarded-ad-btn" disabled="">
+					<i class="fa-solid fa-clapperboard"></i> Watch Ad for Free 10 Lives
+				</button>
+			</div>
+
+		</div>
+
+		<script>
+			function getDotsHTML(num) {
+			const positions = {
+			1: [5],
+			2: [1, 9],
+			3: [1, 5, 9],
+			4: [1, 3, 7, 9],
+			5: [1, 3, 5, 7, 9],
+			6: [1, 3, 4, 6, 7, 9]
+			};
+			let html = '';
+			for (let i = 1; i <= 9; i++) {
+			if (positions[num].includes(i)) html += `<div class="dot" style="grid-area: ${Math.ceil(i/3)}/${(i-1)%3+1}"></div>`;
+			}
+			return html;
+			}
+
+			function shuffleDiceFaces(diceId) {
+			const faces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+			const dice = document.getElementById(diceId);
+			faces.forEach(faceClass => {
+			const randomNum = Math.floor(Math.random() * 6) + 1;
+			dice.querySelector('.' + faceClass).innerHTML = getDotsHTML(randomNum);
+			});
+			}
+
+			function getWeightedResult() {
+			const chance = Math.random() * 100;
+
+			if (chance <= 5) return [6, 6];
+
+			if (chance <= 30) {
+			const num = Math.floor(Math.random() * 5) + 1;
+			return [num, num];
+			}
+
+			if (chance <= 55) {
+			const evens = [2, 4, 6];
+			return [evens[Math.floor(Math.random()*3)], evens[Math.floor(Math.random()*3)]];
+			}
+
+			return [Math.floor(Math.random()*6)+1, Math.floor(Math.random()*6)+1];
+			}
+
+			function startRoll() {
+			const d1 = document.getElementById('dice1');
+			const d2 = document.getElementById('dice2');
+			const btn = document.querySelector('.roll-btn');
+			const status = document.getElementById('status');
+
+			btn.disabled = true;
+			status.innerText = "Shuffle...";
+
+			const shuffleInterval = setInterval(() => {
+			shuffleDiceFaces('dice1');
+			shuffleDiceFaces('dice2');
+			}, 100);
+
+			d1.style.transition = "none";
+			d2.style.transition = "none";
+			d1.className = "dice-container rolling-fast";
+			d2.className = "dice-container rolling-fast";
+
+			setTimeout(() => {
+			clearInterval(shuffleInterval);
+			const [res1, res2] = getWeightedResult();
+
+			d1.querySelector('.front').innerHTML = getDotsHTML(res1);
+			d2.querySelector('.front').innerHTML = getDotsHTML(res2);
+
+			d1.className = "dice-container";
+			d2.className = "dice-container";
+			d1.style.transition = "transform 1s cubic-bezier(0.17, 0.67, 0.83, 0.67)";
+			d2.style.transition = "transform 1s cubic-bezier(0.17, 0.67, 0.83, 0.67)";
+
+			d1.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
+			d2.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
+
+			status.innerText = `Landed: ${res1} & ${res2}!`;
+			btn.disabled = false;
+			}, 3500);
+			}
+
+			window.onload = () => {
+			const d1 = document.getElementById('dice1');
+			const d2 = document.getElementById('dice2');
+
+			if(d1 && d2) {
+				d1.querySelector('.front').innerHTML = getDotsHTML(6);
+				d2.querySelector('.front').innerHTML = getDotsHTML(6);
+
+				d1.className = "dice-container";
+				d2.className = "dice-container";
+				d1.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
+				d2.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
+
+				shuffleDiceFaces('dice1');
+				shuffleDiceFaces('dice2');
+
+				d1.querySelector('.front').innerHTML = getDotsHTML(6);
+				d2.querySelector('.front').innerHTML = getDotsHTML(6);
+				}
+				};
+
+				
+					// ১. ফোনের ফিজিক্যাল ব্যাক বাটন হ্যান্ডেল করা
+					history.pushState(null, null, window.location.href);
+					window.addEventListener('popstate', function(event) {
+					window.location.href = "https://dashboard.gritorax.com";
+					});
+
+					// ২. বাটনে ক্লিক করলে যেন সরাসরি ড্যাশবোর্ডে যায়
+					document.getElementById('dashboard-link').addEventListener('click', function(e) {
+					window.location.href = "https://dashboard.gritorax.com";
+					});
+				
+		</script>
+	</body>
+</html>
