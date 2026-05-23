@@ -5,9 +5,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		<title>Grifity Kinetic Dashboard</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+		<!-- টেলিগ্রাম ওয়েব অ্যাপ স্ক্রিপ্ট -->
+		<script src="https://telegram.org/js/telegram-web-app.js"></script>
 		<style>
 			/* ==========================================================================
-			1. PREMIUM DARK FOREST THEME SYSTEM
+			1. PREMIUM DARK FOREST THEME SYSTEM (আপনার অরিজিনাল কোড)
 			========================================================================== */
 			* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -29,11 +31,12 @@
 			overflow-x: hidden;
 			display: flex;
 			flex-direction: column;
+			transition: filter 0.3s ease; /* ব্লার হওয়ার ট্রানজিশন */
 			}
 
 			/* Header Setup */
 			.header { padding: 24px 20px 10px 20px; display: flex; justify-content: space-between; align-items: center; }
-			
+
 
 			/* ==========================================================================
 			2. SLIM VIP PANEL WITH INTEGRATED REDEEM BUTTON
@@ -144,7 +147,7 @@
 			}
 
 			/* ==========================================================================
-			4. PROGRESS ENGINE (FIXED DIRECTION: LEFT TO RIGHT ENERGY FLOW)
+			4. PROGRESS ENGINE
 			========================================================================== */
 			.progress-section { padding: 4px 20px 22px 20px; }
 			.progress-bar-bg { background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.04); height: 8px; border-radius: 10px; width: 100%; overflow: hidden; position: relative; }
@@ -166,7 +169,7 @@
 			.progress-text { text-align: center; font-size: 11px; color: #a0b3af; margin-top: 5px; font-weight: 600; }
 
 			/* ==========================================================================
-			5. INNER CONTENT HUBS (CLEAN MINIMAL GRID)
+			5. INNER CONTENT HUBS
 			========================================================================== */
 			.main-content {
 			background: rgba(0, 0, 0, 0.15);
@@ -218,18 +221,13 @@
 			.copy-btn:active { transform: scale(0.93); }
 
 			/* ==========================================================================
-			6. PREMIUM DYNAMIC POPUP / MODAL (DIAMOND OFFERS)
+			6. PREMIUM DYNAMIC POPUP / MODAL
 			========================================================================== */
 			.modal-overlay {
-			position: fixed;
-			top: 0; left: 0; width: 100%; height: 100%;
-			background: rgba(2, 23, 18, 0.75);
-			backdrop-filter: blur(12px);
-			-webkit-backdrop-filter: blur(12px);
-			display: flex; justify-content: center; align-items: center;
-			z-index: 1000;
-			opacity: 0; pointer-events: none;
-			transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+			position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+			background: rgba(2, 23, 18, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+			display: flex; justify-content: center; align-items: center; z-index: 1000;
+			opacity: 0; pointer-events: none; transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 			}
 
 			.modal-overlay.active { opacity: 1; pointer-events: auto; }
@@ -237,36 +235,22 @@
 			.modal-box {
 			background: linear-gradient(145deg, #044434 0%, #02231c 100%);
 			border: 1.5px solid rgba(255, 215, 0, 0.25);
-			width: 88%; max-width: 380px;
-			border-radius: 24px;
-			padding: 30px 24px 26px 24px;
-			text-align: center;
-			position: relative;
+			width: 88%; max-width: 380px; border-radius: 24px; padding: 30px 24px 26px 24px;
+			text-align: center; position: relative;
 			box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.05);
-			transform: scale(0.85);
-			transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+			transform: scale(0.85); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 			}
 
 			.modal-overlay.active .modal-box { transform: scale(1); }
 
-			/* ক্লোজ বাটন (Top Right Cross) */
 			.modal-close-btn {
-			position: absolute;
-			top: 16px; right: 16px;
-			background: rgba(255, 255, 255, 0.05);
-			border: 1px solid rgba(255, 255, 255, 0.1);
-			color: #a0b3af;
-			width: 32px; height: 32px;
-			border-radius: 50%;
-			display: flex; justify-content: center; align-items: center;
-			cursor: pointer;
-			font-size: 14px;
-			transition: all 0.2s ease;
+			position: absolute; top: 16px; right: 16px;
+			background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+			color: #a0b3af; width: 32px; height: 32px; border-radius: 50%;
+			display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 14px; transition: all 0.2s ease;
 			}
 			.modal-close-btn:hover { background: rgba(255, 77, 77, 0.2); color: #ff4d4d; border-color: rgba(255, 77, 77, 0.3); }
-			.modal-close-btn:active { transform: scale(0.9); }
 
-			/* ডায়মন্ড আইকন অ্যানিমেশন */
 			@keyframes diamond-pulse {
 			0% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4)); }
 			50% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.7)); }
@@ -274,66 +258,69 @@
 			}
 
 			.modal-icon-wrapper {
-			width: 70px; height: 70px;
-			background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 145, 77, 0.05) 100%);
-			border: 1.5px solid #ffd700;
-			border-radius: 50%;
-			display: flex; justify-content: center; align-items: center;
-			margin: 0 auto 18px auto;
-			animation: diamond-pulse 3s infinite ease-in-out;
+			width: 70px; height: 70px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 145, 77, 0.05) 100%);
+			border: 1.5px solid #ffd700; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+			margin: 0 auto 18px auto; animation: diamond-pulse 3s infinite ease-in-out;
 			}
 			.modal-icon-wrapper i { color: #ffd700; font-size: 30px; }
 
 			.modal-title { font-size: 20px; font-weight: 800; color: #ffffff; margin: 0 0 10px 0; letter-spacing: 0.5px; text-transform: uppercase; }
 			.modal-subtitle { font-size: 11px; color: #ffd700; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
-
-			.modal-description {
-			font-size: 13.5px;
-			color: #cbd5e1;
-			line-height: 1.6;
-			margin: 0 0 22px 0;
-			font-weight: 500;
-			}
+			.modal-description { font-size: 13.5px; color: #cbd5e1; line-height: 1.6; margin: 0 0 22px 0; font-weight: 500; }
 
 			.modal-action-btn {
-			background: linear-gradient(135deg, #4ade80 0%, #2ecc71 100%);
-			color: #044434;
-			border: none;
-			width: 100%;
-			padding: 12px;
-			border-radius: 12px;
-			font-size: 13px;
-			font-weight: 800;
-			cursor: pointer;
-			text-transform: uppercase;
-			letter-spacing: 0.5px;
-			box-shadow: 0 6px 20px rgba(74, 222, 128, 0.2);
-			transition: transform 0.1s;
+			background: linear-gradient(135deg, #4ade80 0%, #2ecc71 100%); color: #044434; border: none; width: 100%;
+			padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase;
+			letter-spacing: 0.5px; box-shadow: 0 6px 20px rgba(74, 222, 128, 0.2); transition: transform 0.1s;
 			}
 			.modal-action-btn:active { transform: scale(0.96); }
 
+			/* ==========================================================================
+			7. NEW: LOADING SCREEN STYLES
+			========================================================================== */
+			#loading-screen {
+			position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+			background: rgba(2, 23, 18, 0.85); backdrop-filter: blur(5px);
+			display: flex; flex-direction: column; justify-content: center; align-items: center;
+			z-index: 9999;
+			}
+			.spinner {
+			width: 50px; height: 50px; border: 4px solid rgba(74, 222, 128, 0.15);
+			border-top: 4px solid #4ade80; border-radius: 50%;
+			animation: spin 1s linear infinite; margin-bottom: 15px;
+			}
+			.loading-text { font-size: 14px; color: #4ade80; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; animation: pulse-glow 2s infinite;}
+			@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 		</style>
 	</head>
 	<body>
 
-		<div class="app-container">
+		<!-- Loading Screen -->
+		<div id="loading-screen">
+			<div class="spinner"></div>
+			<div class="loading-text">Authenticating...</div>
+		</div>
+
+		<!-- ID = "dashboard" যোগ করা হয়েছে ব্লার করার জন্য -->
+		<div class="app-container" id="dashboard">
 
 			<div class="header">
 				<div>
 					<p style="margin:0; opacity: 0.5; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">hello...</p>
-					<h3 style="margin:0; font-size: 18px; font-weight: 700;">Muhtasin Sadmam</h3>
+					<!-- ID যোগ করা হয়েছে -->
+					<h3 id="user-name-display" style="margin:0; font-size: 18px; font-weight: 700;">Loading...</h3>
 				</div>
-				
 			</div>
 
 			<div class="top-info">
-
 				<div class="premium-balance-vault">
 					<div class="balance-meta">
 						<div class="balance-label">Total Balance</div>
 						<h1 class="balance-amount">
-							434350 <span>PTS</span>
+							<!-- ID যোগ করা হয়েছে -->
+							<span id="user-balance">0</span>
+							<span>coins</span>
 						</h1>
 					</div>
 					<a href="https://redeem.gritorax.com" class="top-redeem-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
@@ -344,9 +331,9 @@
 				<div class="bonus-card">
 					<strong>10,000 PTS BONUS</strong>
 					<p>Earn 25,000 pts within 15 days and get a 10,000 pts bonus!</p>
-					<div class="timer">14:23:59:59</div>
+					<!-- ID যোগ করা হয়েছে -->
+					<div class="timer" id="countdown-timer-display">Loading...</div>
 				</div>
-
 			</div>
 
 			<div class="progress-section">
@@ -357,7 +344,6 @@
 			</div>
 
 			<div class="main-content">
-
 				<div class="task-grid">
 					<a href="https://quick.gritorax.com" class="task-item" style="text-decoration: none; color: inherit;">
 						<i class="fa-solid fa-fire"></i>
@@ -383,12 +369,10 @@
 						<i class="fa-solid fa-clapperboard"></i>
 						<p>Creator Rewards</p>
 					</a>
-
 					<div class="task-item" onclick="openDiamondOffers()">
 						<i class="fa-solid fa-gem"></i>
 						<p>Diamond Offers</p>
 					</div>
-
 					<a href="https://support.gritorax.com" class="task-item" style="text-decoration: none; color: inherit;">
 						<i class="fa-solid fa-headset"></i>
 						<p>Support</p>
@@ -418,31 +402,28 @@
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</div>
 
+		<!-- Diamond Modal (আপনার অরিজিনাল) -->
 		<div class="modal-overlay" id="diamondModal">
 			<div class="modal-box">
 				<div class="modal-close-btn" onclick="closeDiamondOffers()">
 					<i class="fa-solid fa-xmark"></i>
 				</div>
-
 				<div class="modal-icon-wrapper">
 					<i class="fa-solid fa-gem"></i>
 				</div>
-
 				<h2 class="modal-title">Exclusive Access</h2>
 				<div class="modal-subtitle">Premium Members Only</div>
-
 				<p class="modal-description">
 					Thank you for your interest! These elite high-reward diamond tasks are currently tailored for selected accounts. Keep actively completing tasks to unlock your personalized invitation soon.
 				</p>
-
 				<button class="modal-action-btn" onclick="closeDiamondOffers()">Understood</button>
 			</div>
 		</div>
 
+		<!-- Exit Modal (আপনার অরিজিনাল) -->
 		<div class="modal-overlay" id="exitModal">
 			<div class="modal-box">
 				<h2 style="color:#ffffff; margin-top:0;">Exit App?</h2>
@@ -454,39 +435,50 @@
 			</div>
 		</div>
 
+		<!-- NEW: Suspended/Error Message Modal -->
+		<div class="modal-overlay" id="messageModal">
+			<div class="modal-box" style="border-color: rgba(255, 77, 77, 0.4);">
+				<div class="modal-icon-wrapper" style="border-color: #ff4d4d; background: rgba(255, 77, 77, 0.1); animation: none;">
+					<i class="fa-solid fa-triangle-exclamation" style="color: #ff4d4d;"></i>
+				</div>
+				<h2 class="modal-title" id="msg-title" style="color: #ff4d4d;">Alert</h2>
+				<div class="modal-subtitle" id="msg-subtitle">Notice</div>
+				<p class="modal-description" id="msg-desc">Something went wrong.</p>
+				<button class="modal-action-btn" style="background: linear-gradient(135deg, #ff4d4d 0%, #cc0000 100%); color: white;" onclick="closeApp()">Exit App</button>
+			</div>
+		</div>
 
 
 		<script>
-			// Exit Modal Logic
-			function showExitModal() {
-			document.getElementById("exitModal").classList.add("active");
-			}
+			// ==========================================
+			// 1. Modal & Navigation Logic
+			// ==========================================
+			function showExitModal() { document.getElementById("exitModal").classList.add("active"); }
+			function hideExitModal() { document.getElementById("exitModal").classList.remove("active"); }
+			function openDiamondOffers() { document.getElementById("diamondModal").classList.add("active"); }
+			function closeDiamondOffers() { document.getElementById("diamondModal").classList.remove("active"); }
 
-			function hideExitModal() {
-			document.getElementById("exitModal").classList.remove("active");
-			}
-
-			// Exit Button ফাংশন
 			function closeApp() {
 			if (window.Telegram?.WebApp) {
 			window.Telegram.WebApp.close();
 			} else {
-			window.close(); // সাধারণ ব্রাউজারের জন্য
+			window.close();
 			}
 			}
 
-			// ফোনের Back Navigation হ্যান্ডেল করার জন্য
+			// নতুন: কাস্টম মেসেজ পপআপ (সাসপেন্ড বা এররের জন্য)
+			function showMessageModal(title, subtitle, description) {
+			document.getElementById('msg-title').innerText = title;
+			document.getElementById('msg-subtitle').innerText = subtitle;
+			document.getElementById('msg-desc').innerText = description;
+			document.getElementById('messageModal').classList.add('active');
+			}
+
 			window.addEventListener('popstate', function(event) {
 			showExitModal();
-			history.pushState(null, null, window.location.href); // যাতে ব্যাক বাটন চাপলে সরাসরি ক্লোজ না হয়
-			});
-
 			history.pushState(null, null, window.location.href);
-
-			function closeDiamondOffers() {
-			const modal = document.getElementById("diamondModal");
-			modal.classList.remove("active");
-			}
+			});
+			history.pushState(null, null, window.location.href);
 
 			function copyReferLink() {
 			const copyText = document.getElementById("refer-link");
@@ -496,14 +488,140 @@
 
 			const copyBtn = document.querySelector(".copy-btn");
 			copyBtn.innerText = "Copied!";
-			setTimeout(() => {
-			copyBtn.innerText = "Copy";
-			}, 2000);
+			setTimeout(() => { copyBtn.innerText = "Copy"; }, 2000);
 			}
 
-			// এই ফাংশনটি আপনার স্ক্রিপ্টের শেষে যোগ করুন
-			function openDiamondOffers() {
-			document.getElementById("diamondModal").classList.add("active");
+			// ==========================================
+			// 2. Telegram Auth & Data Fetching Logic
+			// ==========================================
+			const tg = window.Telegram.WebApp;
+			tg.ready();
+
+			const dashboard = document.getElementById('dashboard');
+			const loadingScreen = document.getElementById('loading-screen');
+
+			function showLoading() {
+			dashboard.style.filter = "blur(10px)";
+			loadingScreen.style.display = "flex";
+			}
+
+			function hideLoading() {
+			dashboard.style.filter = "none";
+			loadingScreen.style.display = "none";
+			}
+
+			// শুরুতেই লোডিং স্ক্রিন
+			showLoading();
+
+			const user = tg.initDataUnsafe?.user;
+			const userid = user?.id;
+			const firstName = user?.first_name || "Guest";
+			const lastName = user?.last_name || "";
+			const fullName = `${firstName} ${lastName}`.trim();
+			const referrer_id = tg.initDataUnsafe?.start_param || "";
+			const country = user?.language_code || navigator.language || "unknown";
+			const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
+			// নাম সেট করা
+			document.getElementById('user-name-display').innerText = fullName;
+
+			if (!userid) {
+			// ব্রাউজারে টেস্ট করার সময় এরর না দিয়ে ডেমো দেখানোর জন্য (লাইভ হলে পপআপ দিবে)
+			setTimeout(() => hideLoading(), 1000);
+			console.log("Not running inside Telegram. Running in demo mode.");
+			} else {
+
+			const formData = new FormData();
+			formData.append('userid', userid);
+			formData.append('country', country);
+			formData.append('timezone', timezone);
+			formData.append('referrer_id', referrer_id);
+
+			// API Call (আপনার PHP ফাইলের লিংক দিবেন)
+			fetch('https://api4016.gritorax.com/login.php', {
+			method: 'POST',
+			body: formData
+			})
+			.then(response => response.json())
+			.then(data => {
+
+			// ১. সাসপেন্ডেড হলে আপনার প্রিমিয়াম পপআপ শো করবে
+			if (data.response_status === "suspended") {
+			hideLoading();
+			showMessageModal("Account Suspended", "Action Required", data.message);
+			return;
+			}
+			// ২. সার্ভার এরর হলে
+			else if (data.response_status === "error") {
+			hideLoading();
+			showMessageModal("System Error", "Connection Failed", data.message);
+			return;
+			}
+			// ৩. সাকসেস হলে
+			else if (data.response_status === "active") {
+			localStorage.setItem('userData', JSON.stringify(data));
+
+			// ব্যালেন্স আপডেট (ডাটাবেসের total_balance নাম অনুযায়ী)
+			if(data.total_balance !== undefined) {
+			document.getElementById('user-balance').innerText = data.total_balance;
+			}
+
+			// রেফারেল লিংক আপডেট
+			document.getElementById('refer-link').value = `https://t.me/gritorax_bot?start=${userid}`;
+
+			// ১৫ দিনের কাউন্টডাউন
+			if (data.countdown_15_days) {
+			start15DaysCountdown(parseInt(data.countdown_15_days));
+			} else {
+			document.getElementById('countdown-timer-display').innerText = "No Bonus Active";
+			}
+
+			// সব ঠিক থাকলে ড্যাশবোর্ড ক্লিয়ার করে দিন
+			hideLoading();
+			tg.expand();
+			}
+			})
+			.catch(error => {
+			console.error("Server Error:", error);
+			hideLoading();
+			showMessageModal("Network Error", "Timeout", "Failed to connect to the server. Please check your internet and try again.");
+			});
+			}
+
+			// ==========================================
+			// 3. Countdown Timer Logic
+			// ==========================================
+			function start15DaysCountdown(deadlineTimestamp) {
+			const timerDisplay = document.getElementById('countdown-timer-display');
+
+			const countdownInterval = setInterval(() => {
+			const currentTimestamp = Math.floor(Date.now() / 1000);
+			let timeRemaining = deadlineTimestamp - currentTimestamp;
+
+			if (timeRemaining <= 0) {
+			clearInterval(countdownInterval);
+			timerDisplay.innerText = "Bonus Expired!";
+			return;
+			}
+
+			const days = Math.floor(timeRemaining / (24 * 60 * 60));
+			timeRemaining %= (24 * 60 * 60);
+
+			const hours = Math.floor(timeRemaining / (60 * 60));
+			timeRemaining %= (60 * 60);
+
+			const minutes = Math.floor(timeRemaining / 60);
+			const seconds = timeRemaining % 60;
+
+			// 0 padding (e.g., 05m instead of 5m)
+			const dStr = days.toString().padStart(2, '0');
+			const hStr = hours.toString().padStart(2, '0');
+			const mStr = minutes.toString().padStart(2, '0');
+			const sStr = seconds.toString().padStart(2, '0');
+
+			timerDisplay.innerText = `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
+
+			}, 1000);
 			}
 		</script>
 	</body>
