@@ -21,46 +21,75 @@
 					.collect-btn { background: #2ecc71; border: 2px solid #27ae60; padding: 6px 15px; color: white; border-radius: 20px; cursor: pointer; }
 					.collect-btn:active { transform: scale(0.95); }
 
-					/* Reward Section */
+					/* Reward Section - NEW STYLES FROM DICE GAME */
 					#rewardSection {
-					height: 50px;
+					padding: 10px 15px;
 					background: #281F1F;
 					display: flex;
+					flex-direction: column;
 					justify-content: center;
 					align-items: center;
 					}
 
-					.reward-btn {
-					background: linear-gradient(45deg, #f1c40f, #e67e22);
-					padding: 8px 20px;
-					border-radius: 25px;
-					font-weight: bold;
-					font-size: 12px;
-					color: white;
-					border: 2px solid #fff;
+					.premium-ad-trigger-btn {
+					width: 100%;
+					padding: 12px 20px;
+					background: linear-gradient(135deg, #f3ba2f 0%, #f1a80a 100%);
+					color: #000000;
+					border: none;
+					border-radius: 15px;
+					font-size: 13px;
+					font-weight: 700;
+					letter-spacing: 0.5px;
 					cursor: pointer;
-					box-shadow: 0 0 10px #f1c40f, 0 0 20px #f1c40f;
-					animation: pulseGlow 1.5s infinite;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					gap: 10px;
+					box-shadow: 0 0 20px rgba(243, 186, 47, 0.4);
+					animation: intenseGlowingEffect 2s infinite alternate;
+					transition: transform 0.1s ease;
 					text-transform: uppercase;
-					letter-spacing: 1px;
 					}
 
-					.reward-btn:active {
-					transform: scale(0.9);
+					.premium-ad-trigger-btn:active {
+					transform: scale(0.96);
 					}
 
-					@keyframes pulseGlow {
-					0% { box-shadow: 0 0 5px #f1c40f, 0 0 10px #f1c40f; }
-					50% { box-shadow: 0 0 20px #f39c12, 0 0 30px #f39c12; }
-					100% { box-shadow: 0 0 5px #f1c40f, 0 0 10px #f1c40f; }
+					@keyframes intenseGlowingEffect {
+					0% { box-shadow: 0 0 12px rgba(243, 186, 47, 0.3); }
+					100% { box-shadow: 0 0 24px rgba(243, 186, 47, 0.65); }
+					}
+
+					.premium-red-timer-box {
+					width: 100%;
+					background: rgba(255, 76, 76, 0.05);
+					border: 1px dashed rgba(255, 76, 76, 0.35);
+					border-radius: 12px;
+					padding: 10px;
+					text-align: center;
+					display: none;
+					box-shadow: 0 0 15px rgba(255, 76, 76, 0.1);
+					animation: timerPulse 2s infinite alternate;
+					}
+
+					.premium-red-timer-box span {
+					font-size: 13px;
+					font-weight: 700;
+					letter-spacing: 0.8px;
+					color: #ff4c4c;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					gap: 6px;
+					}
+
+					@keyframes timerPulse {
+					0% { border-color: rgba(255, 76, 76, 0.35); box-shadow: 0 0 10px rgba(255, 76, 76, 0.1); }
+					100% { border-color: rgba(255, 76, 76, 0.7); box-shadow: 0 0 20px rgba(255, 76, 76, 0.25); }
 					}
 
 					/* Game Area */
-					{
-					position: relative; /* এটি খুবই গুরুত্বপূর্ণ, যাতে টাইমারটি গেম এরিয়ার ভেতরে থাকে */
-					overflow: hidden;   /* যাতে গেমের বাইরে কিছু না যায় */
-					/* আপনার অন্যান্য প্রপার্টি এখানে থাকবে */
-					}
 					#gameArea { flex: 0.90; position: relative; overflow: hidden; background: #281F1F; touch-action: none; }
 					#liveScore { position: absolute; top: 10px; left: 15px; color: white; font-size: 18px; font-weight: bold; z-index: 10; }
 					.road-line { position: absolute; width: 6px; height: 55px; background: rgba(255,255,255,0.3); left: 50%; animation: moveLines 1s linear infinite; }
@@ -71,7 +100,6 @@
 					.enemy { background-image: url('enime.png'); }
 					.reward {
 					background-image: url('reward.png');
-					/* গ্লোয়িং ইফেক্ট শুরু */
 					filter: drop-shadow(0 0 10px rgba(241, 196, 15, 0.8))
 					drop-shadow(0 0 20px rgba(241, 196, 15, 0.6));
 					animation: rewardPulse 1.5s infinite alternate;
@@ -118,15 +146,15 @@
 
 					/* Popups */
 					#gameOverPopup, #startScreen, #messagePopup { display: flex; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); flex-direction: column; justify-content: center; align-items: center; z-index: 200; color: white; }
-					/* Game Over Popup */
+
 					#gameOverPopup {
-					display: none; /* শুরুতে লুকানো থাকবে */
+					display: none;
 					position: absolute;
 					top: 0;
 					left: 0;
 					width: 100%;
 					height: 100%;
-					background: rgba(0, 0, 0, 0.9); /* কালো ব্যাকগ্রাউন্ড */
+					background: rgba(0, 0, 0, 0.9);
 					flex-direction: column;
 					justify-content: center;
 					align-items: center;
@@ -135,12 +163,12 @@
 					}
 
 					#gameOverPopup .game-over-card {
-					background: linear-gradient(135deg, #2c3e50, #000000); /* কালো ও নীল গ্রেডিয়েন্ট */
-					border: 4px solid #e74c3c; /* লাল বর্ডার */
+					background: linear-gradient(135deg, #2c3e50, #000000);
+					border: 4px solid #e74c3c;
 					border-radius: 20px;
 					padding: 30px;
 					text-align: center;
-					box-shadow: 0 0 30px rgba(231, 76, 60, 0.5); /* গ্লোয়িং লাল শেডো */
+					box-shadow: 0 0 30px rgba(231, 76, 60, 0.5);
 					max-width: 80%;
 					}
 
@@ -149,7 +177,7 @@
 					font-weight: 900;
 					margin-top: 0;
 					margin-bottom: 10px;
-					color: #e74c3c; /* লাল রং */
+					color: #e74c3c;
 					text-transform: uppercase;
 					text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 					}
@@ -157,20 +185,20 @@
 					#gameOverPopup .final-score {
 					font-size: 24px;
 					font-weight: bold;
-					color: #f1c40f; /* গোল্ডেন রং */
+					color: #f1c40f;
 					margin-bottom: 20px;
 					text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 					}
 
 					#gameOverPopup .play-again-btn {
 					padding: 15px 40px;
-					background: linear-gradient(135deg, #e74c3c, #c0392b); /* লাল গ্রেডিয়েন্ট */
+					background: linear-gradient(135deg, #e74c3c, #c0392b);
 					color: white;
 					font-size: 20px;
 					font-weight: bold;
 					text-transform: uppercase;
 					border: none;
-					border-radius: 50px; /* একদম রাউন্ডেড বাটন */
+					border-radius: 50px;
 					cursor: pointer;
 					box-shadow: 0 5px 15px rgba(0,0,0,0.5), 0 0 10px #e74c3c;
 					transition: all 0.3s ease;
@@ -178,34 +206,14 @@
 					}
 
 					#gameOverPopup .play-again-btn:hover {
-					transform: scale(1.05); /* মাউস নিলে একটু বড় হবে */
-					box-shadow: 0 0 20px #e74c3c; /* গ্লো বাড়াবে */
-					}
-
-					#timerDisplay {
-					position: absolute;
-					top: 10px;
-					right: 15px; /* ডান দিকে রাখার জন্য */
-					color: red;
-					font-weight: 900;
-					font-size: 13px;
-					background: black;
-					padding: 5px 10px;
-					border-radius: 8px;
-					border: 2px solid red;
-					z-index: 1000;
-					box-shadow: 0 0 10px red;
-					}
-
-					@keyframes blink {
-					from { opacity: 0.7; }
-					to { opacity: 1; }
+					transform: scale(1.05);
+					box-shadow: 0 0 20px #e74c3c;
 					}
 
 					.home-icon-btn {
-					background: rgba(255, 255, 255, 0.1); /* ব্যাকগ্রাউন্ড একটু উজ্জ্বল করলাম */
-					border: 1.5px solid rgba(255, 255, 255, 0.2); /* বর্ডার একটু মোটা করলাম যাতে স্পষ্টভাবে বোঝা যায় */
-					color: #ffffff; /* একদম স্পষ্ট দেখার জন্য সাদা দিলাম, প্রয়োজনে rgba(255,255,255,0.9) দিতে পারেন */
+					background: rgba(255, 255, 255, 0.1);
+					border: 1.5px solid rgba(255, 255, 255, 0.2);
+					color: #ffffff;
 					width: 38px;
 					height: 38px;
 					border-radius: 50%;
@@ -215,7 +223,7 @@
 					cursor: pointer;
 					transition: all 0.2s;
 					font-size: 16px;
-					box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* একটু শ্যাডো দিলাম যেন ব্যাকগ্রাউন্ড থেকে আলাদা মনে হয় */
+					box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 					}
 
 					.home-icon-btn:active {
@@ -226,8 +234,6 @@
 					}
 
 				</style>
-
-
 			</head>
 	<body>
 		<div id="gameContainer">
@@ -243,17 +249,20 @@
 				</div>
 				<button class="collect-btn" onclick="collectPoints()">Collect</button>
 			</div>
+
 			<div id="rewardSection">
-				<button class="reward-btn">Get 2x Reward for 5 minutes</button>
+				<button class="premium-ad-trigger-btn" id="watch-ad-button" onclick="triggerPremiumAdNetwork()">
+					<i class="fa-solid fa-circle-play"></i> Watch Ad for 2x Coins Boost
+				</button>
+				<div class="premium-red-timer-box" id="premium-countdown-box">
+					<span id="timer-display-text">2x Boost Active: 5:00</span>
+				</div>
 			</div>
+
 			<div id="gameArea">
 				<div id="liveScore">Score: 0</div>
 
-					<div id="timerDisplay" style="display:block;">05:00</div>
-
-					<div class="road-line" style="left: 20%;"></div>
-				
-				
+				<div class="road-line" style="left: 20%;"></div>
 				<div class="road-line" style="left: 20%;"></div>
 				<div class="road-line" style="left: 80%;"></div>
 				<div id="userCar" class="obj"></div>
@@ -284,128 +293,218 @@
 			let userCar = document.getElementById('userCar'), gameArea = document.getElementById('gameArea');
 			let score = 0, mainBalance = 0, gameActive = false, carX = 160, speed = 8;
 
+			// New States for 2x Booster
+			let is2xActive = false;
+			let remainingTime = 0;
+			let countdownIntervalId = null;
+			const CAR_STORAGE_KEY = 'car_game_balance';
+
+			// স্পনিং ইন্টারভাল ট্র্যাকার (গেম ওভারের পর এগুলো রিসেট করার জন্য)
+			let enemyIntervalId = null;
+			let rewardIntervalId = null;
+
 			function moveUserCar(dir) {
 			const containerWidth = document.getElementById('gameArea').offsetWidth;
-			const carWidth = 50; // গাড়ির সাইজ
+			const carWidth = 50;
 			const limit = containerWidth - carWidth;
 
 			if (dir === 'left') {
 			carX -= 10;
 			if (carX < 0) carX = 0;
-    }
-    if (dir === 'right') {
-        carX += 10;
-        if (carX > limit) carX = limit;
-    }
-    userCar.style.left = carX + 'px';
-}
+				}
+				if (dir === 'right') {
+					carX += 10;
+					if (carX > limit) carX = limit;
+				}
+				userCar.style.left = carX + 'px';
+			}
         
+			function bindButton(id, dir) {
+				const btn = document.getElementById(id);
+				let interval;
+				btn.addEventListener('touchstart', (e) => { e.preventDefault(); interval = setInterval(() => moveUserCar(dir), 30); });
+				btn.addEventListener('touchend', () => clearInterval(interval));
+				btn.addEventListener('mousedown', () => { interval = setInterval(() => moveUserCar(dir), 30); });
+				btn.addEventListener('mouseup', () => clearInterval(interval));
+			}
+			bindButton('leftBtn', 'left'); bindButton('rightBtn', 'right');
 
-        function bindButton(id, dir) {
-            const btn = document.getElementById(id);
-            let interval;
-            btn.addEventListener('touchstart', (e) => { e.preventDefault(); interval = setInterval(() => moveUserCar(dir), 30); });
-            btn.addEventListener('touchend', () => clearInterval(interval));
-            btn.addEventListener('mousedown', () => { interval = setInterval(() => moveUserCar(dir), 30); });
-            btn.addEventListener('mouseup', () => clearInterval(interval));
-        }
-        bindButton('leftBtn', 'left'); bindButton('rightBtn', 'right');
+			function updateLocalStorageBalance() {
+				localStorage.setItem(CAR_STORAGE_KEY, mainBalance);
+				document.getElementById('mainBalance').innerText = mainBalance;
+			}
 
-        function collectPoints() {
-            if (score < 500) { document.getElementById('messagePopup').style.display = 'flex'; }
-            else { mainBalance += score; score = 0; document.getElementById('mainBalance').innerText = mainBalance; document.getElementById('liveScore').innerText = "Score: 0"; }
-        }
+			function collectPoints() {
+				if (score < 500) { 
+					document.getElementById('messagePopup').style.display = 'flex'; 
+				} else { 
+					mainBalance += score; 
+					score = 0; 
+					updateLocalStorageBalance();
+					document.getElementById('liveScore').innerText = "Score: 0"; 
+				}
+			}
 
-        function restartGame() { location.reload(); }
+			// ফিক্সড রিস্টার্ট গেম ফাংশন - কোনো রিফ্রেশ ছাড়া টাইমার ধরে রাখবে
+			function restartGame() {
+				// ১. গেম ওভার স্ক্রিন হাইড করা
+				document.getElementById('gameOverPopup').style.display = 'none';
+				
+				// ২. গেমের আগের তৈরি হওয়া সব এনিমি ও রিওয়ার্ড অবজেক্ট স্ক্রিন থেকে ডিলিট করা
+				document.querySelectorAll('.enemy, .reward, .plusOne').forEach(obj => obj.remove());
+				
+				// ৩. স্কোর এবং ইউজারের গাড়ির পজিশন ডিফল্ট করা
+				score = 0;
+				document.getElementById('liveScore').innerText = "Score: 0";
+				carX = 160;
+				userCar.style.left = carX + 'px';
+				
+				// ৪. আবার স্টার্ট স্ক্রিন ফিরিয়ে আনা (কোনো রিফ্রেশ ছাড়া)
+				document.getElementById('startScreen').style.display = 'flex';
+			}
 
-        document.getElementById('startBtn').addEventListener('click', () => {
-            document.getElementById('startScreen').style.display = 'none';
-            gameActive = true;
-            setInterval(() => { if(gameActive) spawnObject('enemy'); }, 1000);
-            setInterval(() => { if(gameActive) spawnObject('reward'); }, 2500);
-        });
+			document.getElementById('startBtn').addEventListener('click', () => {
+				document.getElementById('startScreen').style.display = 'none';
+				gameActive = true;
+				
+				// আগের কোনো ইন্টারভাল থেকে থাকলে তা ক্লিয়ার করা
+				if(enemyIntervalId) clearInterval(enemyIntervalId);
+				if(rewardIntervalId) clearInterval(rewardIntervalId);
+				
+				enemyIntervalId = setInterval(() => { if(gameActive) spawnObject('enemy'); }, 1000);
+				rewardIntervalId = setInterval(() => { if(gameActive) spawnObject('reward'); }, 2500);
+			});
 
-      function spawnObject(type) {
-    let el = document.createElement('div'), attempts = 0, isOverlapping, x;
-    
-    // স্পনিং লুপ: গাড়ি যাতে ওভারল্যাপ না করে
-    do {
-        isOverlapping = false;
-        x = Math.floor(Math.random() * 320); 
-        document.querySelectorAll('.obj').forEach(o => {
-            if (o !== el && Math.abs(parseInt(o.style.left) - x) < 65 && parseInt(o.style.top) < 180) {
-                isOverlapping = true;
-            }
-        });
-        attempts++;
-    } while (isOverlapping && attempts < 15);
+			function spawnObject(type) {
+				let el = document.createElement('div'), attempts = 0, isOverlapping, x;
+				
+				do {
+					isOverlapping = false;
+					x = Math.floor(Math.random() * 320); 
+					document.querySelectorAll('.obj').forEach(o => {
+						if (o !== el && Math.abs(parseInt(o.style.left) - x) < 65 && parseInt(o.style.top) < 180) {
+							isOverlapping = true;
+						}
+					});
+					attempts++;
+				} while (isOverlapping && attempts < 15);
 
-    // যদি ১৫ বার চেষ্টার পরও ফাঁকা জায়গা না পায়, তবে গাড়িটি আর তৈরি হবে না
-    if (isOverlapping) return;
+				if (isOverlapping) return;
 
-    el.className = 'obj ' + type;
-    el.style.left = x + 'px';
-    el.style.top = '-80px';
-    gameArea.appendChild(el);
+				el.className = 'obj ' + type;
+				el.style.left = x + 'px';
+				el.style.top = '-80px';
+				gameArea.appendChild(el);
 
-    let move = setInterval(() => {
-        if(!gameActive) { clearInterval(move); el.remove(); return; }
-        el.style.top = (parseInt(el.style.top) + speed) + 'px';
-        
-        let uR = userCar.getBoundingClientRect(), eR = el.getBoundingClientRect();
-        
-        // কলিশন লজিক
-        // কলিশন লজিক
-    if (eR.bottom > uR.top + 15 && eR.top < uR.bottom - 15 && eR.right > uR.left + 15 && eR.left < uR.right - 15) {
-        if(type === 'enemy') { 
-            gameActive = false; 
-            
-            // --- নতুন কোড শুরু ---
-            // ১. স্কোর পপআপে দেখানো
-            document.getElementById('finalScoreDisplay').innerText = score;
-            
-            // ২. ব্যালেন্সে স্কোর যোগ করা
-            mainBalance += score;
-            document.getElementById('mainBalance').innerText = mainBalance;
-            
-            // ৩. গেম ওভার পপআপ দেখানো
-            document.getElementById('gameOverPopup').style.display = 'flex'; 
-            // --- নতুন কোড শেষ ---
-            
-            clearInterval(move); 
-        } else {
-            // ... (আপনার আগের রিওয়ার্ড পাওয়ার কোড যেমন আছে তেমনই থাকবে)
-            score++; 
-            document.getElementById('liveScore').innerText = "Score: " + score;
-            let p = document.createElement('div'); 
-            p.className = "plusOne"; 
-            p.innerText = "+1";
-            p.style.left = el.style.left; 
-            p.style.top = el.style.top;
-            gameArea.appendChild(p); 
-            setTimeout(() => p.remove(), 1000);
-            el.remove(); 
-            clearInterval(move);
-        }
-    }
-        // স্ক্রিন থেকে বেরিয়ে গেলে রিমুভ
-        if(parseInt(el.style.top) > 700) { el.remove(); clearInterval(move); }
-    }, 20);
-}
+				let move = setInterval(() => {
+					if(!gameActive) { clearInterval(move); el.remove(); return; }
+					el.style.top = (parseInt(el.style.top) + speed) + 'px';
+					
+					let uR = userCar.getBoundingClientRect(), eR = el.getBoundingClientRect();
+					
+					if (eR.bottom > uR.top + 15 && eR.top < uR.bottom - 15 && eR.right > uR.left + 15 && eR.left < uR.right - 15) {
+						if(type === 'enemy') { 
+							gameActive = false; 
+							
+							// ইন্টারভালগুলো স্টপ করা
+							clearInterval(enemyIntervalId);
+							clearInterval(rewardIntervalId);
+							
+							document.getElementById('finalScoreDisplay').innerText = score;
+							
+							mainBalance += score;
+							updateLocalStorageBalance();
+							
+							document.getElementById('gameOverPopup').style.display = 'flex'; 
+							clearInterval(move); 
+						} else {
+							let pointsToAdd = is2xActive ? 2 : 1;
+							score += pointsToAdd; 
+							
+							document.getElementById('liveScore').innerText = "Score: " + score;
+							
+							let p = document.createElement('div'); 
+							p.className = "plusOne"; 
+							p.innerText = "+" + pointsToAdd; 
+							p.style.left = el.style.left; 
+							p.style.top = el.style.top;
+							gameArea.appendChild(p); 
+							
+							setTimeout(() => p.remove(), 1000);
+							el.remove(); 
+							clearInterval(move);
+						}
+					}
+					if(parseInt(el.style.top) > 700) { el.remove(); clearInterval(move); }
+				}, 20);
+			}
 
-		// ড্যাশবোর্ডে যাওয়ার ফাংশন
-		function goToDashboard() {
-		window.location.href = "https://dashboard.gritorax.com";
-		}
+			// ==========================================================================
+			// TIMING & BOOSTER FUNCTIONS
+			// ==========================================================================
+			function start5MinuteTimer() {
+				is2xActive = true;
+				remainingTime = 300; 
 
-		// ফোনের ব্যাক বাটন চাপলে ড্যাশবোর্ডে নিয়ে যাবে
-		history.pushState(null, null, window.location.href);
-		window.addEventListener('popstate', function(event) {
-		window.location.href = "https://dashboard.gritorax.com";
-		});
-	
-		
-		
+				if (countdownIntervalId !== null) clearInterval(countdownIntervalId);
+				updateUIState();
+
+				countdownIntervalId = setInterval(() => {
+					remainingTime--;
+					updateUIState();
+
+					if (remainingTime <= 0) {
+			clearInterval(countdownIntervalId);
+			is2xActive = false;
+			updateUIState();
+			}
+			}, 1000);
+			}
+
+			function updateUIState() {
+			let adButton = document.getElementById('watch-ad-button');
+			let timerBox = document.getElementById('premium-countdown-box');
+			let timerText = document.getElementById('timer-display-text');
+
+			if (is2xActive && remainingTime > 0) {
+			adButton.style.display = "none";
+			timerBox.style.display = "block";
+
+			let minutes = Math.floor(remainingTime / 60);
+			let seconds = remainingTime % 60;
+			seconds = seconds < 10 ? '0' + seconds : seconds;
+					timerText.innerHTML = `2x Boost Active: ${minutes}:${seconds}`;
+				} else {
+					adButton.style.display = "flex";
+					timerBox.style.display = "none";
+				}
+			}
+
+			function triggerPremiumAdNetwork() {
+				console.log("Car game ad network activated.");
+				start5MinuteTimer(); 
+			}
+
+			window.onload = () => {
+				if (localStorage.getItem(CAR_STORAGE_KEY)) {
+					mainBalance = parseInt(localStorage.getItem(CAR_STORAGE_KEY));
+				} else {
+					mainBalance = 0;
+				}
+				document.getElementById('mainBalance').innerText = mainBalance;
+
+				is2xActive = false;
+				updateUIState();
+			};
+
+			function goToDashboard() {
+				window.location.href = "https://dashboard.gritorax.com";
+			}
+
+			history.pushState(null, null, window.location.href);
+			window.addEventListener('popstate', function(event) {
+				window.location.href = "https://dashboard.gritorax.com";
+			});
 		</script>
 	</body>
 </html>
