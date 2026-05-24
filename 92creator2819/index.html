@@ -44,7 +44,7 @@
 
 			/* ==========================================================================
 			1. PREMIUM HEADER STATION
-			========================================================================== */
+			========================================================================= */
 			.header-station {
 			width: 100%;
 			display: flex;
@@ -86,21 +86,56 @@
 			}
 
 			/* ==========================================================================
-			2. REFERRAL MILESTONE SECTION
+			2. REFERRAL MILESTONE SECTION (FIXED HEIGHT BUG)
 			========================================================================== */
 			.referral-section {
+			position: relative;
 			background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
 			border: 1px solid #1a1a1a;
 			border-radius: 20px;
-			padding: 20px 16px;
+			padding: 22px 16px;
 			margin-bottom: 24px;
+			height: auto; /* হাইট অটো করা হয়েছে যেন কন্টেন্ট গায়েব না হয় */
+			display: block;
+			}
+
+			/* Task Completed Badge */
+			.completed-badge-overlay {
+			position: absolute;
+			top: 14px;
+			right: 14px;
+			background: linear-gradient(135deg, #2ec4b6 0%, #1a9387 100%);
+			color: #000;
+			font-size: 0.65rem;
+			font-weight: 900;
+			padding: 4px 10px;
+			border-radius: 30px;
+			letter-spacing: 0.8px;
+			text-transform: uppercase;
+			box-shadow: 0 0 12px rgba(46, 196, 182, 0.4);
+			display: none; /* JS দিয়ে কন্ট্রোল হবে */
+			align-items: center;
+			gap: 4px;
+			animation: popBadge 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+			z-index: 10;
+			}
+
+			@keyframes popBadge {
+			from { transform: scale(0.7); opacity: 0; }
+			to { transform: scale(1); opacity: 1; }
 			}
 
 			.ref-header {
 			display: flex;
 			justify-content: space-between;
 			align-items: flex-start;
-			margin-bottom: 14px;
+			margin-bottom: 16px;
+			width: 100%;
+			}
+
+			.ref-title {
+			flex: 1;
+			padding-right: 75px; /* ব্যাজের জায়গার জন্য প্যাডিং ফিক্সড */
 			}
 
 			.ref-title h3 {
@@ -109,16 +144,25 @@
 			font-weight: 800;
 			letter-spacing: 0.5px;
 			color: #fff;
+			line-height: 1.2;
 			}
 
 			.ref-title p {
-			margin: 4px 0 0 0;
+			margin: 6px 0 0 0;
 			font-size: 0.7rem;
 			color: #666;
-			line-height: 1.3;
+			line-height: 1.35;
+			font-weight: 500;
 			}
 
-			.ref-points { font-size: 0.9rem; font-weight: 900; color: #2ec4b6; letter-spacing: 0.5px; }
+			.ref-points {
+			font-size: 0.9rem;
+			font-weight: 900;
+			color: #2ec4b6;
+			letter-spacing: 0.5px;
+			white-space: nowrap;
+			padding-top: 2px;
+			}
 
 			.progress-container {
 			width: 100%;
@@ -128,10 +172,10 @@
 			border-radius: 20px;
 			overflow: hidden;
 			position: relative;
-			margin-top: 15px;
+			margin-top: 16px;
 			}
 
-			.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #2ec4b6, #208b81); border-radius: 20px; }
+			.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #2ec4b6, #208b81); border-radius: 20px; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 			.progress-stats { display: flex; justify-content: space-between; font-size: 0.7rem; color: #555; font-weight: 700; margin-top: 8px; }
 			.progress-stats span b { color: #2ec4b6; }
 
@@ -376,6 +420,11 @@
 			</div>
 
 			<div class="referral-section">
+				<!-- ডাইনামিক কমপ্লিটেড ব্যাজ ট্যাগ -->
+				<div class="completed-badge-overlay" id="milestone-completed-badge">
+					<i class="fa-solid fa-circle-check"></i> Completed
+				</div>
+
 				<div class="ref-header">
 					<div class="ref-title">
 						<h3>ELITE REFERRAL MILESTONE</h3>
@@ -569,7 +618,6 @@
 		<script>
 			let activeSubmissionTaskType = '';
 
-			// টাস্ক ডেটা ম্যাপ অবজেক্ট যা ডাইনামিকলি সঠিক তথ্য লোড করবে
 			const taskDetailsMap = {
 			'fb-post': {
 			icon: '<i class="fa-brands fa-facebook" style="color: #1877f2;"></i>',
@@ -638,18 +686,37 @@
 			}
 			};
 
-			/* ==========================================================================
-			DETAILS MODAL CONTROLLERS WITH DYNAMIC 5TH POINT
-			========================================================================== */
+			document.addEventListener("DOMContentLoaded", function() {
+			const localRawData = localStorage.getItem('userData');
+			let referCount = 0;
+			const maxMilestoneTarget = 10;
+
+			if (localRawData) {
+			const parsedData = JSON.parse(localRawData);
+			referCount = parseInt(parsedData.refer_success_withdraw_count) || 0;
+			}
+
+			if (referCount < 0) referCount = 0;
+				
+				document.getElementById('creator-progress-text').innerText = referCount;
+
+				let progressPercentage = (referCount / maxMilestoneTarget) * 100;
+				if (progressPercentage > 100) progressPercentage = 100;
+				
+				document.getElementById('creator-progress-bar').style.width = progressPercentage + "%";
+
+				if (referCount >= maxMilestoneTarget) {
+					document.getElementById('milestone-completed-badge').style.display = 'flex';
+				}
+			});
+
 			function openDetails(taskType) {
-			console.log("Opening details modal for: " + taskType);
 			const taskData = taskDetailsMap[taskType];
 
 			if (taskData) {
 			const headerHTML = `${taskData.icon} <h3>${taskData.title}</h3>`;
 			document.getElementById('modal-header-icon-title').innerHTML = headerHTML;
 
-			// ক্লোন তৈরি করে ডাইনামিকলি ৫ম পয়েন্ট পুশ করা হচ্ছে
 			let currentSteps = [...taskData.steps];
 			currentSteps.push(`Submit your completed <b>${taskData.labelName}</b> inside the tracking form to initiate validation.`);
 
@@ -681,16 +748,12 @@
 			document.getElementById('details-modal').classList.remove('active');
 			}
 
-			/* ==========================================================================
-			SUBMISSION MODAL CONTROLLERS (FIXED TOAST SYSTEM)
-			========================================================================== */
 			function openSubmit(taskType) {
 			const taskData = taskDetailsMap[taskType];
 
 			if(taskData) {
 			activeSubmissionTaskType = taskType;
 
-			// ইনপুট এবং টোস্ট নোটিফিকেশন রিসেট
 			document.getElementById('task-submission-url').value = '';
 			const toastContainer = document.getElementById('inline-status-toast');
 			toastContainer.style.display = 'none';
@@ -711,7 +774,6 @@
 			const linkInputValue = document.getElementById('task-submission-url').value.trim();
 			const toastContainer = document.getElementById('inline-status-toast');
 
-			// ১. ফাঁকা ইনপুট চেক এর জন্য ইন-লাইন এরর টোস্ট
 			if(linkInputValue === '') {
 			toastContainer.innerHTML = `
 			<div class="status-toast error">
@@ -723,7 +785,6 @@
 			return;
 			}
 
-			// ২. সাকসেসফুলি ইন-লাইন প্রিমিয়াম টোস্ট রেন্ডার (কোনো ব্রাউজার পপ-আপ আসবে না)
 			toastContainer.innerHTML = `
 			<div class="status-toast success">
 				<i class="fa-solid fa-circle-check"></i>
@@ -732,18 +793,11 @@
 			`;
 			toastContainer.style.display = 'block';
 
-			console.log("Secure Audit System Logs: Authorized via " + activeSubmissionTaskType);
-			console.log("Captured Content Vector: " + linkInputValue);
-
-			// ইউজার যেন সাকসেস মেসেজটি দেখতে পারে তাই ১.৫ সেকেন্ড পর পপ-আপ অটো ক্লোজ হবে
 			setTimeout(() => {
 			closeSubmitModal();
 			}, 1800);
 			}
 
-			/* ==========================================================================
-			GLOBAL WINDOW SYSTEM CONTROLLERS
-			========================================================================== */
 			window.onclick = function(event) {
 			let detailsModal = document.getElementById('details-modal');
 			let submitModal = document.getElementById('submit-modal');
@@ -752,7 +806,6 @@
 			if (event.target == submitModal) { submitModal.classList.remove('active'); }
 			}
 
-			// ফোনের ব্যাক বাটন চাপলে ড্যাশবোর্ডে নিয়ে যাবে
 			history.pushState(null, null, window.location.href);
 			window.addEventListener('popstate', function(event) {
 			window.location.href = "https://dashboard.gritorax.com";
