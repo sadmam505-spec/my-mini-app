@@ -86,7 +86,7 @@
 			}
 
 			/* ==========================================================================
-			2. REFERRAL MILESTONE SECTION (FIXED HEIGHT BUG)
+			2. REFERRAL MILESTONE SECTION (UPDATED BADGE POSITION & GLOW)
 			========================================================================== */
 			.referral-section {
 			position: relative;
@@ -95,47 +95,21 @@
 			border-radius: 20px;
 			padding: 22px 16px;
 			margin-bottom: 24px;
-			height: auto; /* হাইট অটো করা হয়েছে যেন কন্টেন্ট গায়েব না হয় */
+			height: auto;
 			display: block;
-			}
-
-			/* Task Completed Badge */
-			.completed-badge-overlay {
-			position: absolute;
-			top: 14px;
-			right: 14px;
-			background: linear-gradient(135deg, #2ec4b6 0%, #1a9387 100%);
-			color: #000;
-			font-size: 0.65rem;
-			font-weight: 900;
-			padding: 4px 10px;
-			border-radius: 30px;
-			letter-spacing: 0.8px;
-			text-transform: uppercase;
-			box-shadow: 0 0 12px rgba(46, 196, 182, 0.4);
-			display: none; /* JS দিয়ে কন্ট্রোল হবে */
-			align-items: center;
-			gap: 4px;
-			animation: popBadge 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-			z-index: 10;
-			}
-
-			@keyframes popBadge {
-			from { transform: scale(0.7); opacity: 0; }
-			to { transform: scale(1); opacity: 1; }
 			}
 
 			.ref-header {
 			display: flex;
 			justify-content: space-between;
 			align-items: flex-start;
-			margin-bottom: 16px;
 			width: 100%;
+			position: relative;
 			}
 
 			.ref-title {
 			flex: 1;
-			padding-right: 75px; /* ব্যাজের জায়গার জন্য প্যাডিং ফিক্সড */
+			padding-right: 15px;
 			}
 
 			.ref-title h3 {
@@ -155,13 +129,63 @@
 			font-weight: 500;
 			}
 
+			/* Right side container for Points and Badge underneath */
+			.ref-rewards-block {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			gap: 8px;
+			text-align: right;
+			min-width: 110px;
+			}
+
 			.ref-points {
-			font-size: 0.9rem;
+			font-size: 0.95rem;
 			font-weight: 900;
 			color: #2ec4b6;
 			letter-spacing: 0.5px;
 			white-space: nowrap;
-			padding-top: 2px;
+			}
+
+			/* ULTRA PREMIUM GLOWING COMPLETED BADGE */
+			.completed-badge-overlay {
+			display: none; /* JS dynamically activates this to 'flex' */
+			align-items: center;
+			gap: 5px;
+			background: linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FF4500 100%);
+			color: #000;
+			font-size: 0.62rem;
+			font-weight: 900;
+			padding: 5px 10px;
+			border-radius: 30px;
+			letter-spacing: 0.8px;
+			text-transform: uppercase;
+			box-shadow: 0 0 15px rgba(255, 140, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+			border: 1px solid rgba(255, 215, 0, 0.5);
+
+			/* Entry Animation & Continuous Pride Glow Pulse */
+			animation: popBadge 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+			badgeGlowPulse 2s infinite ease-in-out;
+			z-index: 10;
+			white-space: nowrap;
+			}
+
+			.completed-badge-overlay i {
+			font-size: 0.7rem;
+			text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+			}
+
+			/* Pop-In Animation */
+			@keyframes popBadge {
+			from { transform: scale(0.6); opacity: 0; }
+			to { transform: scale(1); opacity: 1; }
+			}
+
+			/* Premium Breathing/Glowing Pulse Effect */
+			@keyframes badgeGlowPulse {
+			0% { box-shadow: 0 0 12px rgba(255, 140, 0, 0.5); transform: scale(1); }
+			50% { box-shadow: 0 0 22px rgba(255, 69, 0, 0.85), 0 0 30px rgba(255, 215, 0, 0.4); transform: scale(1.03); }
+			100% { box-shadow: 0 0 12px rgba(255, 140, 0, 0.5); transform: scale(1); }
 			}
 
 			.progress-container {
@@ -258,7 +282,7 @@
 			.btn-submit:active { background: #c8c8c8; transform: scale(0.97); }
 
 			/* ==========================================================================
-			4. PREMIUM POPUP MODAL STYLING (COMMON BASE)
+			4. PREMIUM POPUP MODAL STYLING
 			========================================================================== */
 			.modal-overlay {
 			position: fixed;
@@ -334,7 +358,7 @@
 			.warning-text { font-size: 0.72rem; color: #a6a6a6; line-height: 1.4; font-weight: 500; margin: 0; }
 
 			/* ==========================================================================
-			5. EXCLUSIVE SUBMISSION MODAL STYLING ELEMENTS
+			5. EXCLUSIVE SUBMISSION MODAL STYLING
 			========================================================================== */
 			.input-wrapper { width: 100%; margin-top: 5px; }
 
@@ -377,11 +401,10 @@
 			}
 			.btn-action-submit:active { transform: scale(0.97); opacity: 0.9; }
 
-			/* Premium Inline Toast Messages Styling */
 			.status-toast-wrapper {
 			width: 100%;
 			margin-top: 12px;
-			display: none; /* Controlled via JS */
+			display: none;
 			animation: fadeInToast 0.3s ease-out forwards;
 			}
 
@@ -420,17 +443,18 @@
 			</div>
 
 			<div class="referral-section">
-				<!-- ডাইনামিক কমপ্লিটেড ব্যাজ ট্যাগ -->
-				<div class="completed-badge-overlay" id="milestone-completed-badge">
-					<i class="fa-solid fa-circle-check"></i> Completed
-				</div>
-
 				<div class="ref-header">
 					<div class="ref-title">
 						<h3>ELITE REFERRAL MILESTONE</h3>
 						<p>Get 10 referrals to make their 1st successful withdrawal to trigger this bonus.</p>
 					</div>
-					<div class="ref-points">+50,000 PTS</div>
+
+					<div class="ref-rewards-block">
+						<div class="ref-points">+50,000 PTS</div>
+						<div class="completed-badge-overlay" id="milestone-completed-badge">
+							<i class="fa-solid fa-trophy"></i> Elite Completed
+						</div>
+					</div>
 				</div>
 
 				<div class="progress-container">
@@ -615,7 +639,7 @@
 			</div>
 		</div>
 
-		<script>
+		<script {timestamp="2026-05-24"}>
 			let activeSubmissionTaskType = '';
 
 			const taskDetailsMap = {
