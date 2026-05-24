@@ -36,7 +36,7 @@
 			display: flex;
 			flex-direction: column;
 			box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-			padding: 24px 18px; /* একটু বেশি ব্রিদিং স্পেস দেওয়া হয়েছে */
+			padding: 24px 18px;
 			}
 
 			.phone-container::-webkit-scrollbar {
@@ -55,7 +55,7 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			margin-bottom: 25px; /* নিচের রুলস থেকে গ্যাপ বাড়ানো হয়েছে */
+			margin-bottom: 25px;
 			}
 
 			.point-box { color: #f39c12; font-weight: bold; }
@@ -74,20 +74,103 @@
 			.claim-btn:active { transform: scale(0.9); }
 
 			/* ==========================================================================
-			2. MIDDLE SECTION (Game Rules & Badges)
+			2. MIDDLE SECTION (Game Rules & Badges) - PREMIUM SKY BLUE THEME
 			========================================================================== */
 			.game-rules {
 			width: 100%;
 			text-align: center;
-			margin-bottom: 30px; /* [FIX] গেম সেকশনকে নিচে নামানোর জন্য মার্জিন বাড়ানো হলো */
+			margin-bottom: 30px;
 			padding: 0 10px;
 			display: flex;
 			flex-direction: column;
 			gap: 10px;
 			}
 
+			.game-rules-box {
+			background: rgba(0, 180, 216, 0.1);
+			border: 1px dashed #00b4d8;
+			border-radius: 8px;
+			padding: 10px 12px;
+			display: inline-block;
+			align-self: center;
+			width: 100%;
+			box-shadow: 0 0 15px rgba(0, 180, 216, 0.1);
+			}
+
+			.game-rules-text {
+			color: #00b4d8;
+			font-size: 0.9rem;
+			margin: 0;
+			font-weight: bold;
+			letter-spacing: 0.5px;
+			text-transform: uppercase;
+			text-shadow: 0 0 8px rgba(0, 180, 216, 0.2);
+			}
+
 			/* ==========================================================================
-			3. GAME PLAY AREA (3D Dice Stage) - এখন নিচে নেমে পারফেক্ট পজিশনে থাকবে
+			3. NEW PREMIUM AD BUTTON & COUNTDOWN BOX (SPELLING PAGE STYLE)
+			========================================================================== */
+			.premium-ad-trigger-btn {
+			width: 100%;
+			padding: 14px 20px;
+			background: linear-gradient(135deg, #f3ba2f 0%, #f1a80a 100%);
+			color: #000000;
+			border: none;
+			border-radius: 15px;
+			font-size: 14px;
+			font-weight: 700;
+			letter-spacing: 0.5px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			box-shadow: 0 0 20px rgba(243, 186, 47, 0.4);
+			animation: intenseGlowingEffect 2s infinite alternate;
+			transition: transform 0.1s ease;
+			margin-bottom: 15px;
+			}
+
+			.premium-ad-trigger-btn:active {
+			transform: scale(0.96);
+			}
+
+			@keyframes intenseGlowingEffect {
+			0% { box-shadow: 0 0 12px rgba(243, 186, 47, 0.3); }
+			100% { box-shadow: 0 0 24px rgba(243, 186, 47, 0.65); }
+			}
+
+			.premium-red-timer-box {
+			width: 100%;
+			background: rgba(255, 76, 76, 0.05);
+			border: 1px dashed rgba(255, 76, 76, 0.35);
+			border-radius: 12px;
+			padding: 11px;
+			text-align: center;
+			display: none;
+			box-shadow: 0 0 15px rgba(255, 76, 76, 0.1);
+			animation: timerPulse 2s infinite alternate;
+			margin-bottom: 15px;
+			}
+
+			.premium-red-timer-box span {
+			font-size: 13px;
+			font-weight: 700;
+			letter-spacing: 0.8px;
+			color: #ff4c4c;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			}
+
+			@keyframes timerPulse {
+			0% { border-color: rgba(255, 76, 76, 0.35); box-shadow: 0 0 10px rgba(255, 76, 76, 0.1); }
+			100% { border-color: rgba(255, 76, 76, 0.7); box-shadow: 0 0 20px rgba(255, 76, 76, 0.25); }
+			}
+
+			/* ==========================================================================
+			4. GAME PLAY AREA (3D Dice Stage)
 			========================================================================== */
 			.game-area {
 			display: flex;
@@ -152,10 +235,19 @@
 			100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
 			}
 
-			#status { color: #888; font-size: 0.9rem; margin-top: 25px; font-weight: 500; }
+			#status {
+			font-size: 1.1rem;
+			margin-top: 25px;
+			font-weight: 700;
+			letter-spacing: 0.5px;
+			min-height: 24px;
+			}
+			.status-green { color: #2ec4b6; text-shadow: 0 0 10px rgba(46, 196, 178, 0.2); }
+			.status-red { color: #e74c3c; text-shadow: 0 0 10px rgba(231, 76, 60, 0.2); }
+			.status-normal { color: #888; font-weight: 500; font-size: 0.9rem; }
 
 			/* ==========================================================================
-			4. CONTROLS SECTION (গেম সেকশনের ঠিক নিচে মাউন্টেড)
+			5. CONTROLS SECTION
 			========================================================================== */
 			.controls {
 			width: 100%;
@@ -164,10 +256,7 @@
 			align-items: center;
 			gap: 16px;
 			background: transparent;
-
-			/* [⚓ IMPORTANT] বাটন গেম সেকশন থেকে কতটুকু নিচে নামবে তা এখান থেকে কন্ট্রোল করবেন */
 			margin-top: 35px;
-
 			padding-bottom: 15px;
 			}
 
@@ -183,62 +272,17 @@
 			background: linear-gradient(45deg, #f39c12, #e67e22);
 			color: white;
 			border: none;
-			padding: 15px 40px;
+			padding: 15px 50px;
 			font-size: 1.1rem;
 			border-radius: 30px;
 			font-weight: bold;
 			cursor: pointer;
 			transition: transform 0.1s;
-			min-width: 180px;
+			min-width: 220px;
 			box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
 			}
-			.roll-btn:active { transform: scale(0.9); }
-			.roll-btn:disabled { background: #333; cursor: not-allowed; box-shadow: none; }
-
-			.life-box {
-			position: absolute;
-			right: 5px;
-			display: flex;
-			align-items: center;
-			gap: 6px;
-			font-size: 1.1rem;
-			font-weight: bold;
-			background: rgba(255, 255, 255, 0.05);
-			padding: 6px 12px;
-			border-radius: 20px;
-			border: 1px solid rgba(255, 255, 255, 0.05);
-			}
-			.fa-heart { color: #e74c3c; }
-
-			/* WATCH ADS FOR FREE LIVES BUTTON STYLE */
-			.ad-reward-trigger-btn {
-			width: 85%;
-			padding: 11px 14px;
-			background: linear-gradient(135deg, #ff9f43 0%, #ff6b6b 100%);
-			color: #ffffff;
-			border: none;
-			border-radius: 15px;
-			font-size: 11px;
-			font-weight: 700;
-			text-transform: uppercase;
-			letter-spacing: 0.5px;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 6px;
-			box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
-			transition: all 0.25s ease;
-			}
-
-			.ad-reward-trigger-btn:disabled {
-			opacity: 0.25;
-			background: linear-gradient(135deg, #57606f 0%, #2f3542 100%);
-			color: rgba(255, 255, 255, 0.3);
-			box-shadow: none;
-			cursor: not-allowed;
-			pointer-events: none;
-			}
+			.roll-btn:active { transform: scale(0.95); }
+			.roll-btn:disabled { background: #333; cursor: not-allowed; box-shadow: none; color: #666; }
 		</style>
 	</head>
 	<body>
@@ -251,22 +295,29 @@
 				</a>
 				<div class="point-box" style="flex: 1; display: flex; justify-content: center; align-items: center; gap: 6px; font-size: 1.1rem;">
 					<i class="fa-solid fa-coins"></i>
-					<span id="user-points-display">0 </span>
+					<span id="user-points-display">0</span>
 				</div>
-				<button class="claim-btn" id="claimRewardBtn">
+				<button class="claim-btn" id="claimRewardBtn" onclick="executeClaimSequence()">
 					Claim
 				</button>
 			</div>
 
 			<div class="game-rules">
-				<p style="color: #aaa; font-size: 0.8rem; margin: 0; font-weight: 500; letter-spacing: 0.5px; line-height: 1.4;">
-					✨ Match <b>numbers</b> OR <b>roll evens</b> to win rewards!
-				</p>
-				<div style="background: rgba(46, 196, 182, 0.1); border: 1px dashed #2ec4b6; border-radius: 8px; padding: 6px 12px; margin-top: 4px; display: inline-block; align-self: center;">
-					<p style="color: #2ec4b6; font-size: 0.85rem; margin: 0; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">
-						🔥 Roll <b>Double 6</b> for 2X Rewards! 🔥
+				<div class="game-rules-box">
+					<p class="game-rules-text">
+						Roll double 6 for 10 coins
 					</p>
 				</div>
+			</div>
+
+			<button class="premium-ad-trigger-btn" id="watch-ad-button" onclick="triggerPremiumAdNetwork()">
+				<i class="fa-solid fa-circle-play"></i> Watch Video Ads to Get 2x Coins
+			</button>
+
+			<div class="premium-red-timer-box" id="premium-countdown-box">
+				<span id="timer-display-text">
+					<i class="fa-solid fa-fire"></i> 2x Boost Active: 5:00
+				</span>
 			</div>
 
 			<div class="game-area">
@@ -290,26 +341,24 @@
 						</div>
 					</div>
 				</div>
-				<p id="status">Feeling lucky? Roll the dice!</p>
+				<p id="status" class="status-normal">Feeling lucky? Roll the dice!</p>
 			</div>
 
 			<div class="controls">
 				<div class="roll-action-row">
 					<button class="roll-btn" onclick="startRoll()">ROLL DICE</button>
-					<div class="life-box">
-						<i class="fa-solid fa-heart"></i>
-						<span id="life-count">5</span>
-					</div>
 				</div>
-
-				<button class="ad-reward-trigger-btn" id="watch-rewarded-ad-btn" disabled="">
-					<i class="fa-solid fa-clapperboard"></i> Watch Ad for Free 10 Lives
-				</button>
 			</div>
 
 		</div>
 
 		<script>
+			let is2xActive = false;
+			let remainingTime = 0;
+			let countdownIntervalId = null;
+			let diceGameBalance = 0;
+			const DICE_STORAGE_KEY = 'dice_game_balance';
+
 			function getDotsHTML(num) {
 			const positions = {
 			1: [5],
@@ -336,21 +385,74 @@
 			}
 
 			function getWeightedResult() {
-			const chance = Math.random() * 100;
+			const seed = Math.floor(Math.random() * 100) + 1;
 
-			if (chance <= 5) return [6, 6];
-
-			if (chance <= 30) {
-			const num = Math.floor(Math.random() * 5) + 1;
-			return [num, num];
+			if (seed === 100) {
+			return [6, 6];
 			}
 
-			if (chance <= 55) {
+			if (seed >= 1 && seed <= 30) {
+			const allowedSameValues = [1, 2, 3, 4, 5];
+			const pickValue = allowedSameValues[Math.floor(Math.random() * allowedSameValues.length)];
+			return [pickValue, pickValue];
+			}
+
+			if (seed >= 70 && seed <= 99) {
+			const evenPool = [2, 4, 6];
+			const firstEven = evenPool[Math.floor(Math.random() * evenPool.length)];
+			const remainingEvens = evenPool.filter(val => val !== firstEven);
+			const secondEven = remainingEvens[Math.floor(Math.random() * remainingEvens.length)];
+			return [firstEven, secondEven];
+			}
+
+			const odds = [1, 3, 5];
 			const evens = [2, 4, 6];
-			return [evens[Math.floor(Math.random()*3)], evens[Math.floor(Math.random()*3)]];
+			const randomOdd = odds[Math.floor(Math.random() * odds.length)];
+			const randomEven = evens[Math.floor(Math.random() * evens.length)];
+
+			if (Math.random() > 0.5) {
+			return [randomEven, randomOdd];
+			} else {
+			return [randomOdd, randomEven];
+			}
 			}
 
-			return [Math.floor(Math.random()*6)+1, Math.floor(Math.random()*6)+1];
+			function start5MinuteTimer() {
+			is2xActive = true;
+			remainingTime = 300;
+
+			if (countdownIntervalId !== null) clearInterval(countdownIntervalId);
+			updateUIState();
+
+			countdownIntervalId = setInterval(() => {
+			remainingTime--;
+			updateUIState();
+
+			if (remainingTime <= 0) {
+			clearInterval(countdownIntervalId);
+			is2xActive = false;
+			updateUIState();
+			}
+			}, 1000);
+			}
+
+			function updateUIState() {
+			let adButton = document.getElementById('watch-ad-button');
+			let timerBox = document.getElementById('premium-countdown-box');
+			let timerText = document.getElementById('timer-display-text');
+
+			if (is2xActive && remainingTime > 0) {
+			adButton.style.display = "none";
+			timerBox.style.display = "block";
+
+			let minutes = Math.floor(remainingTime / 60);
+			let seconds = remainingTime % 60;
+			seconds = seconds < 10 ? '0' + seconds : seconds;
+					timerText.innerHTML = `<i class="fa-solid fa-fire"></i> 2x Boost Active: ${minutes}:${seconds}`;
+			} else {
+			adButton.style.display = "flex";
+			timerBox.style.display = "none";
+			}
 			}
 
 			function startRoll() {
@@ -360,7 +462,8 @@
 			const status = document.getElementById('status');
 
 			btn.disabled = true;
-			status.innerText = "Shuffle...";
+			status.innerText = "Rolling...";
+			status.className = "status-normal";
 
 			const shuffleInterval = setInterval(() => {
 			shuffleDiceFaces('dice1');
@@ -387,44 +490,107 @@
 			d1.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
 			d2.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
 
-			status.innerText = `Landed: ${res1} & ${res2}!`;
+			processGameReward(res1, res2);
+
 			btn.disabled = false;
-			}, 3500);
+			}, 3000);
+			}
+
+			function processGameReward(r1, r2) {
+			const status = document.getElementById('status');
+			let calculatedCoins = 0;
+			let isWin = false;
+
+			if (r1 === 6 && r2 === 6) {
+			calculatedCoins = 10;
+			isWin = true;
+			} else if (r1 === r2) {
+			calculatedCoins = 2;
+			isWin = true;
+			} else if (r1 % 2 === 0 && r2 % 2 === 0) {
+			calculatedCoins = 1;
+			isWin = true;
+			} else {
+			calculatedCoins = 0;
+			isWin = false;
+			}
+
+			if (isWin) {
+			let finalAppliedReward = is2xActive ? (calculatedCoins * 2) : calculatedCoins;
+
+			diceGameBalance += finalAppliedReward;
+			document.getElementById('user-points-display').innerText = diceGameBalance;
+
+			localStorage.setItem(DICE_STORAGE_KEY, diceGameBalance);
+
+			status.innerText = `+${finalAppliedReward} Coins Added!`;
+			status.className = "status-green";
+			} else {
+			status.innerText = "Oops! Try Again 😥";
+			status.className = "status-red";
+			}
+
+			setTimeout(() => {
+			status.innerText = "";
+			status.className = "status-normal";
+			}, 2000);
 			}
 
 			window.onload = () => {
 			const d1 = document.getElementById('dice1');
 			const d2 = document.getElementById('dice2');
 
+			if (localStorage.getItem(DICE_STORAGE_KEY)) {
+			diceGameBalance = parseInt(localStorage.getItem(DICE_STORAGE_KEY));
+			} else {
+			diceGameBalance = 0;
+			}
+			document.getElementById('user-points-display').innerText = diceGameBalance;
+
+			is2xActive = false;
+			updateUIState();
+
 			if(d1 && d2) {
-				d1.querySelector('.front').innerHTML = getDotsHTML(6);
-				d2.querySelector('.front').innerHTML = getDotsHTML(6);
+			d1.querySelector('.front').innerHTML = getDotsHTML(6);
+			d2.querySelector('.front').innerHTML = getDotsHTML(6);
 
-				d1.className = "dice-container";
-				d2.className = "dice-container";
-				d1.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
-				d2.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
+			d1.className = "dice-container";
+			d2.className = "dice-container";
+			d1.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
+			d2.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
 
-				shuffleDiceFaces('dice1');
-				shuffleDiceFaces('dice2');
+			shuffleDiceFaces('dice1');
+			shuffleDiceFaces('dice2');
 
-				d1.querySelector('.front').innerHTML = getDotsHTML(6);
-				d2.querySelector('.front').innerHTML = getDotsHTML(6);
-				}
-				};
+			d1.querySelector('.front').innerHTML = getDotsHTML(6);
+			d2.querySelector('.front').innerHTML = getDotsHTML(6);
+			}
+			};
 
-				
-					// ১. ফোনের ফিজিক্যাল ব্যাক বাটন হ্যান্ডেল করা
-					history.pushState(null, null, window.location.href);
-					window.addEventListener('popstate', function(event) {
-					window.location.href = "https://dashboard.gritorax.com";
-					});
+			function triggerPremiumAdNetwork() {
+			console.log("Dice ad network activated.");
+			start5MinuteTimer();
+			}
 
-					// ২. বাটনে ক্লিক করলে যেন সরাসরি ড্যাশবোর্ডে যায়
-					document.getElementById('dashboard-link').addEventListener('click', function(e) {
-					window.location.href = "https://dashboard.gritorax.com";
-					});
-				
+			function executeClaimSequence() {
+			if (diceGameBalance <= 0) {
+			alert("আপনার ক্লেইম করার মতো কোনো কয়েন নেই!");
+			return;
+			}
+			diceGameBalance = 0;
+			localStorage.setItem(DICE_STORAGE_KEY, diceGameBalance);
+			document.getElementById('user-points-display').innerText = "0";
+			alert("কয়েন সফলভাবে আপনার মূল ওয়ালেটে ট্রান্সফার করা হয়েছে!");
+			}
+
+			history.pushState(null, null, window.location.href);
+			window.addEventListener('popstate', function(event) {
+			window.location.href = "https://dashboard.gritorax.com";
+			});
+
+			document.getElementById('dashboard-link').addEventListener('click', function(e) {
+			window.location.href = "https://dashboard.gritorax.com";
+			});
 		</script>
 	</body>
 </html>
