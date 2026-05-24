@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		<title>Grifity Kinetic Dashboard</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-		<!-- টেলিগ্রাম ওয়েব অ্যাপ স্ক্রিপ্ট -->
+		<!-- টেলিগ্রাম ওয়েব অ্যাপ স্ক্রিপ্ট -->
 		<script src="https://telegram.org/js/telegram-web-app.js"></script>
 		<style>
 			/* ==========================================================================
@@ -31,7 +31,7 @@
 			overflow-x: hidden;
 			display: flex;
 			flex-direction: column;
-			transition: filter 0.3s ease; /* ব্লার হওয়ার ট্রানজিশন */
+			transition: filter 0.3s ease; /* ব্লার হওয়ার ট্রানজিশন */
 			}
 
 			/* Header Setup */
@@ -161,7 +161,7 @@
 			background: linear-gradient(90deg, #4ade80 0%, #a7f3d0 25%, #2ecc71 50%, #4ade80 75%, #a7f3d0 100%);
 			background-size: 200% auto;
 			height: 100%;
-			width: 45%;
+			width: 0%; /* ইনিশিয়াল উইডথ ০% করা হলো, জাভাস্ক্রিপ্ট দিয়ে ডাইনামিক হবে */
 			border-radius: 10px;
 			box-shadow: 0 0 14px rgba(74, 222, 128, 0.6);
 			animation: energy-flow-right 1.5s infinite linear;
@@ -302,13 +302,13 @@
 			<div class="loading-text">Authenticating...</div>
 		</div>
 
-		<!-- ID = "dashboard" যোগ করা হয়েছে ব্লার করার জন্য -->
+		<!-- ID = "dashboard" যোগ করা হয়েছে ব্লার করার জন্য -->
 		<div class="app-container" id="dashboard">
 
 			<div class="header">
 				<div>
 					<p style="margin:0; opacity: 0.5; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">hello...</p>
-					<!-- ID যোগ করা হয়েছে -->
+					<!-- ID যোগ করা হয়েছে -->
 					<h3 id="user-name-display" style="margin:0; font-size: 18px; font-weight: 700;">Loading...</h3>
 				</div>
 			</div>
@@ -318,7 +318,7 @@
 					<div class="balance-meta">
 						<div class="balance-label">Total Balance</div>
 						<h1 class="balance-amount">
-							<!-- ID যোগ করা হয়েছে -->
+							<!-- ID যোগ করা হয়েছে -->
 							<span id="user-balance">0</span>
 							<span>coins</span>
 						</h1>
@@ -331,7 +331,7 @@
 				<div class="bonus-card">
 					<strong>10,000 COINS BONUS</strong>
 					<p>Earn 100,000 coins within 15 days and get a 10,000 coins bonus!</p>
-					<!-- ID যোগ করা হয়েছে -->
+					<!-- ID যোগ করা হয়েছে -->
 					<div class="timer" id="countdown-timer-display">Loading...</div>
 				</div>
 			</div>
@@ -466,7 +466,6 @@
 			}
 			}
 
-			// নতুন: কাস্টম মেসেজ পপআপ (সাসপেন্ড বা এররের জন্য)
 			function showMessageModal(title, subtitle, description) {
 			document.getElementById('msg-title').innerText = title;
 			document.getElementById('msg-subtitle').innerText = subtitle;
@@ -510,10 +509,7 @@
 			loadingScreen.style.display = "none";
 			}
 
-			// শুরুতেই লোডিং স্ক্রিন
 			showLoading();
-
-
 
 			const user = tg.initDataUnsafe?.user;
 			const userid = user?.id;
@@ -524,11 +520,9 @@
 			const country = user?.language_code || navigator.language || "unknown";
 			const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
-			// নাম সেট করা
 			document.getElementById('user-name-display').innerText = fullName;
 
 			if (!userid) {
-			// ব্রাউজারে টেস্ট করার সময় এরর না দিয়ে ডেমো দেখানোর জন্য (লাইভ হলে পপআপ দিবে)
 			setTimeout(() => hideLoading(), 1000);
 			console.log("Not running inside Telegram. Running in demo mode.");
 			} else {
@@ -539,7 +533,6 @@
 			formData.append('timezone', timezone);
 			formData.append('referrer_id', referrer_id);
 
-			// API Call (আপনার PHP ফাইলের লিংক দিবেন)
 			fetch('https://api4016.gritorax.com/login.php', {
 			method: 'POST',
 			body: formData
@@ -547,62 +540,72 @@
 			.then(response => response.json())
 			.then(data => {
 
-			// ১. সাসপেন্ডেড হলে আপনার প্রিমিয়াম পপআপ শো করবে
 			if (data.response_status === "suspended") {
 			hideLoading();
 			showMessageModal("Account Suspended", "Action Required", data.message);
 			return;
 			}
-			// ২. সার্ভার এরর হলে
 			else if (data.response_status === "error") {
 			hideLoading();
 			showMessageModal("System Error", "Connection Failed", data.message);
 			return;
 			}
-			// ৩. সাকসেস হলে
 			else if (data.response_status === "active") {
+			// মেমোরিতে সেভ হচ্ছে
 			localStorage.setItem('userData', JSON.stringify(data));
 
-			// ব্যালেন্স আপডেট (ডাটাবেসের total_balance নাম অনুযায়ী)
 			if(data.total_balance !== undefined) {
 			document.getElementById('user-balance').innerText = data.total_balance;
 			}
 
-			// রেফারেল লিংক আপডেট
 			document.getElementById('refer-link').value = `https://t.me/gritorax_bot/app?startapp=${userid}`;
+			document.getElementById('total-refer').innerText = data.total_refer || 0;
+			document.getElementById('refer-income').innerText = data.total_refer_commission || 0;
 
-			// ১. ডাটাবেজের 'total_refer' ডাটাটি HTML-এর 'total-refer' আইডিতে শো করা হলো
-			document.getElementById('total-refer').innerText = data.total_refer;
+			// ==========================================
+			// 3. Progress Bar Logic (এখানে পরিবর্তন করা হয়েছে)
+			// ==========================================
+			let progressBalance = parseFloat(data.progress_balance) || 0;
+			let maxTarget = 100000;
 
-			// ২. ডাটাবেজের 'total_refer_commission' ডাটাটি HTML-এর 'refer-income' আইডিতে শো করা হলো
-			document.getElementById('refer-income').innerText = data.total_refer_commission;
+			// প্রোগ্রেস বারের নিচের টেক্সট পরিবর্তন (০ এর জায়গায় ডাইনামিক ডাটা বসবে)
+			document.getElementById('progress-value').innerText = progressBalance + " / 100,000";
 
-			// ১৫ দিনের কাউন্টডাউন
+			// পার্সেন্টেজ হিসাব এবং প্রোগ্রেস বার ফিল আপডেট
+			let percentage = (progressBalance / maxTarget) * 100;
+
+			if (percentage > 100) percentage = 100;
+			if (percentage < 0) percentage = 0;
+
+			document.getElementById('progress-bar').style.width = percentage + "%";
+
+			// ==========================================
+			// 4. Countdown Logic
+			// ==========================================
 			if (data.countdown_15_days) {
-			start15DaysCountdown(parseInt(data.countdown_15_days));
+				start15DaysCountdown(parseInt(data.countdown_15_days));
 			} else {
-			document.getElementById('countdown-timer-display').innerText = "No Bonus Active";
+				document.getElementById('countdown-timer-display').innerText = "No Bonus Active";
 			}
 
-			// সব ঠিক থাকলে ড্যাশবোর্ড ক্লিয়ার করে দিন
 			hideLoading();
 			tg.expand();
 			}
-			})
-			.catch(error => {
+		})
+		.catch(error => {
 			console.error("Server Error:", error);
 			hideLoading();
 			showMessageModal("Network Error", "Timeout", "Failed to connect to the server. Please check your internet and try again.");
-			});
-			}
+		});
+	}
 
-			// ==========================================
-			// 3. Countdown Timer Logic
-			// ==========================================
-			function start15DaysCountdown(deadlineTimestamp) {
-			const timerDisplay = document.getElementById('countdown-timer-display');
+	// ==========================================
+	// 5. Countdown Timer Function
+	// ==========================================
+	function start15DaysCountdown(deadlineTimestamp) {
+		const timerDisplay = document.getElementById('countdown-timer-display');
 
-			const countdownInterval = setInterval(() => {
+		const countdownInterval = setInterval(() => {
 			const currentTimestamp = Math.floor(Date.now() / 1000);
 			let timeRemaining = deadlineTimestamp - currentTimestamp;
 
@@ -611,7 +614,6 @@
 			timerDisplay.innerText = "Bonus Expired!";
 			return;
 			}
-
 			const days = Math.floor(timeRemaining / (24 * 60 * 60));
 			timeRemaining %= (24 * 60 * 60);
 
@@ -621,7 +623,6 @@
 			const minutes = Math.floor(timeRemaining / 60);
 			const seconds = timeRemaining % 60;
 
-			// 0 padding (e.g., 05m instead of 5m)
 			const dStr = days.toString().padStart(2, '0');
 			const hStr = hours.toString().padStart(2, '0');
 			const mStr = minutes.toString().padStart(2, '0');
@@ -631,25 +632,6 @@
 
 			}, 1000);
 			}
-
-			// ১. ডাটাবেজ থেকে আসা প্রোগ্রেস ব্যালেন্সটি জাভাস্ক্রিপ্ট ভেরিয়েবলে নেওয়া হলো
-			let progressBalance = data.progress_balance || 0;
-			let maxTarget = 100000; // আমাদের ফিক্সড টার্গেট ১ লাখ
-
-			// ২. টেক্সট আপডেট করা: ০ এর জায়গায় এখন ডাটাবেজের ব্যালেন্সটি বসবে (যেমন: 5000 / 100,000)
-			document.getElementById('progress-value').innerText = progressBalance + " / 100,000";
-
-			// ৩. এই ব্যালেন্সটি কত পার্সেন্ট বাড়লো, তা অটোমেটিক হিসাব করা (সূত্র: (ব্যালেন্স / ১লাখ) * ১০০)
-			let percentage = (progressBalance / maxTarget) * 100;
-
-			// সেফটি চেক: ব্যালেন্স যদি ১ লাখের বেশি হয়ে যায়, বার যেন ১০০% এর বাইরে চলে না যায়
-			if (percentage > 100) percentage = 100;
-			if (percentage < 0) percentage = 0;
-
-// ৪. ব্যালেন্স যত পার্সেন্ট বাড়লো, সেই হিসেবে প্রোগ্রেস বারটিও ঠিক ততটুকু সামনে বাড়বে
-document.getElementById('progress-bar').style.width = percentage + "%";
-
-				
 		</script>
 	</body>
 </html>
