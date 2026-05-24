@@ -116,31 +116,26 @@
 						}
 
 						.claim-btn {
-						background: rgba(255, 255, 255, 0.05);
-						color: rgba(255, 255, 255, 0.2);
-						border: 1px solid rgba(255, 255, 255, 0.05);
+						background: linear-gradient(135deg, #00ff87 0%, #60efff 100%);
+						border: none;
+						color: #000000;
 						padding: 8px 16px;
 						border-radius: 20px;
 						font-size: 12px;
 						font-weight: 600;
 						cursor: pointer;
-						transition: all 0.3s ease;
-						pointer-events: none;
-						}
-
-						.claim-btn.active {
-						background: linear-gradient(135deg, #00ff87 0%, #60efff 100%);
-						border: none;
-						color: #000000;
-						opacity: 1;
-						pointer-events: auto;
-						box-shadow: 0 4px 20px rgba(0, 255, 135, 0.3);
+						transition: all 0.2s ease;
+						box-shadow: 0 4px 20px rgba(0, 255, 135, 0.25);
 						animation: pulseGlow 1.5s infinite alternate;
 						}
 
+						.claim-btn:active {
+						transform: scale(0.94);
+						}
+
 						@keyframes pulseGlow {
-						0% { transform: scale(1); }
-						100% { transform: scale(1.04); }
+						0% { transform: scale(1); box-shadow: 0 4px 12px rgba(0, 255, 135, 0.2); }
+						100% { transform: scale(1.04); box-shadow: 0 4px 20px rgba(0, 255, 135, 0.45); }
 						}
 
 						/* ==========================================================================
@@ -162,22 +157,76 @@
 						}
 
 						/* ==========================================================================
-						4. SECTION: HIGHLIGHTED SESSION BOX
+						4. SECTION: PREMIUM AD BUTTON
 						========================================================================== */
-						.session-badge-box {
-						background: rgba(96, 239, 255, 0.03);
-						border: 1px dashed rgba(96, 239, 255, 0.2);
+						.premium-ad-trigger-btn {
+						background: linear-gradient(135deg, #f3ba2f 0%, #f1a80a 100%);
+						border: none;
+						border-radius: 14px;
+						padding: 14px 20px;
+						color: #000000;
+						font-size: 14px;
+						font-weight: 700;
+						letter-spacing: 0.5px;
+						cursor: pointer;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						gap: 10px;
+						margin-top: 20px;
+						box-shadow: 0 0 20px rgba(243, 186, 47, 0.4);
+						animation: intenseGlowingEffect 2s infinite alternate;
+						transition: transform 0.1s ease;
+						width: 100%;
+						display: flex; /* ডিফল্টভাবে ভিজিবল থাকবে */
+						}
+
+						.premium-ad-trigger-btn i {
+						font-size: 16px;
+						}
+
+						.premium-ad-trigger-btn:active {
+						transform: scale(0.96);
+						}
+
+						@keyframes intenseGlowingEffect {
+						0% {
+						box-shadow: 0 0 12px rgba(243, 186, 47, 0.3), inset 0 0 0px rgba(255,255,255,0);
+						}
+						100% {
+						box-shadow: 0 0 24px rgba(243, 186, 47, 0.65), inset 0 0 8px rgba(255, 255, 255, 0.3);
+						}
+						}
+
+						/* ==========================================================================
+						4.1 SECTION: PREMIUM RED COUNTDOWN TIMER BOX
+						========================================================================== */
+						.premium-red-timer-box {
+						background: rgba(255, 76, 76, 0.05);
+						border: 1px dashed rgba(255, 76, 76, 0.35);
 						border-radius: 12px;
 						padding: 10px;
 						text-align: center;
-						margin-top: 20px;
+						margin-top: 20px; /* এড বাটনের জায়গাতেই পারফেক্টলি বসার জন্য মার্জিন সেট করা */
+						display: none; /* ডিফল্ট বা নতুন লোডে সবসময় হাইড থাকবে */
+						box-shadow: 0 0 15px rgba(255, 76, 76, 0.1);
+						animation: timerPulse 2s infinite alternate;
 						}
 
-						.session-badge-box span {
+						.premium-red-timer-box span {
 						font-size: 13px;
-						font-weight: 600;
-						letter-spacing: 0.5px;
-						color: #60efff;
+						font-weight: 700;
+						letter-spacing: 0.8px;
+						color: #ff4c4c;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						gap: 6px;
+						}
+
+						@keyframes timerPulse {
+						0% { border-color: rgba(255, 76, 76, 0.35); box-shadow: 0 0 10px rgba(255, 76, 76, 0.1); }
+						100% { border-color: rgba(255, 76, 76, 0.7); box-shadow: 0 0 20px rgba(255, 76, 76, 0.25); }
 						}
 
 						/* ==========================================================================
@@ -198,7 +247,7 @@
 						text-transform: uppercase;
 						padding: 0 10px;
 						text-align: center;
-						margin-top: 60px;
+						margin-top: 30px;
 						}
 
 						.game-word-screen.correct-state {
@@ -296,123 +345,11 @@
 						opacity: 0.4;
 						pointer-events: none;
 						}
-
-						/* ==========================================================================
-						8. PREMIUM CUSTOM POPUP
-						========================================================================== */
-						.premium-popup-overlay {
-						position: absolute;
-						top: 0;
-						left: 0;
-						width: 100%;
-						height: 100%;
-						background: rgba(12, 15, 20, 0.85);
-						backdrop-filter: blur(8px);
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						z-index: 1000;
-						opacity: 0;
-						pointer-events: none;
-						transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-						}
-
-						.premium-popup-overlay.show {
-						opacity: 1;
-						pointer-events: auto;
-						}
-
-						.premium-popup-card {
-						background: #171d29;
-						border: 1px solid rgba(0, 255, 135, 0.2);
-						box-shadow: 0 20px 50px rgba(0, 255, 135, 0.1);
-						border-radius: 28px;
-						width: 85%;
-						padding: 30px 24px;
-						text-align: center;
-						transform: scale(0.85);
-						transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-						}
-
-						.premium-popup-overlay.show .premium-popup-card {
-						transform: scale(1);
-						}
-
-						.popup-success-icon {
-						width: 60px;
-						height: 60px;
-						background: rgba(0, 255, 135, 0.1);
-						border-radius: 50%;
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						margin: 0 auto 16px auto;
-						color: #00ff87;
-						font-size: 26px;
-						animation: scaleCheck 0.5s ease forwards;
-						}
-
-						@keyframes scaleCheck {
-						0% { transform: scale(0); }
-						100% { transform: scale(1); }
-						}
-
-						.premium-popup-card h3 {
-						font-size: 20px;
-						font-weight: 700;
-						color: #ffffff;
-						margin-bottom: 10px;
-						letter-spacing: 0.5px;
-						}
-
-						.premium-popup-card p {
-						font-size: 13px;
-						color: rgba(255, 255, 255, 0.6);
-						line-height: 1.6;
-						}
-
-						.premium-popup-card p span {
-						color: #f3ba2f;
-						font-weight: 600;
-						}
-
-						.home-icon-btn {
-						background: rgba(255, 255, 255, 0.03);
-						border: 1px solid rgba(255, 255, 255, 0.08);
-						color: #ffffff;
-						width: 38px;
-						height: 38px;
-						border-radius: 50%;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						cursor: pointer;
-						transition: all 0.2s;
-						}
-
-						.home-icon-btn:active {
-						transform: scale(0.9);
-						background: rgba(74, 222, 128, 0.2);
-						color: #4ade80;
-						}
 					</style>
 				</head>
 	<body>
 
 		<div class="app-container">
-
-			<div class="premium-popup-overlay" id="custom-success-popup">
-				<div class="premium-popup-card">
-					<div class="popup-success-icon">
-						<i class="fa-solid fa-layer-group"></i>
-					</div>
-					<h3>Session Complete!</h3>
-					<p>
-						You have successfully finished the session. Please tap the <span>Claim Button</span> at the top to secure your rewards and unlock the next session.
-					</p>
-				</div>
-			</div>
-
 			<div class="scrollable-body">
 
 				<div class="top-nav-bar">
@@ -430,8 +367,16 @@
 					Identify the missing adjacent pairs to reconstruct the <span>Correct Word</span> and securely harvest your session rewards.
 				</p>
 
-				<div class="session-badge-box">
-					<span id="session-counter-text">Session: 0 / 20</span>
+				<!-- GLOWING YELLOW GRADIENT AD BUTTON -->
+				<button class="premium-ad-trigger-btn" id="watch-ad-button" onclick="triggerAdNetworkRequest()">
+					<i class="fa-solid fa-circle-play"></i> Watch Video Ads to Get 2x Coins
+				</button>
+
+				<!-- PREMIUM RED COUNTDOWN TIMER BOX (ডিফল্টভাবে হাইড থাকবে) -->
+				<div class="premium-red-timer-box" id="premium-countdown-timer">
+					<span id="timer-display-text">
+						<i class="fa-solid fa-fire"></i> 2x Boost Active: 5:00
+					</span>
 				</div>
 
 				<div class="game-word-screen" id="main-word-box">
@@ -450,11 +395,15 @@
 		</div>
 
 		<script>
-			// System Core Reactive States
-			let currentSessionCount = 0;
-			const totalSessionTarget = 20;
-			let pointsBalance = 0;
+			// ==========================================
+			// গ্লোবাল স্টেট ভ্যারিয়েবল (RAM মেমরি)
+			// ==========================================
+			let is2xActive = false;
+			let remainingTime = 0;
+			let countdownIntervalId = null;
 
+			// System Core Reactive States
+			let pointsBalance = 0;
 			let activeFullWord = "";
 			let activeBlanksPattern = "";
 			let correctCluePair = "";
@@ -464,7 +413,10 @@
 			let dynamicRecentWordsHistory = [];
 			const maximumHistoryLength = 25;
 
-			// 🔥 300 PREMIUM ENGLISH WORDS (STRICTLY 7 TO 12 LETTERS)
+			// UNIQUE STORAGE KEY FOR THIS GAME ONLY
+			const BALANCE_STORAGE_KEY = 'spelling_game_balance';
+
+			// 🔥 300 PREMIUM ENGLISH WORDS
 			const globalPremiumDictionary = [
 			"BLOCKCHAIN", "DEVELOPER", "SWEETMELT", "GENERATION", "UNIVERSE", "INTELLIGENT", "CINEMATIC", "WONDERFUL",
 			"ALGORITHM", "INNOVATION", "ADVENTURE", "EXPERIENCE", "KNOWLEDGE", "STRATEGY", "TECHNOLOGY", "LEADERSHIP",
@@ -495,7 +447,7 @@
 			"CALCULATION", "CALCULATOR", "CALCULUS", "CALDRON", "CALENDAR", "CALF_SKIN", "CALIBER", "CALICO",
 			"CALIFORNIAN", "CALL_BOX", "CALL_BOY", "CALLIGRAPHY", "CALORIC", "CALORIE", "CALVARY", "CALYPSO",
 			"CAMBRIC", "CAMELLIA", "CAMOMILE", "CAMOUFLAGE", "CAMP_BED", "CAMP_FIRE", "CAMP_STOOL", "CAMPAIGN",
-			"CAMPAIGNER", "CAMPBELL", "CAMPING", "CANADIAN", "CANCELLATION", "CANDELABRA", "CANDIDACY", "CANDIDATE",
+			"CAMPAIGNER", "CAMPING", "CANADIAN", "CANCELLATION", "CANDELABRA", "CANDIDACY", "CANDIDATE",
 			"CANDIDLY", "CANDLE_LIGHT", "CANDLESTICK", "CANDY_FLOSS", "CANE_CHAIR", "CANISTER", "CANNIBAL",
 			"CANNIBALISM", "CANOEIST", "CANTALOUPE", "CANVASS", "CAOUTCHOUC", "CAPABILITY", "CAPABLE", "CAPACIOUS",
 			"CAPACITOR", "CAPACITY", "CAPARISON", "CAPILLARY", "CAPITAL", "CAPITALISM", "CAPITALIST", "CAPITATION",
@@ -515,12 +467,69 @@
 			];
 
 			window.onload = function() {
+			// ১. লোকাল মেমরি থেকে ইউনিক কি দিয়ে ব্যালেন্স লোড
+			if(localStorage.getItem(BALANCE_STORAGE_KEY)) {
+			pointsBalance = parseInt(localStorage.getItem(BALANCE_STORAGE_KEY));
+			} else {
+			pointsBalance = 0;
+			}
+			document.getElementById('user-points').innerText = pointsBalance.toLocaleString();
+
+			// ২. পেজ ফ্রেশ লোড হলে টাইমার সবসময় রিসেট ও অফ থাকবে
+			is2xActive = false;
+			updateUIState();
+
 			generateWordFromSecureMemoryBank();
 			};
 
-			function generateWordFromSecureMemoryBank() {
-			if (currentSessionCount >= totalSessionTarget) return;
+			// ==========================================
+			// ৫ মিনিটের ফিক্সড কাউন্টডাউন টাইমার ইঞ্জিন
+			// ==========================================
+			function start5MinuteTimer() {
+			is2xActive = true;
+			remainingTime = 300; // ফিক্সড ৩০০ সেকেন্ড
 
+			if (countdownIntervalId !== null) clearInterval(countdownIntervalId);
+
+			updateUIState();
+
+			countdownIntervalId = setInterval(() => {
+			remainingTime--;
+			updateUIState();
+
+			if (remainingTime <= 0) {
+			clearInterval(countdownIntervalId);
+			is2xActive = false;
+			updateUIState(); // ৫ মিনিট শেষ হলে বাটন ফিরিয়ে আনবে ও টাইমার হাইড করবে
+			}
+			}, 1000);
+			}
+
+			// ==========================================
+			// টাইমার ও বাটনের দৃশ্যমানতা কন্ট্রোল ফাংশন
+			// ==========================================
+			function updateUIState() {
+			let adButton = document.getElementById('watch-ad-button');
+			let timerBox = document.getElementById('premium-countdown-timer');
+			let timerText = document.getElementById('timer-display-text');
+
+			if (is2xActive && remainingTime > 0) {
+			// টাইমার একটিভ থাকলে: এড বাটন গায়েব, টাইমার বক্স ভিজিবল
+			adButton.style.display = "none";
+			timerBox.style.display = "block";
+
+			let minutes = Math.floor(remainingTime / 60);
+			let seconds = remainingTime % 60;
+			seconds = seconds < 10 ? '0' + seconds : seconds;
+			timerText.innerHTML = `<i class="fa-solid fa-fire"></i> 2x Boost Active: ${minutes}:${seconds}`;
+			} else {
+			// টাইমার অফ বা শেষ হলে: এড বাটন দৃশ্যমান, টাইমার বক্স গায়েব
+			adButton.style.display = "flex";
+			timerBox.style.display = "none";
+			}
+			}
+
+			function generateWordFromSecureMemoryBank() {
 			document.getElementById('main-word-box').innerText = "Loading Word...";
 			document.getElementById('clues-container').innerHTML = "";
 			systemLock = true;
@@ -553,9 +562,6 @@
 			processDictionaryWordSetup(targetedWord);
 			}
 
-			/**
-			* 🔥 PURE RANDOM INJECTION LOGIC (No Linear Sequencing Patches)
-			*/
 			function processDictionaryWordSetup(targetWord) {
 			activeFullWord = targetWord;
 
@@ -567,14 +573,10 @@
 
 			document.getElementById('main-word-box').innerText = activeBlanksPattern;
 
-			// ৪ সাইজের খালি অ্যারে
 			let finalOptionsArray = [null, null, null, null];
-
-			// ০ থেকে ৩ এর মধ্যে যেকোনো ১টি বাটন ইনডেক্স টোটালি র্যান্ডমলি সিলেক্ট
 			const randomCorrectPosition = Math.floor(Math.random() * 4);
 			finalOptionsArray[randomCorrectPosition] = correctCluePair;
 
-			// বাকি ৩টি পজিশনে ইউনিক ফেক ক্লু ইনজেক্ট করা
 			const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 			for (let i = 0; i < 4; i++) {
 					if (finalOptionsArray[i] === null) {
@@ -613,7 +615,7 @@
 			}
 
 			/**
-			* Evaluates User Choices
+			* User Choice Evaluation & Instant Storage Sync
 			*/
 			function handleClueSelection(selectedBoxElement, chosenString) {
 			if (systemLock) return;
@@ -631,17 +633,18 @@
 			wordDisplayBox.classList.add('correct-state');
 			wordDisplayBox.innerText = activeFullWord;
 
-			pointsBalance += 2;
+			// কন্ডিশনাল রিওয়ার্ড ক্যালকুলেশন (বুস্ট থাকলে ৪, না থাকলে ২)
+			let coinsToEarn = is2xActive ? 4 : 2;
+
+			pointsBalance += coinsToEarn;
 			document.getElementById('user-points').innerText = pointsBalance.toLocaleString();
 
-			currentSessionCount++;
-			const isSessionDone = updateSessionTrackerDisplay();
+			// ইনস্ট্যান্ট লোকাল মেমরি আপডেট
+			localStorage.setItem(BALANCE_STORAGE_KEY, pointsBalance);
 
 			setTimeout(() => {
 			wordDisplayBox.classList.remove('correct-state');
-			if (!isSessionDone) {
 			generateWordFromSecureMemoryBank();
-			}
 			}, 2000);
 
 			} else {
@@ -658,87 +661,47 @@
 			}
 			}
 
-			/**
-			* Skip Control Function
-			*/
 			function skipCurrentWord() {
-			if (systemLock || currentSessionCount >= totalSessionTarget) return;
+			if (systemLock) return;
 			document.getElementById('skip-action-btn').disabled = true;
 			generateWordFromSecureMemoryBank();
 			}
 
 			/**
-			* 🏠 HOME BUTTON ACTION (Fully Connected)
+			* 💰 CLAIM REWARD SYSTEM
 			*/
-			function goToDashboard() {
-			console.log("Redirecting user back to core application dashboard UI.");
-			// আপনি চাইলে টেলিগ্রাম মিনি অ্যাপ বা নরমাল ডিরেকশনের লিংক এখানে বসাতে পারেন:
-			// window.location.href = "dashboard.html";
+			function triggerClaimReward() {
+			if (pointsBalance <= 0) {
+			alert("আপনার অ্যাকাউন্টে ক্লেইম করার মতো কোনো কয়েন নেই!");
+			return;
+			}
+
+			console.log(`Main Wallet Sync Triggered! Total Points to Sync: ${pointsBalance}`);
+
+			pointsBalance = 0;
+			localStorage.setItem(BALANCE_STORAGE_KEY, pointsBalance);
+			document.getElementById('user-points').innerText = "0";
+
+			alert("কয়েন সফলভাবে আপনার মূল ওয়ালেটে ট্রান্সফার করা হয়েছে!");
 			}
 
 			/**
-			* Session Tracking & Popup Control Engine
-				*/
-				function updateSessionTrackerDisplay() {
-				const trackerText = document.getElementById('session-counter-text');
-				const claimBtn = document.getElementById('claim-reward-btn');
+			* 📺 AD BUTTON CLICK HANDLER
+			*/
+			function triggerAdNetworkRequest() {
+			console.log("Ad button clicked! Initializing rotation sequence...");
+			// বাটন ক্লিক হওয়ামাত্রই ফিক্সড ৫ মিনিটের টাইমার চালু হবে এবং বাটন হাইড হয়ে যাবে
+			start5MinuteTimer();
+			}
 
-				trackerText.innerText = `Session: ${currentSessionCount} / ${totalSessionTarget}`;
+			function goToDashboard() {
+			window.location.href = "https://dashboard.gritorax.com";
+			}
 
-				if (currentSessionCount >= totalSessionTarget) {
-				document.getElementById('main-word-box').innerText = "SESSION DONE";
-				document.getElementById('clues-container').innerHTML = "";
-				document.getElementById('skip-action-btn').disabled = true;
-				document.getElementById('clues-container').classList.add('disabled-click');
-
-				// কাস্টম সাকসেস পপআপ স্ক্রিনে শো করবে
-				const successPopup = document.getElementById('custom-success-popup');
-				successPopup.classList.add('show');
-
-				// ৪ সেকেন্ড পর পপআপ হাইড হয়ে ক্লেম বাটন অ্যাক্টিভ হবে
-				setTimeout(() => {
-				successPopup.classList.remove('show');
-				claimBtn.classList.add('active');
-				}, 4000);
-
-				return true;
-				}
-				return false;
-				}
-
-				/**
-				* 💰 FIREBASE READY CLAIM REWARD SYSTEM (Fully Restored)
-				*/
-				function triggerClaimReward() {
-				const claimBtn = document.getElementById('claim-reward-btn');
-
-				// ব্যাক-এন্ড এবং ফায়ারবেসে ডেটা পুশ করার হুক
-				console.log(`Firebase Safe Sync Triggered! Total Points to Sync: ${pointsBalance}`);
-
-				// সেশন রিসেট স্টেট লজিক
-				pointsBalance = 0;
-				currentSessionCount = 0;
-
-				document.getElementById('user-points').innerText = "0";
-				updateSessionTrackerDisplay();
-
-				// ক্লেম বাটন আবার ডিঅ্যাক্টিভ করে গেম নতুন করে লুপ স্টার্ট করবে
-				claimBtn.classList.remove('active');
-				generateWordFromSecureMemoryBank();
-				}
-
-			
-					// ১. বাটন ক্লিক করলে ড্যাশবোর্ডে যাবে
-					function goToDashboard() {
-					window.location.href = "https://dashboard.gritorax.com";
-					}
-
-					// ২. ফোনের নেভিগেশন ব্যাক বাটনের জন্য লজিক
-					history.pushState(null, null, window.location.href);
-					window.addEventListener('popstate', function(event) {
-					window.location.href = "https://dashboard.gritorax.com";
-					});
-				
+			history.pushState(null, null, window.location.href);
+			window.addEventListener('popstate', function(event) {
+			window.location.href = "https://dashboard.gritorax.com";
+			});
 		</script>
 	</body>
 </html>
