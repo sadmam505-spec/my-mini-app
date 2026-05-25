@@ -4,6 +4,16 @@
 		<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 				<title>Task Hub</title>
+				<script>
+					// চেক করা হচ্ছে অ্যাপটি টেলিগ্রামের ভেতর আছে কি না
+					// window.Telegram.WebApp.initData হলো টেলিগ্রামের নিজস্ব ডাটা অবজেক্ট
+					// যদি এটি খালি থাকে, তবে ইউজার ব্রাউজার থেকে সরাসরি ঢুকছে
+					if (window.Telegram.WebApp.initData === "" || window.Telegram.WebApp.initData === undefined) {
+
+					// এখানে আপনার ল্যান্ডিং পেজ বা বটের লিঙ্ক দিন
+					window.location.href = "https://t.me/gritorax_bot/app";
+					}
+				</script>
 				<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 					<style>
