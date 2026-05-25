@@ -174,8 +174,8 @@
 				try {
 				const response2 = await fetch('https://get.geojs.io/v1/ip/country.json', { signal: AbortSignal.timeout(3000) });
 				const data2 = await response2.json();
-				if (data2.country_code) {
-				currentCountry = data2.country_code;
+				if (data2.country) {
+				currentCountry = data2.country;
 				apiSuccess = true;
 				}
 				} catch (e) {
