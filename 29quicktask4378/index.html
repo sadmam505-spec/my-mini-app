@@ -132,62 +132,8 @@
 		</div>
 		
 		
-		<div id="securityPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; backdrop-filter:blur(8px);">
-			<div style="background:#121212; border:1px solid #ff416c; padding:30px; border-radius:24px; width:90%; max-width:350px; text-align:center; box-shadow:0 0 30px rgba(255, 65, 108, 0.2);">
-				<div style="font-size:50px; color:#ff416c; margin-bottom:15px;">
-					<i class="fa-solid fa-shield-halved"></i>
-				</div>
-				<h2 style="color:#fff; margin:0 0 10px 0;">Access Denied</h2>
-				<p style="color:#aaa; font-size:14px; margin-bottom:25px;">VPN or Unusual Activity Detected. Please disable VPN to continue.</p>
-				<button onclick="window.Telegram.WebApp.close()" style="width:100%; padding:14px; background:#ff416c; border:none; border-radius:12px; color:#fff; font-weight:800; cursor:pointer; font-size:16px;">Close App</button>
-			</div>
-		</div>
-
+	
 		<script>
-			
-				async function checkUserLocation() {
-				// ১. লোকাল স্টোরেজ থেকে ডাটা আনা
-				const rawData = localStorage.getItem('userData');
-				const userData = rawData ? JSON.parse(rawData) : null;
-				const savedCountry = userData ? userData.country : null;
-
-				if (!savedCountry) return;
-
-				let currentCountry = null;
-				let apiSuccess = false;
-
-				// ২. API ট্রাই
-				try {
-				const response1 = await fetch('https://api.country.is/', { signal: AbortSignal.timeout(3000) });
-				const data1 = await response1.json();
-				if (data1.country) {
-				currentCountry = data1.country;
-				apiSuccess = true;
-				}
-				} catch (e) { console.log("API 1 Failed"); }
-
-				if (!apiSuccess) {
-				try {
-				const response2 = await fetch('https://get.geojs.io/v1/ip/country.json', { signal: AbortSignal.timeout(3000) });
-				const data2 = await response2.json();
-				if (data2.country) {
-				currentCountry = data2.country;
-				apiSuccess = true;
-				}
-				} catch (e) { console.log("API 2 also failed."); }
-				}
-
-				// ৩. ফাইনাল লজিক: API ফেইল করলে OR কান্ট্রি না মিললে পপআপ দেখাবে
-				// যদি apiSuccess false হয় অথবা কান্ট্রি ম্যাচ না করে -> পপআপ আসবে
-				if (!apiSuccess || (currentCountry && currentCountry.toUpperCase() !== savedCountry.toUpperCase())) {
-				document.getElementById('securityPopup').style.display = 'flex';
-				}
-				}
-
-				// পেজ লোড হলে চেক করা
-				window.addEventListener('load', checkUserLocation);
-		
-		
 			function openModal() { document.getElementById('taskModal').style.display = 'flex'; }
 			function closeModal() { document.getElementById('taskModal').style.display = 'none'; }
 		</script>
