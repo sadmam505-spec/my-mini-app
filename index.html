@@ -16,6 +16,19 @@
 
 			gtag('config', 'G-T75CB9P89E');
 		</script>
+		<script>
+			const initData = window.Telegram?.WebApp?.initDataUnsafe;
+			const startParam = initData?.start_param;
+
+			if (startParam) {
+			gtag('set', 'user_properties', {
+			'referral_source': startParam
+			});
+			gtag('event', 'referral_join', {
+			'referral_id': startParam
+			});
+			}
+		</script>
 		<style>
 			/* ==========================================================================
 			1. PREMIUM DARK FOREST THEME SYSTEM (আপনার অরিজিনাল কোড)
