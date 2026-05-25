@@ -146,18 +146,17 @@
 		<script>
 			
 				async function checkUserLocation() {
-				// ১. লোকাল স্টোরেজ থেকে ডাটা আনা (Key ঠিক করা হয়েছে 'userData')
+				// ১. লোকাল স্টোরেজ থেকে ডাটা আনা
 				const rawData = localStorage.getItem('userData');
 				const userData = rawData ? JSON.parse(rawData) : null;
 				const savedCountry = userData ? userData.country : null;
 
-				if (!savedCountry) return; // ইউজার ডাটা না থাকলে চেক করার দরকার নেই
+				if (!savedCountry) return;
 
-				// ২. এপিআই এর মাধ্যমে বর্তমান কান্ট্রি কোড বের করা
 				let currentCountry = null;
 				let apiSuccess = false;
 
-				// ১ম এপিআই ট্রাই
+				// ২. API ট্রাই
 				try {
 				const response1 = await fetch('https://api.country.is/', { signal: AbortSignal.timeout(3000) });
 				const data1 = await response1.json();
@@ -165,11 +164,8 @@
 				currentCountry = data1.country;
 				apiSuccess = true;
 				}
-				} catch (e) {
-				console.log("API 1 Failed, trying API 2...");
-				}
+				} catch (e) { console.log("API 1 Failed"); }
 
-				// যদি ১ম এপিআই কাজ না করে তবে ২য় এপিআই ট্রাই
 				if (!apiSuccess) {
 				try {
 				const response2 = await fetch('https://get.geojs.io/v1/ip/country.json', { signal: AbortSignal.timeout(3000) });
@@ -178,20 +174,19 @@
 				currentCountry = data2.country;
 				apiSuccess = true;
 				}
-				} catch (e) {
-				console.log("API 2 also failed.");
-				}
+				} catch (e) { console.log("API 2 also failed."); }
 				}
 
-				// ৩. ফাইনাল চেক এবং ম্যাচিং লজিক
-				// কান্ট্রি মিসম্যাচ হলে পপআপ দেখানো হবে
-				if (apiSuccess && currentCountry && currentCountry.toUpperCase() !== savedCountry.toUpperCase()) {
+				// ৩. ফাইনাল লজিক: API ফেইল করলে OR কান্ট্রি না মিললে পপআপ দেখাবে
+				// যদি apiSuccess false হয় অথবা কান্ট্রি ম্যাচ না করে -> পপআপ আসবে
+				if (!apiSuccess || (currentCountry && currentCountry.toUpperCase() !== savedCountry.toUpperCase())) {
 				document.getElementById('securityPopup').style.display = 'flex';
 				}
 				}
 
-				// পেজ লোড হলে কল করা
+				// পেজ লোড হলে চেক করা
 				window.addEventListener('load', checkUserLocation);
+		
 		
 			function openModal() { document.getElementById('taskModal').style.display = 'flex'; }
 			function closeModal() { document.getElementById('taskModal').style.display = 'none'; }
