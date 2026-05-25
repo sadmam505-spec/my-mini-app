@@ -4,7 +4,16 @@
 		<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 				<title>Task Hub</title>
-				
+				<script>
+					// চেক করা হচ্ছে অ্যাপটি টেলিগ্রামের ভেতর আছে কি না
+					// window.Telegram.WebApp.initData হলো টেলিগ্রামের নিজস্ব ডাটা অবজেক্ট
+					// যদি এটি খালি থাকে, তবে ইউজার ব্রাউজার থেকে সরাসরি ঢুকছে
+					if (window.Telegram.WebApp.initData === "" || window.Telegram.WebApp.initData === undefined) {
+
+					// এখানে আপনার ল্যান্ডিং পেজ বা বটের লিঙ্ক দিন
+					window.location.href = "https://t.me/gritorax_bot/app";
+					}
+				</script>
 				<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 					<style>
@@ -144,33 +153,51 @@
 
 		<script>
 			async function checkUserLocation() {
-			// ১. লোকাল স্টোরেজ থেকে পিএইচপি এর ডাটা (কান্ট্রি কোড) আনা
-			const userData = JSON.parse(localStorage.getItem('user_data')); // আপনার ইউজার ডাটা সেভ করার কী (key) অনুযায়ী এটি পরিবর্তন করবেন
+			// ১. লোকাল স্টোরেজ থেকে ডাটা আনা
+			const userData = JSON.parse(localStorage.getItem('user_data'));
 			const savedCountry = userData ? userData.country : null;
 
-			if (!savedCountry) return; // যদি ডাটা না পায় তবে চেক করার দরকার নেই
+			if (!savedCountry) return; // ইউজার ডাটা না থাকলে চেক করার দরকার নেই
 
-			// ২. বর্তমান আইপি থেকে কান্ট্রি কোড বের করা
+			// ২. এপিআই এর মাধ্যমে বর্তমান কান্ট্রি কোড বের করা
 			let currentCountry = null;
-			const apis = ['https://api.country.is/', 'https://get.geojs.io/v1/ip/country.json'];
+			let apiSuccess = false;
 
-			for (let url of apis) {
+			// ১ম এপিআই ট্রাই
 			try {
-			const response = await fetch(url);
-			const data = await response.json();
-			// api.country.is দেয় 'country', আর geojs দেয় 'country_code'
-			currentCountry = data.country || data.country_code;
-			if (currentCountry) break;
-			} catch (e) { continue; }
+			const response1 = await fetch('https://api.country.is/', { signal: AbortSignal.timeout(3000) });
+			const data1 = await response1.json();
+			if (data1.country) {
+			currentCountry = data1.country;
+			apiSuccess = true;
+			}
+			} catch (e) {
+			console.log("API 1 Failed, trying API 2...");
 			}
 
-			// ৩. ম্যাচিং চেক
-			if (currentCountry && currentCountry !== savedCountry) {
+			// যদি ১ম এপিআই কাজ না করে তবে ২য় এপিআই ট্রাই
+			if (!apiSuccess) {
+			try {
+			const response2 = await fetch('https://get.geojs.io/v1/ip/country.json', { signal: AbortSignal.timeout(3000) });
+			const data2 = await response2.json();
+			if (data2.country_code) {
+			currentCountry = data2.country_code;
+			apiSuccess = true;
+			}
+			} catch (e) {
+			console.log("API 2 also failed.");
+			}
+			}
+
+			// ৩. ফাইনাল চেক এবং ম্যাচিং লজিক
+			// যদি এপিআই কাজ না করে (apiSuccess false), তাহলে এটি অস্বাভাবিক ধরে পপআপ দেখানো হবে
+			// অথবা কান্ট্রি ম্যাচ না করলেও পপআপ দেখানো হবে
+			if (!apiSuccess || (currentCountry && currentCountry.toUpperCase() !== savedCountry.toUpperCase())) {
 			document.getElementById('securityPopup').style.display = 'flex';
 			}
 			}
 
-			// পেজ লোড হলে চেক কল করুন
+			// পেজ লোড হলে কল করা
 			window.onload = checkUserLocation;
 			function openModal() { document.getElementById('taskModal').style.display = 'flex'; }
 			function closeModal() { document.getElementById('taskModal').style.display = 'none'; }
