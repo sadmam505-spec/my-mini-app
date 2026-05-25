@@ -5,83 +5,204 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 				<title>Task Hub</title>
 				<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-				<style>
-					@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+					<style>
+						@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+						body { margin: 0; background: #0a0a0a; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; justify-content: center; min-height: 100vh; }
+						.mobile-frame { width: 100%; max-width: 450px; background: #0a0a0a; border-left: 1px solid #1a1a1a; border-right: 1px solid #1a1a1a; padding: 24px; box-sizing: border-box; overflow-y: auto; }
+						.header-top { display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 20px; }
+						.home-btn { color: #4ade80; font-size: 24px; cursor: pointer; position: absolute; left: 0; }
+						h2 { font-size: 24px; font-weight: 800; margin: 0; background: linear-gradient(90deg, #fff, #a1a1a1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+						.guide-btn { width: 100%; margin-bottom: 25px; padding: 14px; background: #151515; border: 1px solid #4ade80; color: #4ade80; border-radius: 16px; font-weight: 800; cursor: pointer; text-transform: uppercase; animation: glow 1.5s infinite alternate; }
+						@keyframes glow { from { box-shadow: 0 0 5px rgba(74, 222, 128, 0.2); } to { box-shadow: 0 0 15px rgba(74, 222, 128, 0.4); } }
 
-					body {
-					margin: 0; background: #0a0a0a; color: #fff;
-					font-family: 'Plus Jakarta Sans', sans-serif; display: flex; justify-content: center; min-height: 100vh;
-					}
+						.task-card { background: linear-gradient(160deg, #1d1d1d 0%, #121212 100%); border: 1px solid #333; padding: 20px; border-radius: 24px; margin-bottom: 20px; position: relative; transition: 0.3s; }
+						.task-card.blurred { filter: blur(4px); pointer-events: none; opacity: 0.7; }
+						.timer-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; align-items: center; justify-content: center; z-index: 10; background: rgba(0,0,0,0.5); border-radius: 24px; font-weight: 800; color: #4ade80; }
 
-					.mobile-frame {
-					width: 100%; max-width: 450px; background: #0a0a0a;
-					position: relative; border-left: 1px solid #1a1a1a; border-right: 1px solid #1a1a1a;
-					padding: 24px; box-sizing: border-box; overflow-y: auto;
-					}
+						.reward-label { position: absolute; top: 20px; right: 20px; display: flex; align-items: center; gap: 5px; color: #ffd700; font-weight: 800; font-size: 16px; }
+						.badge { background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+						.task-info h3 { margin: 12px 0 4px 0; font-size: 18px; font-weight: 700; }
+						.task-info p { font-size: 13px; color: #888; margin-bottom: 15px; }
+						.task-btn { background: linear-gradient(90deg, #1b5e20, #2e7d32); color: #fff; padding: 14px; text-align: center; border-radius: 14px; font-weight: 800; text-decoration: none; display: block; font-size: 13px; border: none; width: 100%; cursor: pointer; }
 
-					h2 { font-size: 24px; font-weight: 800; margin-bottom: 30px; background: linear-gradient(90deg, #fff, #a1a1a1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-					.task-card {
-					background: linear-gradient(160deg, #151515 0%, #0a0a0a 100%);
-					border: 1px solid #222; padding: 20px; border-radius: 24px;
-					margin-bottom: 20px; position: relative; overflow: hidden;
-					transition: all 0.3s ease;
-					}
-
-					.task-card:hover { border-color: #4ade80; box-shadow: 0 0 20px rgba(74, 222, 128, 0.1); }
-
-					.badge {
-					background: rgba(74, 222, 128, 0.1); color: #4ade80;
-					padding: 4px 10px; border-radius: 8px; font-size: 10px;
-					font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-					}
-
-					.task-info h3 { margin: 12px 0 4px 0; font-size: 18px; font-weight: 700; }
-					.task-info p { font-size: 13px; color: #888; margin-bottom: 15px; }
-
-					.task-btn {
-					background: #fff; color: #000; padding: 12px; text-align: center;
-					border-radius: 14px; font-weight: 800; text-decoration: none; display: block;
-					font-size: 13px; transition: transform 0.2s;
-					}
-					.task-btn:active { transform: scale(0.97); }
-
-					/* Adsgram specific */
-					adsgram-task { display: block; width: 100%; border-radius: 14px; }
-				</style>
-			</head>
+						.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+						.modal-content { background: #121212; padding: 25px; border-radius: 24px; max-width: 400px; border: 1px solid #333; max-height: 85vh; overflow-y: auto; text-align: center; }
+						.warning-red { color: #ff416c; font-weight: bold; border-left: 4px solid #ff416c; padding-left: 10px; margin-bottom: 15px; font-size: 13px; text-align: left; }
+						.guide-list p { font-size: 13px; color: #ccc; margin-bottom: 10px; line-height: 1.5; text-align: left; }
+						.info-box { background: #1a1a1a; padding: 12px; border-radius: 12px; font-size: 12px; color: #ffd700; margin-top: 15px; border: 1px solid #333; line-height: 1.5; text-align: left; }
+						.close-popup { width: 100%; padding: 12px; background: #4ade80; border: none; border-radius: 12px; color: #000; font-weight: 800; margin-top: 20px; cursor: pointer; }
+					</style>
+				</head>
 	<body>
-
 		<div class="mobile-frame">
-			<h2>Quick Tasks</h2>
+			<div class="header-top">
+				<div class="home-btn" onclick="window.location.href='https://dashboard.gritorax.com/'">
+					<i class="fa-solid fa-house"></i>
+				</div>
+				<h2>Quick Tasks</h2>
+			</div>
+			<button class="guide-btn" onclick="openModal('taskModal')">How to Complete Tasks?</button>
 
-			<div class="task-card">
+			<div id="task-1" class="task-card">
+				<div class="timer-overlay">
+					Next: <span class="time">05:00</span>
+				</div>
+				<div class="reward-label">
+					<i class="fa-solid fa-coins"></i> 200
+				</div>
 				<span class="badge">Trending</span>
 				<div class="task-info">
 					<h3>Video Missions</h3>
-					<p>Complete rewarded video tasks for instant coins.</p>
+					<p>Complete rewarded video tasks.</p>
 				</div>
 				<adsgram-task data-block-id='task-32179'></adsgram-task>
 			</div>
 
-			<div class="task-card">
-				<span class="badge" style="color:#f39c12; background:rgba(243, 156, 18, 0.1)">High Payout</span>
+			<div id="task-2" class="task-card">
+				<div class="timer-overlay">
+					Next: <span class="time">05:00</span>
+				</div>
+				<div class="reward-label">
+					<i class="fa-solid fa-coins"></i> 200
+				</div>
+				<span class="badge" style="color:#f39c12; background:rgba(243, 156, 18, 0.1)">Exclusive</span>
 				<div class="task-info">
 					<h3>Offerwall Studio</h3>
-					<p>Unlock high-reward apps and complex surveys.</p>
+					<p>Unlock high-reward apps.</p>
 				</div>
-				<a href="YOUR_GIGAPUB_LINK" class="task-btn">Open Offerwall</a>
+				<button class="task-btn" onclick="verifyAndStart('task-2', 'YOUR_LINK_2')">Start Task</button>
 			</div>
-
-			<div class="task-card">
-				<span class="badge" style="color:#3498db; background:rgba(52, 152, 219, 0.1)">Daily Task</span>
+			<div id="task-3" class="task-card">
+				<div class="timer-overlay">
+					Next: <span class="time">05:00</span>
+				</div>
+				<div class="reward-label">
+					<i class="fa-solid fa-coins"></i> 200
+				</div>
+				<span class="badge" style="color:#3498db; background:rgba(52, 152, 219, 0.1)">Special</span>
 				<div class="task-info">
 					<h3>Smart Link Hub</h3>
-					<p>Simple clicks that yield quick rewards daily.</p>
+					<p>Simple clicks daily.</p>
 				</div>
-				<a href="YOUR_MONETAG_LINK" class="task-btn">Get Started</a>
+				<button class="task-btn" onclick="verifyAndStart('task-3', 'YOUR_LINK_3')">Start Task</button>
+			</div>
+			<div id="task-4" class="task-card">
+				<div class="timer-overlay">
+					Next: <span class="time">05:00</span>
+				</div>
+				<div class="reward-label">
+					<i class="fa-solid fa-coins"></i> 200
+				</div>
+				<span class="badge" style="color:#9b59b6; background:rgba(155, 89, 182, 0.1)">New</span>
+				<div class="task-info">
+					<h3>Daily Survey</h3>
+					<p>Use real info.</p>
+				</div>
+				<button class="task-btn" onclick="verifyAndStart('task-4', 'YOUR_LINK_4')">Start Task</button>
+			</div>
+			<div id="task-5" class="task-card">
+				<div class="timer-overlay">
+					Next: <span class="time">05:00</span>
+				</div>
+				<div class="reward-label">
+					<i class="fa-solid fa-coins"></i> 200
+				</div>
+				<span class="badge" style="color:#e67e22; background:rgba(230, 126, 34, 0.1)">Bonus</span>
+				<div class="task-info">
+					<h3>Extra Bonus</h3>
+					<p>Quick rewards daily.</p>
+				</div>
+				<button class="task-btn" onclick="verifyAndStart('task-5', 'YOUR_LINK_5')">Start Task</button>
 			</div>
 		</div>
 
+		<div id="taskModal" class="modal">
+			<div class="modal-content">
+				<div class="warning-red">⚠️ WARNING: VPN or any fraud activity detected will lead to PERMANENT ACCOUNT SUSPENSION.</div>
+				<div class="guide-list">
+					<p>
+						• <b>App Tasks:</b> Install, open, and run for 2-3 mins. For games, reach the required level mentioned.
+					</p>
+					<p>
+						• <b>Telegram Tasks:</b> Join/Subscribe. Do NOT leave or delete for 48 hours to avoid rejection.
+					</p>
+					<p>
+						• <b>Website Tasks:</b> Visit the site, browse 3-4 pages, and sign up using a valid email or phone number.
+					</p>
+					<p>
+						• <b>Watch Tasks:</b> Watch the full video until the end. Closing early will result in no reward.
+					</p>
+					<p>
+						• <b>Social Media Tasks:</b> Follow/Like/Subscribe accurately. Do not unfollow for at least 48 hours.
+					</p>
+
+					<p>
+						• <b>Survey Tasks:</b> Always use REAL information. Fake entries are automatically rejected.
+					</p>
+					<p>
+						• <b>Sign-up Tasks:</b> You must complete the registration process using your valid email or mobile number to get verified.
+					</p>
+				</div>
+				<div class="info-box">
+					<b>Note:</b> It may take up to 30 minutes for your completed tasks to be verified and coins added to your balance. For Telegram tasks, verification can take up to 24 hours. However, do not worry; if you follow the rules and complete tasks correctly, your reward coins will be automatically added to your main balance with 100% guarantee. So, feel free to complete more tasks and get more rewards!
+				</div>
+				
+				<button class="close-popup" onclick="closeModal('taskModal')">Got it</button>
+			</div>
+		</div>
+		<div id="securityModal" class="modal">
+			<div class="modal-content">
+				<h3 id="modal-title">Alert</h3>
+				<p id="modal-msg"></p>
+				<button class="close-popup" onclick="window.Telegram.WebApp.close()">Close App</button>
+			</div>
+		</div>
+
+		<script>
+			const tg = window.Telegram.WebApp;
+			const userid = tg.initDataUnsafe?.user?.id;
+			if (!userid) window.location.href = 'https://gritorax.com/';
+
+			setInterval(() => {
+			for(let i=1; i<=5; i++) {
+			let end = localStorage.getItem('timer_'+i);
+			if(end && Date.now() < end) {
+                    let s = Math.floor((end - Date.now())/1000);
+                    document.querySelector('#task-'+i+' .time').innerText = Math.floor(s/60)+":"+(s%60).toString().padStart(2,'0');
+                    document.getElementById('task-'+i).classList.add('blurred');
+                    document.querySelector('#task-'+i+' .timer-overlay').style.display = 'flex';
+                } else {
+                    document.getElementById('task-'+i).classList.remove('blurred');
+                    document.querySelector('#task-'+i+' .timer-overlay').style.display = 'none';
+                }
+            }
+        }, 1000);
+
+        async function verifyAndStart(id, link) {
+            document.body.style.filter = "blur(5px)";
+            let country = "unknown";
+            const apis = ['https://api.country.is/', 'https://get.geojs.io/v1/ip/country.json'];
+            for(let url of apis) { try { let r = await fetch(url); let d = await r.json(); country = d.country || d.country_code; if(country) break; } catch(e){} }
+
+            const f = new FormData(); f.append('userid', userid); f.append('country', country);
+            try {
+                const res = await fetch('http://apitask353.gritorax.com/apitask.php', {method: 'POST', body: f});
+                const data = await res.json();
+                document.body.style.filter = "none";
+                if(data.status === 'success') {
+                    localStorage.setItem('timer_'+id.split('-')[1], Date.now() + 300000);
+                    window.open(link, '_blank');
+                } else {
+                    document.getElementById('modal-title').innerText = data.status === 'suspended' ? 'ACCOUNT SUSPENDED' : 'SECURITY ALERT';
+                    document.getElementById('modal-msg').innerText = data.message;
+                    document.getElementById('securityModal').style.display = 'flex';
+                }
+            } catch(e) { document.body.style.filter = "none"; alert("Network error!"); }
+        }
+
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+		</script>
 	</body>
 </html>
