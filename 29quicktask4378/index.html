@@ -4,30 +4,39 @@
 		<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 				<title>Task Hub</title>
-				<div id="debug-box" style="background: #333; color: #0f0; padding: 10px; font-size: 12px; margin: 10px; border-radius: 5px; border: 1px solid #444;">
-					Loading...
-				</div>
+				<div class="mobile-frame">
+					<div id="debug-box" style="width: 100%; padding: 10px; background: #222; color: #fff; font-size: 12px; border-bottom: 1px solid #444;">
+						Checking...
+					</div>
 
-				<script>
-					window.addEventListener('load', () => {
-					const debugBox = document.getElementById('debug-box');
-					const storedData = localStorage.getItem('user_data');
+					```
 
-					if (storedData) {
-					try {
-					// ডাটাটি অবজেক্ট হিসেবে পার্স করার চেষ্টা
-					const parsed = JSON.parse(storedData);
-					debugBox.innerHTML = "<strong>Data Found!</strong><br>Country Code: " + (parsed.country || "Not Found");
-            } catch (e) {
-                // যদি JSON ফরমেটে না থাকে
-                debugBox.innerHTML = "Data exists but is not valid JSON format: " + storedData;
-            }
-        } else {
-            debugBox.innerHTML = "No data found in LocalStorage with key 'user_data'!";
-        }
-    });
+					### কেন আপনার কোড `Initializing...` এ আটকে থাকছে?
+					যদি ডিবাগ বক্সটি সবসময় `Initializing...` দেখায়, তার মানে হলো **আপনার পেজের `window.onload` অথবা `DOMContentLoaded` ইভেন্টটি ঠিকঠাক ফায়ার হচ্ছে না**। অর্থাৎ, কোডটি রানই হচ্ছে না।
 
-				</script>
+					আপনি নিশ্চিত হওয়ার জন্য নিচের এই **"Quick Fix"** কোডটি ব্যবহার করুন, যা কোনো `load` ইভেন্টের অপেক্ষায় থাকবে না, সরাসরি রান হবে:
+
+					```html
+					<div id="debug-box" style="width: 100%; padding: 10px; background: #000; color: #0f0; font-size: 11px;">
+						Checking...
+					</div>
+
+					<script>
+						// কোনো ইভেন্টের অপেক্ষা করবে না, পেজ লোড হওয়ার সাথে সাথে রান হবে
+						const debugBox = document.getElementById('debug-box');
+						const storedData = localStorage.getItem('user_data');
+
+						if (!storedData) {
+						debugBox.innerHTML = "❌ Error: 'user_data' key not found in LocalStorage!";
+						} else {
+						try {
+						const parsed = JSON.parse(storedData);
+						debugBox.innerHTML = "<strong>Data found:</strong> " + JSON.stringify(parsed);
+						} catch (e) {
+						debugBox.innerHTML = "❌ Error: Data exists but is invalid JSON.";
+						}
+						}
+					</script>
 				<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 					
