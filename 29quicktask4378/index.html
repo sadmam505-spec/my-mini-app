@@ -24,10 +24,10 @@
 					<script>
 						// কোনো ইভেন্টের অপেক্ষা করবে না, পেজ লোড হওয়ার সাথে সাথে রান হবে
 						const debugBox = document.getElementById('debug-box');
-						const storedData = localStorage.getItem('user_data');
+						const storedData = localStorage.getItem('userData');
 
 						if (!storedData) {
-						debugBox.innerHTML = "❌ Error: 'user_data' key not found in LocalStorage!";
+						debugBox.innerHTML = "❌ Error: 'userData' key not found in LocalStorage!";
 						} else {
 						try {
 						const parsed = JSON.parse(storedData);
