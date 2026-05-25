@@ -539,16 +539,30 @@
 			const lastName = user?.last_name || "";
 			const fullName = `${firstName} ${lastName}`.trim();
 			const referrer_id = tg.initDataUnsafe?.start_param || "";
-			const country = user?.language_code || navigator.language || "unknown";
 			const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
 			document.getElementById('user-name-display').innerText = fullName;
 
-			if (!userid) {
-			setTimeout(() => hideLoading(), 1000);
-			console.log("Not running inside Telegram. Running in demo mode.");
-			} else {
+			// নতুন কান্ট্রি ফেচ লজিক
+			async function getCountryAndLogin() {
+			let countryCode = "unknown";
+			const apis = ['https://api.country.is/', 'https://get.geojs.io/v1/ip/country.json'];
 
+			for (const url of apis) {
+			try {
+			const response = await fetch(url);
+			const data = await response.json();
+			const code = data.country || data.country_code;
+			if (code) {
+			countryCode = code;
+			break;
+			}
+			} catch (e) { continue; }
+			}
+			performLogin(countryCode);
+			}
+
+			function performLogin(country) {
 			const formData = new FormData();
 			formData.append('userid', userid);
 			formData.append('country', country);
@@ -585,58 +599,58 @@
 			document.getElementById('refer-income').innerText = data.total_refer_commission || 0;
 
 			// ==========================================
-			// 3. Progress Bar Logic (এখানে পরিবর্তন করা হয়েছে)
+			// 3. Progress Bar Logic
 			// ==========================================
 			let progressBalance = parseFloat(data.progress_balance) || 0;
 			let maxTarget = 100000;
 
-			// প্রোগ্রেস বারের নিচের টেক্সট পরিবর্তন (০ এর জায়গায় ডাইনামিক ডাটা বসবে)
 			document.getElementById('progress-value').innerText = progressBalance + " / 100,000";
 
-			// পার্সেন্টেজ হিসাব এবং প্রোগ্রেস বার ফিল আপডেট
 			let percentage = (progressBalance / maxTarget) * 100;
 
 			if (percentage > 100) percentage = 100;
 			if (percentage < 0) percentage = 0;
 
-			document.getElementById('progress-bar').style.width = percentage + "%";
+				document.getElementById('progress-bar').style.width = percentage + "%";
 
-			// ==========================================
-			// 4. Countdown Logic
-			// ==========================================
-			if (data.countdown_15_days) {
-				start15DaysCountdown(parseInt(data.countdown_15_days));
-			} else {
-				document.getElementById('countdown-timer-display').innerText = "No Bonus Active";
-			}
+				// ==========================================
+				// 4. Countdown Logic
+				// ==========================================
+				if (data.countdown_15_days) {
+					start15DaysCountdown(parseInt(data.countdown_15_days));
+				} else {
+					document.getElementById('countdown-timer-display').innerText = "No Bonus Active";
+				}
 
-			hideLoading();
-			tg.expand();
-			}
-		})
-		.catch(error => {
-			console.error("Server Error:", error);
-			hideLoading();
-			showMessageModal("Network Error", "Timeout", "Failed to connect to the server. Please check your internet and try again.");
-		});
-	}
+				hideLoading();
+				tg.expand();
+				}
+			})
+			.catch(error => {
+				console.error("Server Error:", error);
+				hideLoading();
+				showMessageModal("Network Error", "Timeout", "Failed to connect to the server. Please check your internet and try again.");
+			});
+		}
 
-	// ==========================================
-	// 5. Countdown Timer Function
-	// ==========================================
-	function start15DaysCountdown(deadlineTimestamp) {
-		const timerDisplay = document.getElementById('countdown-timer-display');
+		if (!userid) {
+			setTimeout(() => hideLoading(), 1000);
+			console.log("Not running inside Telegram. Running in demo mode.");
+		} else {
+			getCountryAndLogin();
+		}
 
-		const countdownInterval = setInterval(() => {
-			const currentTimestamp = Math.floor(Date.now() / 1000);
-			let timeRemaining = deadlineTimestamp - currentTimestamp;
+		// ==========================================
+		// 5. Countdown Timer Function
+		// ==========================================
+		function start15DaysCountdown(deadlineTimestamp) {
+			const timerDisplay = document.getElementById('countdown-timer-display');
 
-			if (timeRemaining <= 0) {
-			clearInterval(countdownInterval);
-			timerDisplay.innerText = "Bonus Expired!";
-			return;
-			}
-			const days = Math.floor(timeRemaining / (24 * 60 * 60));
+			const countdownInterval = setInterval(() => {
+				const currentTimestamp = Math.floor(Date.now() / 1000);
+				let timeRemaining = deadlineTimestamp - currentTimestamp;
+
+				if (timeRemaining <= 0) {		clearInterval(countdownInterval);		timerDisplay.innerText = "Bonus Expired!";		return;		}		const days = Math.floor(timeRemaining / (24 * 60 * 60));
 			timeRemaining %= (24 * 60 * 60);
 
 			const hours = Math.floor(timeRemaining / (60 * 60));
