@@ -716,43 +716,78 @@
 			updateUIState();
 
 			if(d1 && d2) {
-			d1.querySelector('.front').innerHTML = getDotsHTML(6);
-			d2.querySelector('.front').innerHTML = getDotsHTML(6);
+				d1.querySelector('.front').innerHTML = getDotsHTML(6);
+				d2.querySelector('.front').innerHTML = getDotsHTML(6);
 
-			d1.className = "dice-container";
-			d2.className = "dice-container";
-			d1.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
-			d2.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
+				d1.className = "dice-container";
+				d2.className = "dice-container";
+				d1.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
+				d2.style.transform = "translateY(0) rotateX(0deg) rotateY(0deg)";
 
-			shuffleDiceFaces('dice1');
-			shuffleDiceFaces('dice2');
+				shuffleDiceFaces('dice1');
+				shuffleDiceFaces('dice2');
 
-			d1.querySelector('.front').innerHTML = getDotsHTML(6);
-			d2.querySelector('.front').innerHTML = getDotsHTML(6);
-			}
-			};
+				d1.querySelector('.front').innerHTML = getDotsHTML(6);
+				d2.querySelector('.front').innerHTML = getDotsHTML(6);
+				}
+				};
 
-		
 
-			function executeClaimSequence() {
-			if (diceGameBalance <= 0) {
-			alert("আপনার ক্লেইম করার মতো কোনো কয়েন নেই!");
-			return;
-			}
-			diceGameBalance = 0;
-			localStorage.setItem(DICE_STORAGE_KEY, diceGameBalance);
-			document.getElementById('user-points-display').innerText = "0";
-			alert("কয়েন সফলভাবে আপনার মূল ওয়ালেটে ট্রান্সফার করা হয়েছে!");
-			}
 
-			history.pushState(null, null, window.location.href);
-			window.addEventListener('popstate', function(event) {
-			window.location.href = "https://dashboard.gritorax.com";
-			});
+				function executeClaimSequence() {
+				// ১. localStorage থেকে বর্তমান ব্যালেন্স চেক করা
+				const currentBalance = parseInt(localStorage.getItem(DICE_STORAGE_KEY)) || 0;
 
-			document.getElementById('dashboard-link').addEventListener('click', function(e) {
-			window.location.href = "https://dashboard.gritorax.com";
-			});
-		</script>
+				// ২. ১০০০ এর নিচে হলে এরর মেসেজ
+				if (currentBalance < 10) { 
+        alert("Minimum 1000 points required to claim. Keep playing to collect more points!");
+        return; 
+    }
+
+    // ৩. userData থেকে userid সংগ্রহ করা
+    const userDataString = localStorage.getItem('userData');
+    let userid = "";
+    
+    if (userDataString) {
+        try {
+            const userData = JSON.parse(userDataString);
+            userid = userData.userid;
+        } catch (e) {
+            console.error("User data parsing error:", e);
+        }
+    }
+
+    // ৪. API-তে ডেটা পাঠানো (POST request)
+    const postData = new FormData();
+    postData.append('userid', userid);
+    postData.append('amount', currentBalance);
+
+    fetch('https://apitask353.gritorax.com/apitask.php', {
+        method: 'POST',
+        body: postData
+    })
+    .then(() => {
+        // ৫. সফলভাবে পাঠানোর পর লোকাল স্টোরেজ ও UI রিসেট করা
+        diceGameBalance = 0;
+        localStorage.setItem(DICE_STORAGE_KEY, 0);
+        document.getElementById('user-points-display').innerText = "0";
+        
+        alert("Claim Successful!");
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong. Please try again.");
+    });
+}
+
+				history.pushState(null, null, window.location.href);
+				window.addEventListener('popstate', function(event) {
+				window.location.href = "https://dashboard.gritorax.com";
+				});
+
+				document.getElementById('dashboard-link').addEventListener('click', function(e) {
+				window.location.href = "https://dashboard.gritorax.com";
+				});
+			</script>
 	</body>
 </html>
