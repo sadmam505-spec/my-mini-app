@@ -284,7 +284,7 @@
 					</div>
 				</div>
 				<div id="messagePopup" style="display:none;">
-					<p style="text-align:center; padding:20px;">Minimum 10-00 points required to claim. Keep playing to collect more points!</p>
+					<p style="text-align:center; padding:20px;">Minimum 1000 points required to claim. Keep playing to collect more points!</p>
 					<button onclick="document.getElementById('messagePopup').style.display='none'">OK</button>
 				</div>
 			</div>
@@ -504,7 +504,7 @@
     const currentStorageBalance = parseInt(localStorage.getItem('car_game_balance')) || 0;
 
     // ২. চেক করা যে ব্যালেন্স ১০০০ বা তার বেশি কি না
-    if (currentStorageBalance < 10) { 
+    if (currentStorageBalance < 1000) { 
         document.getElementById('messagePopup').style.display = 'flex'; 
     } else { 
         // ৩. userData থেকে userid সংগ্রহ করা
