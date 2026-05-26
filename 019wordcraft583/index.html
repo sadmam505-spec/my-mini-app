@@ -4,6 +4,11 @@
 		<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 			<title>WordPlay - Spelling Challenge</title>
+			<script src='//libtl.com/sdk.js' data-zone='11042210' data-sdk='show_11042210'></script>
+
+			<script src="https://ad.gigapub.tech/script?id=6779"></script>
+			<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+			
 
 			<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -368,7 +373,7 @@
 				</p>
 
 				<!-- GLOWING YELLOW GRADIENT AD BUTTON -->
-				<button class="premium-ad-trigger-btn" id="watch-ad-button" onclick="triggerAdNetworkRequest()">
+				<button class="premium-ad-trigger-btn" id="watch-ad-button" onclick="tryNextAd()">
 					<i class="fa-solid fa-circle-play"></i> Watch Video Ads to Get 2x Coins
 				</button>
 
@@ -394,7 +399,170 @@
 			</div>
 		</div>
 
+
+		<div id="ad-popup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.5); z-index:9999;">
+			<p>No video ads available at the moment. Please wait! </p>
+			<button onclick="document.getElementById('ad-popup').style.display='none'">Close</button>
+		</div>
+
 		<script>
+			// --- স্ক্রিপ্টের একদম শুরুতে একবারই ইনিশিয়ালাইজ করবেন ---
+			const rewardedController = window.Adsgram.init({ blockId: "32174" });
+			const interstitialController = window.Adsgram.init({ blockId: "int-32178" });
+
+			// অটোমেটিক ইন্টারস্টিশিয়াল (পেইজ লোড হওয়ার ৫ সেকেন্ড পর শুরু হবে)
+			show_11042210({
+			type: 'inApp',
+			inAppSettings: {
+			frequency: 1,
+			capping: 0.15,
+			interval: 30,
+			timeout: 5,
+			everyPage: false
+			}
+			});
+
+			// --- ফাংশনগুলো ---
+
+			function showAd_id0() {
+			show_11042210().then(() => {
+			// অ্যাড সাকসেস হলে এই আইডি সেভ হবে
+			localStorage.setItem('last_ad_id', 0);
+
+			// টাইমার ও রিওয়ার্ড কল
+			start4MinuteTimer();
+			triggerAdNetworkRequest();
+			}).catch((e) => {
+			// অ্যাড লোড না হলে বা এরর হলে পরবর্তী আইডিতে সুইচ করবে
+			console.log("ID 0 failed, switching to next...");
+			tryNextAd();
+			});
+			}
+
+
+
+			function showAd_id1() {
+			rewardedController.show().then((result) => {
+			if (result.done) {
+			// ১. সফল হলে আইডি সেভ করুন
+			localStorage.setItem('last_ad_id', 1);
+
+			// ২. টাইমার ও রিওয়ার্ড কল করুন
+			start4MinuteTimer();
+			triggerAdNetworkRequest();
+			} else {
+			// ৩. ইউজার স্কিপ করলে বা অ্যাড না দেখলে পরের আইডিতে সুইচ করুন
+			tryNextAd();
+			}
+			}).catch((e) => {
+			// ৪. এরর বা অ্যাড লোড না হলে পরের আইডিতে সুইচ করুন
+			console.log("ID 1 failed or skipped, switching to next...");
+			tryNextAd();
+			});
+			}
+
+
+			function showAd_id2() {
+			show_11042210('pop').then(() => {
+			// ১. অ্যাড সাকসেস হলে আইডি সেভ করুন
+			localStorage.setItem('last_ad_id', 2);
+
+			// ২. টাইমার ও রিওয়ার্ড কল করুন
+			start4MinuteTimer();
+			triggerAdNetworkRequest();
+			}).catch(e => {
+			// ৩. এরর বা অ্যাড লোড না হলে পরের আইডিতে সুইচ করুন
+			console.log("ID 2 failed, switching to next...");
+			tryNextAd();
+			});
+			}
+
+
+			function showAd_id3() {
+			window.showGiga().then(() => {
+			// ১. অ্যাড সাকসেস হলে আইডি সেভ করুন
+			localStorage.setItem('last_ad_id', 3);
+
+			// ২. টাইমার ও রিওয়ার্ড কল করুন
+			start4MinuteTimer();
+			triggerAdNetworkRequest();
+			}).catch(e => {
+			// ৩. এরর হলে পরের আইডিতে সুইচ করুন
+			console.log("ID 3 failed, switching to next...");
+			tryNextAd();
+			});
+			}
+
+
+			function showAd_id4() {
+			interstitialController.show().then((result) => {
+			// ১. অ্যাড সফলভাবে শেষ হলে আইডি সেভ করুন
+			localStorage.setItem('last_ad_id', 4);
+
+			// ২. টাইমার ও রিওয়ার্ড কল করুন
+			start4MinuteTimer();
+			triggerAdNetworkRequest();
+			}).catch((e) => {
+			// ৩. এরর বা অ্যাড লোড না হলে পরের আইডিতে সুইচ করুন
+			console.log("ID 4 failed, switching to next...");
+			tryNextAd();
+			});
+			}
+
+
+			function tryNextAd() {
+			// ১. টাইমার চেক করা (ads_gap_timer)
+			const expiryTime = localStorage.getItem('ads_gap_timer');
+
+			// যদি টাইমার থাকে এবং তা বর্তমান সময়ের চেয়ে বেশি হয় (অর্থাৎ রানিং আছে)
+			if (expiryTime && Date.now() < parseInt(expiryTime)) {
+        // টাইমার রানিং, তাই পপআপ দেখাবে
+        document.getElementById('ad-popup').style.display = 'block';
+        return; // অ্যাড লোড করা বন্ধ করবে
+    }
+
+    // ২. যদি টাইমার না থাকে বা শেষ হয়ে যায় (টাইমার স্টপ)
+    // তাহলে গতবারের সফল আইডি থেকে পরবর্তী আইডি বের করবে
+    let lastId = parseInt(localStorage.getItem('last_ad_id')) || 0;
+    let nextId = (lastId + 1) % 5;
+
+    // নতুন আইডি সেভ করে নেয়া (যাতে পরেরবার এর পর থেকে শুরু হয়)
+    localStorage.setItem('last_ad_id', nextId);
+
+    console.log("Timer stopped. Trying Ad ID: " + nextId);
+
+    // ৩. আইডি অনুযায়ী কল করা
+    switch (nextId) {
+        case 0: showAd_id0(); break;
+        case 1: showAd_id1(); break;
+        case 2: showAd_id2(); break;
+        case 3: showAd_id3(); break;
+        case 4: showAd_id4(); break;
+    }
+}
+
+
+
+
+			// ৪ মিনিটের জন্য টাইমার ফাংশন
+			function start4MinuteTimer() {
+			const duration = 4 * 60 * 1000; // ৪ মিনিট মিলিসেকেন্ডে
+			const expiryTime = Date.now() + duration;
+			localStorage.setItem('ads_gap_timer', expiryTime);
+			}
+
+
+			function triggerAdNetworkRequest() {
+			start5MinuteTimer();
+			}
+
+
+
+
+
+
+
+
 			// ==========================================
 			// গ্লোবাল স্টেট ভ্যারিয়েবল (RAM মেমরি)
 			// ==========================================
@@ -685,14 +853,7 @@
 			alert("কয়েন সফলভাবে আপনার মূল ওয়ালেটে ট্রান্সফার করা হয়েছে!");
 			}
 
-			/**
-			* 📺 AD BUTTON CLICK HANDLER
-			*/
-			function triggerAdNetworkRequest() {
-			console.log("Ad button clicked! Initializing rotation sequence...");
-			// বাটন ক্লিক হওয়ামাত্রই ফিক্সড ৫ মিনিটের টাইমার চালু হবে এবং বাটন হাইড হয়ে যাবে
-			start5MinuteTimer();
-			}
+			
 
 			function goToDashboard() {
 			window.location.href = "https://dashboard.gritorax.com";
