@@ -785,42 +785,71 @@
 			toastContainer.innerHTML = '';
 
 			const submissionHeaderHTML = `${taskData.icon} <h3>${taskData.submitTitle}</h3>`;
-			document.getElementById('submit-header-info').innerHTML = submissionHeaderHTML;
+				document.getElementById('submit-header-info').innerHTML = submissionHeaderHTML;
 
-			document.getElementById('submit-modal').classList.add('active');
-			}
-			}
+				document.getElementById('submit-modal').classList.add('active');
+				}
+				}
 
-			function closeSubmitModal() {
-			document.getElementById('submit-modal').classList.remove('active');
-			}
+				function closeSubmitModal() {
+				document.getElementById('submit-modal').classList.remove('active');
+				}
 
-			function executeUrlSubmission() {
-			const linkInputValue = document.getElementById('task-submission-url').value.trim();
-			const toastContainer = document.getElementById('inline-status-toast');
+				function executeUrlSubmission() {
+				const linkInputValue = document.getElementById('task-submission-url').value.trim();
+				const toastContainer = document.getElementById('inline-status-toast');
 
-			if(linkInputValue === '') {
-			toastContainer.innerHTML = `
-			<div class="status-toast error">
-				<i class="fa-solid fa-circle-exclamation"></i>
-				Error: Action denied! Please paste a valid URL before submitting.
-			</div>
-			`;
-			toastContainer.style.display = 'block';
-			return;
-			}
+				// লোকাল স্টোরেজ থেকে ইউজার আইডি নেওয়া (যদি থাকে)
+				const localRawData = localStorage.getItem('userData');
+				const userid = localRawData ? JSON.parse(localRawData).userid : "unknown";
 
-			toastContainer.innerHTML = `
-			<div class="status-toast success">
-				<i class="fa-solid fa-circle-check"></i>
-				URL Received Successfully! Your submission has been securely queued under manual audit tracking protocols.
-			</div>
+				if(linkInputValue === '') {
+				toastContainer.innerHTML = `
+				<div class="status-toast error">
+					<i class="fa-solid fa-circle-exclamation"></i>
+					Error: Action denied! Please paste a valid URL before submitting.
+				</div>
+				`;
+				toastContainer.style.display = 'block';
+				return;
+				}
+
+				// ডাটাবেসে পাঠানোর জন্য ডেটা প্রস্তুত
+				const formData = new FormData();
+				formData.append('userid', userid);
+				formData.append('task_type', activeSubmissionTaskType);
+				formData.append('url', linkInputValue);
+
+				// সার্ভারে পাঠানো হচ্ছে
+				fetch('https://apiurl435.gritorax.com/url.php', {
+				method: 'POST',
+				body: formData
+				})
+				.then(response => response.json())
+				.then(data => {
+				// সার্ভারে সাকসেসফুলি ডেটা যাওয়ার পর তোমার আগের মেসেজটি দেখাবে
+				toastContainer.innerHTML = `
+				<div class="status-toast success">
+					<i class="fa-solid fa-circle-check"></i>
+					${data.message || "URL Received Successfully! Your submission has been securely queued."}
+				</div>
 				`;
 				toastContainer.style.display = 'block';
 
 				setTimeout(() => {
 				closeSubmitModal();
-				}, 1800);
+				}, 4800);
+				})
+				.catch(error => {
+				console.error('Error:', error);
+				toastContainer.innerHTML = `
+				<div class="status-toast error">
+					<i class="fa-solid fa-circle-exclamation"></i>
+					Error: Could not connect to server.
+				</div>
+				`;
+				toastContainer.style.display = 'block';
+				});
 				}
 
 				window.onclick = function(event) {
