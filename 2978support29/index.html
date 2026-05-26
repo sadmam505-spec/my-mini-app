@@ -215,12 +215,7 @@
         <div id="ticketContainer" class="ticket-list">
             </div>
 
-        <div class="simulate-panel">
-            <button class="sim-btn" onclick="simulateAdminReply()">
-                <i class="fa-solid fa-robot"></i> Simulate Admin Reply (Test System)
-            </button>
-        </div>
-
+       
     </div>
 
     <script>
@@ -327,30 +322,11 @@
             );
         }
 
-        // ৩. অ্যাডমিন রিপ্লাই সিমুলেশন (টেস্ট করার জন্য সিক্রেট পাওয়ার বাটন)
-        function simulateAdminReply() {
-            let tickets = JSON.parse(localStorage.getItem(REPO_STORAGE_KEY)) || [];
+       
             
-            // প্রথম পেন্ডিং টিকিটটি খোঁজা হবে উত্তর দেওয়ার জন্য
-            let pendingTicket = tickets.find(t => t.status === "pending");
+            
 
-            if (!pendingTicket) {
-                alert("Please submit a new ticket first to test the Admin Reply system!");
-                return;
-            }
-
-            // টিকিট স্ট্যাটাস আপডেট এবং অ্যাডমিন মেসেজ রাইটিং
-            pendingTicket.status = "answered";
-            pendingTicket.reply = "Hello! We have reviewed your account log carefully. The required adjustment has been made, and your points/status should be perfectly updated now. Thank you for your patience!";
-
-            localStorage.setItem(REPO_STORAGE_KEY, JSON.stringify(tickets));
-            loadTickets();
-
-            // অটো স্ক্রোল টু অ্যানসারড টিকিট
-            const targetCard = document.getElementById(`card-${pendingTicket.id}`);
-            if(targetCard) targetCard.scrollIntoView({ behavior: 'smooth' });
-        }
-
+            
         function closeApp() {
             if (window.Telegram && window.Telegram.WebApp) {
 					window.Telegram.WebApp.close();
