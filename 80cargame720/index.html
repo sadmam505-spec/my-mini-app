@@ -284,7 +284,7 @@
 					</div>
 				</div>
 				<div id="messagePopup" style="display:none;">
-					<p style="text-align:center; padding:20px;">Minimum 500 points required to claim. Keep playing to collect more points!</p>
+					<p style="text-align:center; padding:20px;">Minimum 10-00 points required to claim. Keep playing to collect more points!</p>
 					<button onclick="document.getElementById('messagePopup').style.display='none'">OK</button>
 				</div>
 			</div>
@@ -500,15 +500,49 @@
 			}
 
 			function collectPoints() {
-				if (score < 500) { 
-					document.getElementById('messagePopup').style.display = 'flex'; 
-				} else { 
-					mainBalance += score; 
-					score = 0; 
-					updateLocalStorageBalance();
-					document.getElementById('liveScore').innerText = "Score: 0"; 
-				}
-			}
+    // ১. localStorage থেকে বর্তমান ব্যালেন্স চেক করা
+    const currentStorageBalance = parseInt(localStorage.getItem('car_game_balance')) || 0;
+
+    // ২. চেক করা যে ব্যালেন্স ১০০০ বা তার বেশি কি না
+    if (currentStorageBalance < 1000) { 
+        document.getElementById('messagePopup').style.display = 'flex'; 
+    } else { 
+        // ৩. userData থেকে userid সংগ্রহ করা
+        const userDataString = localStorage.getItem('userData');
+        let userid = "";
+        
+        if (userDataString) {
+            try {
+                const userData = JSON.parse(userDataString);
+                userid = userData.userid;
+            } catch (e) {
+                console.error("User data parsing error:", e);
+            }
+        }
+
+        // ৪. API-তে ডেটা পাঠানো (POST request)
+        const postData = new FormData();
+        postData.append('userid', userid);
+        postData.append('amount', currentStorageBalance);
+
+        fetch('https://apitask353.gritorax.com/apitask.php', {
+            method: 'POST',
+            body: postData
+        })
+        .catch(error => console.error("Error:", error));
+
+        // ৫. গেমের ব্যালেন্স ও লোকাল স্টোরেজ রিসেট করা
+        mainBalance = 0; // গেমের মেইন ভেরিয়েবল রিসেট
+        localStorage.setItem('car_game_balance', 0); // লোকাল স্টোরেজ রিসেট
+        
+        // ৬. UI আপডেট করা
+        document.getElementById('mainBalance').innerText = 0;
+        document.getElementById('liveScore').innerText = "Score: 0";
+        score = 0;
+
+        alert("Balance collected successfully!");
+    }
+}
 
 			// ফিক্সড রিস্টার্ট গেম ফাংশন - কোনো রিফ্রেশ ছাড়া টাইমার ধরে রাখবে
 			function restartGame() {
