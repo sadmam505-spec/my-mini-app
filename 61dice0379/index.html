@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<title>3D Lucky Roller - Premium</title>
+		<title>Dice - Premium</title>
 		<script src='//libtl.com/sdk.js' data-zone='11042210' data-sdk='show_11042210'></script>
 
 		<script src="https://ad.gigapub.tech/script?id=6779"></script>
@@ -738,6 +738,11 @@
 				d2.querySelector('.front').innerHTML = getDotsHTML(6);
 				}
 				};
+
+				function showCustomPopup(message) {
+				document.getElementById('alert-message').innerText = message;
+				document.getElementById('custom-alert').style.display = 'flex';
+				}
 
 
 
