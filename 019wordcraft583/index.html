@@ -784,85 +784,116 @@
 
 			/**
 			* User Choice Evaluation & Instant Storage Sync
-			*/
-			function handleClueSelection(selectedBoxElement, chosenString) {
-			if (systemLock) return;
-			systemLock = true;
+				*/
+				function handleClueSelection(selectedBoxElement, chosenString) {
+				if (systemLock) return;
+				systemLock = true;
 
-			const wordDisplayBox = document.getElementById('main-word-box');
-			const cluesContainer = document.getElementById('clues-container');
-			const skipButton = document.getElementById('skip-action-btn');
+				const wordDisplayBox = document.getElementById('main-word-box');
+				const cluesContainer = document.getElementById('clues-container');
+				const skipButton = document.getElementById('skip-action-btn');
 
-			cluesContainer.classList.add('disabled-click');
-			skipButton.disabled = true;
+				cluesContainer.classList.add('disabled-click');
+				skipButton.disabled = true;
 
-			if (chosenString === correctCluePair) {
-			selectedBoxElement.classList.add('correct-choice');
-			wordDisplayBox.classList.add('correct-state');
-			wordDisplayBox.innerText = activeFullWord;
+				if (chosenString === correctCluePair) {
+				selectedBoxElement.classList.add('correct-choice');
+				wordDisplayBox.classList.add('correct-state');
+				wordDisplayBox.innerText = activeFullWord;
 
-			// কন্ডিশনাল রিওয়ার্ড ক্যালকুলেশন (বুস্ট থাকলে ৪, না থাকলে ২)
-			let coinsToEarn = is2xActive ? 4 : 2;
+				// কন্ডিশনাল রিওয়ার্ড ক্যালকুলেশন (বুস্ট থাকলে ৪, না থাকলে ২)
+				let coinsToEarn = is2xActive ? 4 : 2;
 
-			pointsBalance += coinsToEarn;
-			document.getElementById('user-points').innerText = pointsBalance.toLocaleString();
+				pointsBalance += coinsToEarn;
+				document.getElementById('user-points').innerText = pointsBalance.toLocaleString();
 
-			// ইনস্ট্যান্ট লোকাল মেমরি আপডেট
-			localStorage.setItem(BALANCE_STORAGE_KEY, pointsBalance);
+				// ইনস্ট্যান্ট লোকাল মেমরি আপডেট
+				localStorage.setItem(BALANCE_STORAGE_KEY, pointsBalance);
 
-			setTimeout(() => {
-			wordDisplayBox.classList.remove('correct-state');
-			generateWordFromSecureMemoryBank();
-			}, 2000);
+				setTimeout(() => {
+				wordDisplayBox.classList.remove('correct-state');
+				generateWordFromSecureMemoryBank();
+				}, 2000);
 
-			} else {
-			selectedBoxElement.classList.add('wrong-choice');
-			wordDisplayBox.classList.add('wrong-state');
+				} else {
+				selectedBoxElement.classList.add('wrong-choice');
+				wordDisplayBox.classList.add('wrong-state');
 
-			setTimeout(() => {
-			selectedBoxElement.classList.remove('wrong-choice');
-			wordDisplayBox.classList.remove('wrong-state');
-			cluesContainer.classList.remove('disabled-click');
-			skipButton.disabled = false;
-			systemLock = false;
-			}, 1500);
-			}
-			}
+				setTimeout(() => {
+				selectedBoxElement.classList.remove('wrong-choice');
+				wordDisplayBox.classList.remove('wrong-state');
+				cluesContainer.classList.remove('disabled-click');
+				skipButton.disabled = false;
+				systemLock = false;
+				}, 1500);
+				}
+				}
 
-			function skipCurrentWord() {
-			if (systemLock) return;
-			document.getElementById('skip-action-btn').disabled = true;
-			generateWordFromSecureMemoryBank();
-			}
+				function skipCurrentWord() {
+				if (systemLock) return;
+				document.getElementById('skip-action-btn').disabled = true;
+				generateWordFromSecureMemoryBank();
+				}
 
-			/**
-			* 💰 CLAIM REWARD SYSTEM
-			*/
-			function triggerClaimReward() {
-			if (pointsBalance <= 0) {
-			alert("আপনার অ্যাকাউন্টে ক্লেইম করার মতো কোনো কয়েন নেই!");
-			return;
-			}
+				/**
+				* 💰 CLAIM REWARD SYSTEM
+				*/
+				function triggerClaimReward() {
+				// ১. localStorage থেকে বর্তমান ব্যালেন্স চেক করা
+				const currentBalance = parseInt(localStorage.getItem(BALANCE_STORAGE_KEY)) || 0;
 
-			console.log(`Main Wallet Sync Triggered! Total Points to Sync: ${pointsBalance}`);
+				// ২. ১০০০ এর নিচে হলে এরর মেসেজ
+				if (currentBalance < 10) { 
+        alert("Minimum 1000 points required to claim. Keep playing to collect more points!");
+        return; 
+    }
 
-			pointsBalance = 0;
-			localStorage.setItem(BALANCE_STORAGE_KEY, pointsBalance);
-			document.getElementById('user-points').innerText = "0";
+    // ৩. userData থেকে userid সংগ্রহ করা
+    const userDataString = localStorage.getItem('userData');
+    let userid = "";
+    
+    if (userDataString) {
+        try {
+            const userData = JSON.parse(userDataString);
+            userid = userData.userid;
+        } catch (e) {
+            console.error("User data parsing error:", e);
+        }
+    }
 
-			alert("কয়েন সফলভাবে আপনার মূল ওয়ালেটে ট্রান্সফার করা হয়েছে!");
-			}
+    // ৪. API-তে ডেটা পাঠানো (POST request)
+    const postData = new FormData();
+    postData.append('userid', userid);
+    postData.append('amount', currentBalance);
 
-			
+    fetch('https://apitask353.gritorax.com/apitask.php', {
+        method: 'POST',
+        body: postData
+    })
+    .then(() => {
+        // ৫. সফলভাবে পাঠানোর পর লোকাল স্টোরেজ ও UI রিসেট করা
+        pointsBalance = 0;
+        localStorage.setItem(BALANCE_STORAGE_KEY, 0);
+        document.getElementById('user-points').innerText = "0";
+        
+        alert("Claim Successful!");
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong. Please try again.");
+    });
+}
 
-			function goToDashboard() {
-			window.location.href = "https://dashboard.gritorax.com";
-			}
 
-			history.pushState(null, null, window.location.href);
-			window.addEventListener('popstate', function(event) {
-			window.location.href = "https://dashboard.gritorax.com";
-			});
-		</script>
+
+				function goToDashboard() {
+				window.location.href = "https://dashboard.gritorax.com";
+				}
+
+				history.pushState(null, null, window.location.href);
+				window.addEventListener('popstate', function(event) {
+				window.location.href = "https://dashboard.gritorax.com";
+				});
+			</script>
 	</body>
 </html>
