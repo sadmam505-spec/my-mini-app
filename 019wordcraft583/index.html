@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-			<title>WordPlay - Spelling Challenge</title>
+			<title>Spelling Challenge</title>
 			<script src='//libtl.com/sdk.js' data-zone='11042210' data-sdk='show_11042210'></script>
 
 			<script src="https://ad.gigapub.tech/script?id=6779"></script>
@@ -840,6 +840,12 @@
 				if (systemLock) return;
 				document.getElementById('skip-action-btn').disabled = true;
 				generateWordFromSecureMemoryBank();
+				}
+
+
+				function showCustomPopup(message) {
+				document.getElementById('alert-message').innerText = message;
+				document.getElementById('custom-alert').style.display = 'flex';
 				}
 
 				function triggerClaimReward() {
