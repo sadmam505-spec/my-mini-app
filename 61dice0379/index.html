@@ -362,6 +362,13 @@
 			<button onclick="document.getElementById('ad-popup').style.display='none'">Close</button>
 		</div>
 
+		<div id="custom-alert" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+			<div style="background:white; padding:20px; border-radius:10px; text-align:center; color:black;">
+				<p id="alert-message"></p>
+				<button onclick="document.getElementById('custom-alert').style.display='none'" style="padding:5px 15px; cursor:pointer;">OK</button>
+			</div>
+		</div>
+
 		<script>
 			// --- স্ক্রিপ্টের একদম শুরুতে একবারই ইনিশিয়ালাইজ করবেন ---
 			const rewardedController = window.Adsgram.init({ blockId: "32174" });
@@ -740,7 +747,7 @@
 
 				// ২. ১০০০ এর নিচে হলে এরর মেসেজ
 				if (currentBalance < 1000) { 
-        alert("Minimum 1000 points required to claim. Keep playing to collect more points!");
+        showCustomPopup("Minimum 1000 points required to claim. Keep playing to collect more points!");
         return; 
     }
 
@@ -772,11 +779,11 @@
         localStorage.setItem(DICE_STORAGE_KEY, 0);
         document.getElementById('user-points-display').innerText = "0";
         
-        alert("Claim Successful!");
+        showCustomPopup("Claim Successful!");
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("Something went wrong. Please try again.");
+        showCustomPopup("Something went wrong. Please try again.");
     });
 }
 
