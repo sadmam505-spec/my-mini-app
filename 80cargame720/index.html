@@ -504,7 +504,7 @@
     const currentStorageBalance = parseInt(localStorage.getItem('car_game_balance')) || 0;
 
     // ২. চেক করা যে ব্যালেন্স ১০০০ বা তার বেশি কি না
-    if (currentStorageBalance < 1000) { 
+    if (currentStorageBalance < 10) { 
         document.getElementById('messagePopup').style.display = 'flex'; 
     } else { 
         // ৩. userData থেকে userid সংগ্রহ করা
