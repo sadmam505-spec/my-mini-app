@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<title>Creator Rewards - Premium Dashboard</title>
+		<title>Creator Rewards - Premium</title>
+		<script src='//libtl.com/sdk.js' data-zone='11042210' data-sdk='show_11042210'></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 		<style>
 			* {
@@ -814,26 +815,38 @@
 				<i class="fa-solid fa-circle-check"></i>
 				URL Received Successfully! Your submission has been securely queued under manual audit tracking protocols.
 			</div>
-			`;
-			toastContainer.style.display = 'block';
+				`;
+				toastContainer.style.display = 'block';
 
-			setTimeout(() => {
-			closeSubmitModal();
-			}, 1800);
-			}
+				setTimeout(() => {
+				closeSubmitModal();
+				}, 1800);
+				}
 
-			window.onclick = function(event) {
-			let detailsModal = document.getElementById('details-modal');
-			let submitModal = document.getElementById('submit-modal');
+				window.onclick = function(event) {
+				let detailsModal = document.getElementById('details-modal');
+				let submitModal = document.getElementById('submit-modal');
 
-			if (event.target == detailsModal) { detailsModal.classList.remove('active'); }
-			if (event.target == submitModal) { submitModal.classList.remove('active'); }
-			}
+				if (event.target == detailsModal) { detailsModal.classList.remove('active'); }
+				if (event.target == submitModal) { submitModal.classList.remove('active'); }
+				}
 
-			history.pushState(null, null, window.location.href);
-			window.addEventListener('popstate', function(event) {
-			window.location.href = "https://dashboard.gritorax.com";
-			});
-		</script>
+				history.pushState(null, null, window.location.href);
+				window.addEventListener('popstate', function(event) {
+				window.location.href = "https://dashboard.gritorax.com";
+				});
+
+				// অটোমেটিক ইন্টারস্টিশিয়াল (পেইজ লোড হওয়ার ৫ সেকেন্ড পর শুরু হবে)
+				show_11042210({
+				type: 'inApp',
+				inAppSettings: {
+				frequency: 2,
+				capping: 0.10,
+				interval: 30,
+				timeout: 5,
+				everyPage: false
+				}
+				});
+			</script>
 	</body>
 </html>
