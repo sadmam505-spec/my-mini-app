@@ -739,7 +739,7 @@
 				const currentBalance = parseInt(localStorage.getItem(DICE_STORAGE_KEY)) || 0;
 
 				// ২. ১০০০ এর নিচে হলে এরর মেসেজ
-				if (currentBalance < 10) { 
+				if (currentBalance < 1000) { 
         alert("Minimum 1000 points required to claim. Keep playing to collect more points!");
         return; 
     }
