@@ -440,6 +440,35 @@
 			20% { left: 100%; }
 			100% { left: 100%; }
 			}
+
+
+			/* Payout Method Capsule */
+			.payout-method-box {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			margin-top: 15px;
+			padding: 8px 15px;
+			background: #0a0a0a;
+			border: 1px solid #1a1a1a;
+			border-radius: 12px;
+			}
+			.payout-method-box img {
+			width: 20px;
+			height: 20px;
+			border-radius: 5px;
+			}
+			.payout-method-text {
+			font-size: 0.7rem;
+			color: #888;
+			text-transform: uppercase;
+			font-weight: 700;
+			}
+			.payout-method-text b {
+			color: #fff;
+			letter-spacing: 0.5px;
+			}
 		</style>
 	</head>
 	<body>
@@ -464,7 +493,16 @@
 				<button class="btn-redeem-trigger" onclick="handleRedeemRequest()">
 					<i class="fa-solid fa-wallet"></i> Request Instant Transfer
 				</button>
+
+				<div class="payout-method-box">
+				
+						<div class="payout-method-text">
+							PAYOUT VIA <b>TRUST WALLET</b>
+						</div>
+					</div>
 			</div>
+			
+			
 
 			<h3 class="live-section-title">
 				<i class="fa-solid fa-circle-dot live-dot"></i> Live Proofs
