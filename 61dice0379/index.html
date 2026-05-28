@@ -486,6 +486,8 @@
         document.getElementById('ad-popup').style.display = 'block';
         return; // অ্যাড লোড করা বন্ধ করবে
     }
+	
+		document.getElementById('ad-popup').style.display = 'none';
 
     // ২. যদি টাইমার না থাকে বা শেষ হয়ে যায় (টাইমার স্টপ)
     // তাহলে গতবারের সফল আইডি থেকে পরবর্তী আইডি বের করবে
@@ -782,7 +784,7 @@
 				const currentBalance = parseInt(localStorage.getItem(DICE_STORAGE_KEY)) || 0;
 
 				// ১. ব্যালেন্স চেক
-				if (currentBalance < 10) { 
+				if (currentBalance < 1000) { 
         showCustomPopup("Minimum 1000 points required to claim.");
         return; 
     }
