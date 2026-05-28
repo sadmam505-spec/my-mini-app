@@ -4,6 +4,8 @@
 		<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 			<title>Spelling Challenge</title>
+
+			<script src="https://telegram.org/js/telegram-web-app.js"></script>
 			<script src='//libtl.com/sdk.js' data-zone='11042210' data-sdk='show_11042210'></script>
 
 			<script src="https://ad.gigapub.tech/script?id=6779"></script>
@@ -412,7 +414,7 @@
 			</div>
 		</div>
 
-		<script>
+		<script type="module">
 			// --- স্ক্রিপ্টের একদম শুরুতে একবারই ইনিশিয়ালাইজ করবেন ---
 			const rewardedController = window.Adsgram.init({ blockId: "32174" });
 			const interstitialController = window.Adsgram.init({ blockId: "int-32178" });
@@ -527,6 +529,8 @@
         document.getElementById('ad-popup').style.display = 'block';
         return; // অ্যাড লোড করা বন্ধ করবে
     }
+
+				document.getElementById('ad-popup').style.display = 'none';
 
     // ২. যদি টাইমার না থাকে বা শেষ হয়ে যায় (টাইমার স্টপ)
     // তাহলে গতবারের সফল আইডি থেকে পরবর্তী আইডি বের করবে
@@ -848,61 +852,105 @@
 				document.getElementById('custom-alert').style.display = 'flex';
 				}
 
-				function triggerClaimReward() {
-				// ১. localStorage থেকে বর্তমান ব্যালেন্স চেক করা
+
+
+
+
+				// ১. Analytics এর বদলে getDatabase ইমপোর্ট করুন
+				import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+				import { getDatabase, ref, update, increment, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+				const firebaseConfig = {
+				apiKey: "AIzaSyB7s_bTJ3CLUZRVOnG2yRYPDwWLDdRrEDI",
+				authDomain: "tgminiapp-65bc1.firebaseapp.com",
+				databaseURL: "https://tgminiapp-65bc1-default-rtdb.firebaseio.com",
+				projectId: "tgminiapp-65bc1",
+				storageBucket: "tgminiapp-65bc1.firebasestorage.app",
+				messagingSenderId: "693051279147",
+				appId: "1:693051279147:web:c36d0e61cbe419c78ce76e",
+				measurementId: "G-4T7QLFY7TP"
+				};
+
+				// ২. Firebase ইনিশিয়ালাইজ করুন
+				const app = initializeApp(firebaseConfig);
+
+				// ৩. Analytics এর বদলে Database সেটআপ করুন
+				const db = getDatabase(app);
+
+				console.log("Firebase Database is ready!");
+
+
+				async function triggerClaimReward() {
+				// ১. ব্যালেন্স চেক (এখানে আপনার আগের কি (key) ব্যবহার করুন)
 				const currentBalance = parseInt(localStorage.getItem(BALANCE_STORAGE_KEY)) || 0;
 
-				// ২. ১০০০ এর নিচে হলে এরর মেসেজ
-				if (currentBalance < 1000) { 
+				if (currentBalance < 10) { 
         showCustomPopup("Minimum 1000 points required to claim. Keep playing to collect more points!");
         return; 
     }
 
-    // ৩. userData থেকে userid সংগ্রহ করা
-    const userDataString = localStorage.getItem('userData');
-    let userid = "";    
-    if (userDataString) {
-        try {
-            const userData = JSON.parse(userDataString);
-            userid = userData.userid;
-        } catch (e) {
-            console.error("User data parsing error:", e);
-        }
+    // ২. Telegram WebApp থেকে সরাসরি UserID নেওয়া
+    const userid = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+
+    if (!userid) {
+        showCustomPopup("Authentication failed. Please open via Telegram.");
+        return;
     }
 
-    // ৪. API-তে ডেটা পাঠানো (POST request)
-    const postData = new FormData();
-    postData.append('userid', userid);
-    postData.append('amount', currentBalance);
-
-    fetch('https://apitask353.gritorax.com/apitask.php', {
-        method: 'POST',
-        body: postData
-    })
-    .then(() => {
-        // ৫. সফলভাবে পাঠানোর পর লোকাল স্টোরেজ ও UI রিসেট করা
-        pointsBalance = 0;
-        localStorage.setItem(BALANCE_STORAGE_KEY, 0);
-        document.getElementById('user-points').innerText = "0";        
+    try {
+        const userRef = ref(db, 'users/' + userid);
+        const snapshot = await get(userRef);
         
-        showCustomPopup("Claim Successful!");
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        showCustomPopup("Something went wrong. Please try again.");
-    });
-}
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            
+            // ৩. ইউজারের নিজের ব্যালেন্স আপডেট
+            await update(userRef, { 
+                bal: increment(currentBalance) 
+            });
+
+            // ৪. যদি রেফারার (referrer) থাকে, তাকে ১০% কমিশন দেওয়া
+            if (userData.rid && userData.rid !== "none") {
+					const commission = currentBalance * 0.10; // ১০% কমিশন
+					const referrerRef = ref(db, 'users/' + userData.rid);
+
+					await update(referrerRef, {
+					bal: increment(commission),
+					comm: increment(commission) // কমিশন ট্র্যাক করার জন্য
+					});
+					console.log("Commission sent to referrer:", userData.rid);
+					}
+					} else {
+					// যদি ইউজার ডাটাবেসে না থাকে, শুধু নিজের ব্যালেন্স আপডেট
+					await update(userRef, { bal: increment(currentBalance) });
+					}
+
+					// ৫. সফলভাবে আপডেট হওয়ার পর রিসেট
+					pointsBalance = 0;
+					localStorage.setItem(BALANCE_STORAGE_KEY, 0);
+					document.getElementById('user-points').innerText = "0";
+					showCustomPopup("Claim Successful!");
+
+					} catch (error) {
+					console.error("Firebase Update Error:", error);
+					showCustomPopup("Something went wrong. Please try again.");
+					}
+					}
 
 
+					function goToDashboard() {
+					window.location.href = "https://dashboard.gritorax.com";
+					}
 
-				function goToDashboard() {
-				window.location.href = "https://dashboard.gritorax.com";
-				}
+					history.pushState(null, null, window.location.href);
+					window.addEventListener('popstate', function(event) {
+					window.location.href = "https://dashboard.gritorax.com";
+					});
 
-				history.pushState(null, null, window.location.href);
-				window.addEventListener('popstate', function(event) {
-				window.location.href = "https://dashboard.gritorax.com";
-				});
-			</script>
+					window.goToDashboard = goToDashboard;      // Home button
+					window.triggerClaimReward = triggerClaimReward; // Claim button
+					window.tryNextAd = tryNextAd;              // Watch Ads button
+					window.skipCurrentWord = skipCurrentWord;  // Skip button
+				</script>
 	</body>
 </html>
