@@ -523,7 +523,7 @@ const currentUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
 window.collectPoints = async function collectPoints() {
     const currentStorageBalance = parseInt(localStorage.getItem('car_game_balance')) || 0;
 
-    if (currentStorageBalance < 1000) { 
+    if (currentStorageBalance < 10) { 
         document.getElementById('messagePopup').style.display = 'flex'; 
     } else { 
         if (!currentUserId) {
