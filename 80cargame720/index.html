@@ -523,7 +523,7 @@ const currentUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
 async function collectPoints() {
     const currentStorageBalance = parseInt(localStorage.getItem('car_game_balance')) || 0;
 
-    if (currentStorageBalance < 10) { 
+    if (currentStorageBalance < 1000) { 
         document.getElementById('messagePopup').style.display = 'flex'; 
     } else { 
         if (!currentUserId) {
@@ -568,7 +568,7 @@ async function collectPoints() {
            
         } catch (error) {
             console.error("Firebase Update Error:", error);
-            alert("Something went wrong, please try again.");
+           
         }
     }
 }
