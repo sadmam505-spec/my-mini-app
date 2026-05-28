@@ -4,6 +4,8 @@
 		<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 				<title>Pro Racing Game</title>
+
+				<script src="https://telegram.org/js/telegram-web-app.js"></script>
 				<script src='//libtl.com/sdk.js' data-zone='11042210' data-sdk='show_11042210'></script>
 
 				<script src="https://ad.gigapub.tech/script?id=6779"></script>
@@ -521,7 +523,7 @@ const currentUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
 window.collectPoints = async function collectPoints() {
     const currentStorageBalance = parseInt(localStorage.getItem('car_game_balance')) || 0;
 
-    if (currentStorageBalance < 10) { 
+    if (currentStorageBalance < 1000) { 
         document.getElementById('messagePopup').style.display = 'flex'; 
     } else { 
         if (!currentUserId) {
