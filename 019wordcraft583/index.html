@@ -884,7 +884,7 @@
 				// ১. ব্যালেন্স চেক (এখানে আপনার আগের কি (key) ব্যবহার করুন)
 				const currentBalance = parseInt(localStorage.getItem(BALANCE_STORAGE_KEY)) || 0;
 
-				if (currentBalance < 10) { 
+				if (currentBalance < 1000) { 
         showCustomPopup("Minimum 1000 points required to claim. Keep playing to collect more points!");
         return; 
     }
