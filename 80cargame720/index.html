@@ -284,7 +284,7 @@
 					</div>
 				</div>
 				<div id="messagePopup" style="display:none;">
-					<p style="text-align:center; padding:20px;">Minimum 1000 points required to claim. Keep playing to collect more points!</p>
+					<p style="text-align:center; padding:20px;">Minimum 10-00 points required to claim. Keep playing to collect more points!</p>
 					<button onclick="document.getElementById('messagePopup').style.display='none'">OK</button>
 				</div>
 			</div>
@@ -299,13 +299,23 @@
 			<button onclick="document.getElementById('ad-popup').style.display='none'">Close</button>
 		</div>
 
-		<script>
+		<script type="module">
 
 			// --- স্ক্রিপ্টের একদম শুরুতে একবারই ইনিশিয়ালাইজ করবেন ---
 			const rewardedController = window.Adsgram.init({ blockId: "32174" });
 			const interstitialController = window.Adsgram.init({ blockId: "int-32178" });
 
-			
+			// অটোমেটিক ইন্টারস্টিশিয়াল (পেইজ লোড হওয়ার ৫ সেকেন্ড পর শুরু হবে)
+			show_11042210({
+			type: 'inApp',
+			inAppSettings: {
+			frequency: 1,
+			capping: 0.15,
+			interval: 30,
+			timeout: 5,
+			everyPage: false
+			}
+			});
 
 			// --- ফাংশনগুলো ---
 
@@ -489,50 +499,79 @@
 				document.getElementById('mainBalance').innerText = mainBalance;
 			}
 
-			function collectPoints() {
-    // ১. localStorage থেকে বর্তমান ব্যালেন্স চেক করা
-    const currentStorageBalance = parseInt(localStorage.getItem('car_game_balance')) || 0;
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, update, increment, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // ২. চেক করা যে ব্যালেন্স ১০০০ বা তার বেশি কি না
-    if (currentStorageBalance < 1000) { 
-        document.getElementById('messagePopup').style.display = 'flex'; 
-    } else { 
-        // ৩. userData থেকে userid সংগ্রহ করা
-        const userDataString = localStorage.getItem('userData');
-        let userid = "";
-        
-        if (userDataString) {
-            try {
-                const userData = JSON.parse(userDataString);
-                userid = userData.userid;
-            } catch (e) {
-                console.error("User data parsing error:", e);
-            }
-        }
+const firebaseConfig = {
+    apiKey: "AIzaSyB7s_bTJ3CLUZRVOnG2yRYPDwWLDdRrEDI",
+    authDomain: "tgminiapp-65bc1.firebaseapp.com",
+    databaseURL: "https://tgminiapp-65bc1-default-rtdb.firebaseio.com",
+    projectId: "tgminiapp-65bc1",
+    storageBucket: "tgminiapp-65bc1.firebasestorage.app",
+    messagingSenderId: "693051279147",
+    appId: "1:693051279147:web:c36d0e61cbe419c78ce76e",
+    measurementId: "G-4T7QLFY7TP"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+// টেলিগ্রাম থেকে আইডি নেওয়া
+const currentUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
 
-        // ৪. API-তে ডেটা পাঠানো (POST request)
-        const postData = new FormData();
-        postData.append('userid', userid);
-        postData.append('amount', currentStorageBalance);
 
-        fetch('https://apitask353.gritorax.com/apitask.php', {
-            method: 'POST',
-            body: postData
-        })
-        .catch(error => console.error("Error:", error));
+window.collectPoints = async function collectPoints() {
+    const currentStorageBalance = parseInt(localStorage.getItem('car_game_balance')) || 0;
 
-        // ৫. গেমের ব্যালেন্স ও লোকাল স্টোরেজ রিসেট করা
-        mainBalance = 0; // গেমের মেইন ভেরিয়েবল রিসেট
-        localStorage.setItem('car_game_balance', 0); // লোকাল স্টোরেজ রিসেট
-        
-        // ৬. UI আপডেট করা
-        document.getElementById('mainBalance').innerText = 0;
-        document.getElementById('liveScore').innerText = "Score: 0";
-        score = 0;
+    if (currentStorageBalance < 10) { 
+        document.getElementById('messagePopup').style.display = 'flex'; 
+    } else { 
+        if (!currentUserId) {
+            alert("Error: User ID not found!");
+            return;
+        }
 
-        alert("Balance collected successfully!");
-    }
+        try {
+            const userRef = ref(db, 'users/' + currentUserId);
+            
+            // ১. বর্তমান ইউজারের ডেটা ডাটাবেস থেকে আনুন (এখানেই আমরা rid পাব)
+            const snapshot = await get(userRef);
+            
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                
+                // ২. ইউজারের ব্যালেন্স যোগ করা
+                await update(userRef, { bal: increment(currentStorageBalance) });
+
+                // ৩. ডাটাবেস থেকে পাওয়া rid চেক করা
+                if (userData.rid && userData.rid !== "none") {
+                    const commission = currentStorageBalance * 0.10; // ১০% কমিশন
+                    
+                    // ৪. রেফারারের ব্যালেন্স আপডেট করা
+                    update(ref(db, 'users/' + userData.rid), {
+                        bal: increment(commission),
+                        comm: increment(commission)
+                    });
+                }
+            } else {
+                // যদি ডাটাবেসে ইউজার না থাকে (প্রথমবার খেলে)
+                await update(userRef, { bal: increment(currentStorageBalance) });
+            }
+
+            // ৫. রিসেট লজিক
+            mainBalance = 0;
+            localStorage.setItem('car_game_balance', 0);
+            document.getElementById('mainBalance').innerText = 0;
+            document.getElementById('liveScore').innerText = "Score: 0";
+            score = 0;
+
+            alert("Balance collected successfully!");
+        } catch (error) {
+            console.error("Firebase Update Error:", error);
+            alert("Something went wrong, please try again.");
+        }
+    }
 }
+
+
 
 			// ফিক্সড রিস্টার্ট গেম ফাংশন - কোনো রিফ্রেশ ছাড়া টাইমার ধরে রাখবে
 			function restartGame() {
