@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-				<title>Quick Task</title>
+				<title>Task Hub</title>
 				<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 				<script src="https://telegram.org/js/telegram-web-app.js"></script>
 				<script src='//libtl.com/sdk.js' data-zone='11042210' data-sdk='show_11042210'></script>
@@ -101,7 +101,8 @@
 					<p>Successfully complete the entire task without skipping any parts</p>
 				</div>
 				<a href="#" class="task-btn" style="background: #f39c12; color: #000;"
-				   onclick="startTask('task2', 300, 'https://omg10.com/4/11057658')">Start Task</a>
+				   onclick="startTask('task2', 300, 100, 'https://omg10.com/4/11057658')">Start Task</a>
+				  
 			</div>
 
 			<div class="task-card" id="task3" style="background: linear-gradient(135deg, #1a4a75, #0c243d);">
@@ -114,7 +115,8 @@
 					<p>Complete the task perfectly and collect your well-deserved reward</p>
 				</div>
 				<a href="#" class="task-btn" style="background: #3498db;"
-				   onclick="startTask('task3', 300, 'https://www.effectivecpmnetwork.com/sgwvikhkhz?key=ca356bda9fe09a215d984eee2d1e6a44')">Start Task</a>
+				   onclick="startTask('task3', 300, 100, 'https://www.effectivecpmnetwork.com/sgwvikhkhz?key=ca356bda9fe09a215d984eee2d1e6a44')">Start Task</a>
+				   
 			</div>
 
 			<div class="task-card" id="task4" style="background: linear-gradient(135deg, #5e2a75, #2a1236);">
@@ -127,7 +129,8 @@
 					<p>Complete the task properly and claim your reward!</p>
 				</div>
 				<a href="#" class="task-btn" style="background: #9b59b6;"
-				   onclick="startTask('task4', 300, 'https://link.gigapub.tech/l/91qwxth9f7')">Start Task</a>
+				   onclick="startTask('task4', 300, 100, 'https://link.gigapub.tech/l/91qwxth9f7')">Start Task</a>
+				   
 			</div>
 		</div>
 
@@ -165,9 +168,94 @@
 			</div>
 		</div>
 
-		<script>
+		
 
-			// অটোমেটিক ইন্টারস্টিশিয়াল (পেইজ লোড হওয়ার ৫ সেকেন্ড পর শুরু হবে)
+			
+
+		<script type="module">
+    // ১. সব ইমপোর্ট সবার উপরে
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, update, increment, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    // ২. কনফিগারেশন ও ইনিশিয়াল লজিক
+    const firebaseConfig = {
+        apiKey: "AIzaSyB7s_bTJ3CLUZRVOnG2yRYPDwWLDdRrEDI",
+        authDomain: "tgminiapp-65bc1.firebaseapp.com",
+        databaseURL: "https://tgminiapp-65bc1-default-rtdb.firebaseio.com",
+        projectId: "tgminiapp-65bc1",
+        storageBucket: "tgminiapp-65bc1.firebasestorage.app",
+        messagingSenderId: "693051279147",
+        appId: "1:693051279147:web:c36d0e61cbe419c78ce76e",
+        measurementId: "G-4T7QLFY7TP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const currentUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+
+    // ৩. ফায়ারবেস আপডেট ফাংশন
+    async function completeTaskAndReward(userId, taskAmount) {
+        if (!userId) return;
+        try {
+            const userRef = ref(db, 'users/' + userId);                
+            await update(userRef, { bal: increment(taskAmount) });
+
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                if (userData.rid && userData.rid !== "none") {
+                    const commission = taskAmount * 0.10;
+                    update(ref(db, 'users/' + userData.rid), {
+                        bal: increment(commission),
+                        comm: increment(commission)
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("Reward Update Error:", error);
+        }
+    }
+
+    // ৪. মূল স্টার্ট টাস্ক ফাংশন
+    window.startTask = async (taskId, durationInSeconds, amount, targetUrl) => {
+        // ফায়ারবেস আপডেট
+        await completeTaskAndReward(currentUserId, amount);
+
+        // টাইমার ও ইউআই লজিক
+        const endTime = Date.now() + (durationInSeconds * 1000);
+        localStorage.setItem(`timer_${taskId}`, endTime);
+        
+        const card = document.getElementById(taskId);
+        if(card) card.style.display = 'none';
+
+        window.open(targetUrl, '_blank');
+
+        setTimeout(() => {
+            if(card) card.style.display = 'block';
+            localStorage.removeItem(`timer_${taskId}`);
+        }, durationInSeconds * 1000);
+    };
+
+    // আপনার অন্যান্য ফাংশন (Modal, Ads)
+    window.openModal = () => { document.getElementById('taskModal').style.display = 'flex'; };
+    window.closeModal = () => { document.getElementById('taskModal').style.display = 'none'; };
+
+    // পেজ লোড লজিক
+    window.addEventListener('load', () => {
+        const taskConfig = { 'task2': 300, 'task3': 300, 'task4': 300 };
+        Object.keys(taskConfig).forEach(taskId => {
+            const endTime = localStorage.getItem(`timer_${taskId}`);
+            const card = document.getElementById(taskId);
+            if (endTime && endTime > Date.now()) {
+                if (card) card.style.display = 'none';
+                setTimeout(() => { if (card) card.style.display = 'block'; }, endTime - Date.now());
+            }
+        });
+        setTimeout(() => { document.getElementById('loading-overlay').style.display = 'none'; }, 500);
+    });
+
+
+    // অটোমেটিক ইন্টারস্টিশিয়াল (পেইজ লোড হওয়ার ৫ সেকেন্ড পর শুরু হবে)
 			show_11042210({
 			type: 'inApp',
 			inAppSettings: {
@@ -179,95 +267,6 @@
 			}
 			});
 
-
-			// ১. পপআপ খোলার ফাংশন
-			function openModal() { document.getElementById('taskModal').style.display = 'flex'; }
-			function closeModal() { document.getElementById('taskModal').style.display = 'none'; }
-
-
-			// কার্ডগুলোর আইডি এবং ডিউরেশন সেট করা (Task2, Task3, Task4)
-			const taskConfig = {
-			'task2': 300, // 5 মিনিট
-			'task3': 300,
-			'task4': 300
-			};
-
-			// পেজ লোড হওয়ার সাথে সাথে চেক করা
-			window.addEventListener('load', () => {
-			const overlay = document.getElementById('loading-overlay');
-
-			Object.keys(taskConfig).forEach(taskId => {
-			const endTime = localStorage.getItem(`timer_${taskId}`);
-			const card = document.getElementById(taskId);
-
-			if (endTime) {
-			const timeLeft = endTime - Date.now();
-
-			if (timeLeft > 0) {
-			// এখনো সময় বাকি আছে, তাই কার্ড লুকিয়ে রাখো
-			if (card) card.style.display = 'none';
-
-			// টাইমার শেষ হওয়ার বাকি সময়টুকু হিসাব করে কার্ড ফিরিয়ে আনা
-			setTimeout(() => {
-			if (card) card.style.display = 'block';
-			localStorage.removeItem(`timer_${taskId}`);
-			}, timeLeft);
-			} else {
-			// সময় শেষ, কার্ড রেখে দাও
-			localStorage.removeItem(`timer_${taskId}`);
-			}
-			}
-			});
-
-			// সব কাজ শেষে overlay সরিয়ে নেওয়া (একটু সময় নিয়ে যেন প্রিমিয়াম লাগে)
-			setTimeout(() => {
-			overlay.style.display = 'none';
-			}, 500);
-			});
-
-			// টাস্ক ক্লিক করলে যা হবে
-			function startTask(taskId, durationInSeconds, targetUrl) {
-			const endTime = Date.now() + (durationInSeconds * 1000);
-			localStorage.setItem(`timer_${taskId}`, endTime);
-
-			// কার্ড সাথে সাথে ভ্যানিশ
-			document.getElementById(taskId).style.display = 'none';
-
-			// ----- নতুন যুক্ত করা API কল (POST মেথড) -----
-			// টেলিগ্রাম মিনি অ্যাপ থেকে সরাসরি ইউজার আইডি নেওয়া
-			let currentUserId = "";
-			if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
-			currentUserId = window.Telegram.WebApp.initDataUnsafe.user.id;
-			}
-
-			// ইউজার আইডি থাকলে POST মেথডে API কল করা হবে
-			if (currentUserId) {
-			// POST রিকোয়েস্টের জন্য ডাটা তৈরি করা
-			const postData = new URLSearchParams();
-			postData.append('userid', currentUserId);
-			postData.append('amount', '100');
-
-			fetch('https://apitask353.gritorax.com/apitask.php', {
-			method: 'POST',
-			body: postData
-			})
-			.catch(error => console.error("Error:", error)); // শুধু কোনো বড় এরর হলে কনসোলে দেখাবে
-			}
-			// ---------------------------------
-
-			// অফার পেজে রিডাইরেক্ট
-			window.open(targetUrl, '_blank');
-
-			// নির্দিষ্ট সময় পর কার্ড আবার দেখানো
-			setTimeout(() => {
-			document.getElementById(taskId).style.display = 'block';
-			localStorage.removeItem(`timer_${taskId}`);
-			}, durationInSeconds * 1000);
-			}
-
-
-
-
-		</script>
+        </script>
 	</body>
 </html>
