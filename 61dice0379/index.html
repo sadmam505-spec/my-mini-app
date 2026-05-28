@@ -749,10 +749,14 @@
 
 
 
+
+
+
+
+
 				// ১. Analytics এর বদলে getDatabase ইমপোর্ট করুন
 				import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-				import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
+				import { getDatabase, ref, update, increment, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 				const firebaseConfig = {
 				apiKey: "AIzaSyB7s_bTJ3CLUZRVOnG2yRYPDwWLDdRrEDI",
 				authDomain: "tgminiapp-65bc1.firebaseapp.com",
@@ -778,7 +782,7 @@
 				const currentBalance = parseInt(localStorage.getItem(DICE_STORAGE_KEY)) || 0;
 
 				// ১. ব্যালেন্স চেক
-				if (currentBalance < 4) { 
+				if (currentBalance < 10) { 
         showCustomPopup("Minimum 1000 points required to claim.");
         return; 
     }
