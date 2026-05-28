@@ -471,7 +471,7 @@
 		</div>
 
 
-		<script>
+		<script type="module">
 			// ==========================================
 			// 1. Modal & Navigation Logic
 			// ==========================================
@@ -518,6 +518,8 @@
 			const tg = window.Telegram.WebApp;
 			tg.ready();
 
+
+
 			const dashboard = document.getElementById('dashboard');
 			const loadingScreen = document.getElementById('loading-screen');
 
@@ -541,133 +543,99 @@
 			const referrer_id = tg.initDataUnsafe?.start_param || "";
 			const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
+
 			document.getElementById('user-name-display').innerText = fullName;
 
-			// নতুন কান্ট্রি ফেচ লজিক
-			async function getCountryAndLogin() {
-			let countryCode = "unknown";
-			const apis = ['https://api.country.is/', 'https://get.geojs.io/v1/ip/country.json'];
 
-			for (const url of apis) {
-			try {
-			const response = await fetch(url);
-			const data = await response.json();
-			const code = data.country || data.country_code;
-			if (code) {
-			countryCode = code;
-			break;
+
+
+			import { getDatabase, ref, get, set, increment, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+			const db = getDatabase();
+
+			// সব ফাংশন (Modal, Exit, Copy, Loading) আপনার আগের মতোই থাকবে...
+			// [এখানে আপনার Modal Logic এবং showLoading/hideLoading ফাংশনগুলো আগের মতোই থাকবে]
+
+			// ১. সব ডেটা একবারে শুরুতেই ডিক্লেয়ার করুন
+			
+
+			// ২. Firebase লজিক (একবারই)
+			if (userid) {
+			const userRef = ref(db, 'users/' + userid);
+			get(userRef).then((snapshot) => {
+			if (snapshot.exists()) {
+			updateDashboard(snapshot.val());
+			} else {
+			const now = Math.floor(Date.now() / 1000);
+			const newUser = {
+			bal: 10000, 
+			ref: 0, 
+			comm: 0, 
+			j_d: now, 
+			tz: timezone,
+			rid: referrer_id || "none", 
+			ct: now + (15 * 24 * 60 * 60), w_c: 0
+			};
+			set(userRef, newUser).then(() => {
+			if (referrer_id && referrer_id !== userid) {
+			update(ref(db, 'users/' + referrer_id), { ref: increment(1) });
 			}
-			} catch (e) { continue; }
-			}
-			performLogin(countryCode);
-			}
-
-			function performLogin(country) {
-			const formData = new FormData();
-			formData.append('userid', userid);
-			formData.append('country', country);
-			formData.append('timezone', timezone);
-			formData.append('referrer_id', referrer_id);
-
-			fetch('https://api4016.gritorax.com/login.php', {
-			method: 'POST',
-			body: formData
-			})
-			.then(response => response.json())
-			.then(data => {
-
-			if (data.response_status === "suspended") {
-			hideLoading();
-			showMessageModal("Account Suspended", "Action Required", data.message);
-			return;
-			}
-			else if (data.response_status === "error") {
-			hideLoading();
-			showMessageModal("System Error", "Connection Failed", data.message);
-			return;
-			}
-			else if (data.response_status === "active") {
-			// মেমোরিতে সেভ হচ্ছে
-			localStorage.setItem('userData', JSON.stringify(data));
-
-			if(data.total_balance !== undefined) {
-			document.getElementById('user-balance').innerText = data.total_balance;
-			}
-
-			document.getElementById('refer-link').value = `https://t.me/gritorax_bot/app?startapp=${userid}`;
-			document.getElementById('total-refer').innerText = data.total_refer || 0;
-			document.getElementById('refer-income').innerText = data.total_refer_commission || 0;
-
-			// ==========================================
-			// 3. Progress Bar Logic
-			// ==========================================
-			let progressBalance = parseFloat(data.progress_balance) || 0;
-			let maxTarget = 100000;
-
-			document.getElementById('progress-value').innerText = progressBalance + " / 100,000";
-
-			let percentage = (progressBalance / maxTarget) * 100;
-
-			if (percentage > 100) percentage = 100;
-			if (percentage < 0) percentage = 0;
-
-				document.getElementById('progress-bar').style.width = percentage + "%";
-
-				// ==========================================
-				// 4. Countdown Logic
-				// ==========================================
-				if (data.countdown_15_days) {
-					start15DaysCountdown(parseInt(data.countdown_15_days));
-				} else {
-					document.getElementById('countdown-timer-display').innerText = "No Bonus Active";
-				}
-
-				hideLoading();
-				tg.expand();
-				}
-			})
-			.catch(error => {
-				console.error("Server Error:", error);
-				hideLoading();
-				showMessageModal("Network Error", "Timeout", "Failed to connect to the server. Please check your internet and try again.");
+			updateDashboard(newUser);
 			});
-		}
+			}
+			}).catch(console.error);
+			}
 
-		if (!userid) {
-			setTimeout(() => hideLoading(), 1000);
-			console.log("Not running inside Telegram. Running in demo mode.");
-		} else {
-			getCountryAndLogin();
-		}
+			// ৩. ড্যাশবোর্ড আপডেট ফাংশন
+			function updateDashboard(data) {
+			document.getElementById('user-balance').innerText = data.bal;
+			document.getElementById('total-refer').innerText = data.ref;
+			document.getElementById('refer-income').innerText = data.comm;
+			document.getElementById('refer-link').value = `https://t.me/gritorax_bot/app?startapp=${userid}`;
 
-		// ==========================================
-		// 5. Countdown Timer Function
-		// ==========================================
-		function start15DaysCountdown(deadlineTimestamp) {
+			let percentage = (data.bal / 100000) * 100;
+			document.getElementById('progress-value').innerText = `${data.bal} / 100,000`;
+			document.getElementById('progress-bar').style.width = (percentage > 100 ? 100 : percentage) + "%";
+
+			if (data.ct) start15DaysCountdown(data.ct);
+			hideLoading();
+			if(tg) tg.expand();
+			}
+
+			
+		
+
+
+
+			// ==========================================
+			// 5. Countdown Timer Function
+			// ==========================================
+			function start15DaysCountdown(deadlineTimestamp) {
 			const timerDisplay = document.getElementById('countdown-timer-display');
 
 			const countdownInterval = setInterval(() => {
-				const currentTimestamp = Math.floor(Date.now() / 1000);
-				let timeRemaining = deadlineTimestamp - currentTimestamp;
+			const currentTimestamp = Math.floor(Date.now() / 1000);
+			let timeRemaining = deadlineTimestamp - currentTimestamp;
 
-				if (timeRemaining <= 0) {		clearInterval(countdownInterval);		timerDisplay.innerText = "Bonus Expired!";		return;		}		const days = Math.floor(timeRemaining / (24 * 60 * 60));
-			timeRemaining %= (24 * 60 * 60);
+			if (timeRemaining <= 0) {		clearInterval(countdownInterval);		timerDisplay.innerText = "Bonus Expired!";		return;		}		const days = Math.floor(timeRemaining / (24 * 60 * 60));
+				timeRemaining %= (24 * 60 * 60);
 
-			const hours = Math.floor(timeRemaining / (60 * 60));
-			timeRemaining %= (60 * 60);
+				const hours = Math.floor(timeRemaining / (60 * 60));
+				timeRemaining %= (60 * 60);
 
-			const minutes = Math.floor(timeRemaining / 60);
-			const seconds = timeRemaining % 60;
+				const minutes = Math.floor(timeRemaining / 60);
+				const seconds = timeRemaining % 60;
 
-			const dStr = days.toString().padStart(2, '0');
-			const hStr = hours.toString().padStart(2, '0');
-			const mStr = minutes.toString().padStart(2, '0');
-			const sStr = seconds.toString().padStart(2, '0');
+				const dStr = days.toString().padStart(2, '0');
+				const hStr = hours.toString().padStart(2, '0');
+				const mStr = minutes.toString().padStart(2, '0');
+				const sStr = seconds.toString().padStart(2, '0');
 
-			timerDisplay.innerText = `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
+				timerDisplay.innerText = `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
 
-			}, 1000);
-			}
-		</script>
+				}, 1000);
+				}
+
+				window.copyReferLink = copyReferLink;
+			</script>
 	</body>
 </html>
