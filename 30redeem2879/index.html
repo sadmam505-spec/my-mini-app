@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<title>Asset Hub - Live Ledger</title>
+	
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 		<style>
 			* {
@@ -486,7 +487,7 @@
 			<div class="balance-card">
 				<div class="balance-label">Your Total Balance</div>
 				<div class="balance-amount" id="user-points-display">
-					10<span>coins</span>
+					10000<span>coins</span>
 				</div>
 
 				<button class="btn-redeem-trigger" onclick="handleRedeemRequest()">
@@ -503,7 +504,7 @@
 				<div class="payout-method-box">
 
 					<div class="payout-method-text">
-						1 coin = <b>0.001 USDT</b>
+						1 coin = <b>$ 0.001</b>
 					</div>
 				</div>
 			</div>
@@ -554,34 +555,21 @@
 		<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 		<script>
-			// পেজ লোড হওয়ার সাথে সাথে ব্যালেন্স আপডেট করার ফাংশন
-			document.addEventListener("DOMContentLoaded", function() {
-			// localStorage থেকে 'userData' কি (key) টি পড়ুন
-			const storedData = localStorage.getItem('userData');
+			
+			// পেজ লোড হওয়ার সাথে সাথে চেক করবে
+			window.addEventListener('DOMContentLoaded', () => {
+			const savedBalance = localStorage.getItem('user_balance');
+			const displayElement = document.getElementById('user-points-display');
 
-			if (storedData) {
-			try {
-			// স্ট্রিং ডেটাকে JSON অবজেক্টে রূপান্তর করুন
-			const userData = JSON.parse(storedData);
-
-			// 'total_balance' ভ্যালুটি সংগ্রহ করুন
-			const balance = userData.total_balance;
-
-			// HTML এলিমেন্টে ব্যালেন্সটি সেট করুন
-			const balanceDisplay = document.getElementById("user-points-display");
-
-			if (balanceDisplay) {
-			// এখানে ব্যালেন্সের সাথে 'PTS' লেখাটি বজায় রাখার জন্য এভাবে লিখুন
-			balanceDisplay.innerHTML = `${balance} <span>coins</span>`;
-			}
-			} catch (e) {
-			console.error("LocalStorage ডাটা পার্স করতে সমস্যা হয়েছে:", e);
-			}
+			// যদি ডাটা থাকে তবে সেটি দেখাবে, না থাকলে 0 দেখাবে
+			if (savedBalance !== null) {
+			// শুধুমাত্র সংখ্যাটি আপডেট করতে চাইলে এভাবে করতে পারেন
+			displayElement.innerHTML = `${savedBalance} <span>coins</span>`;
 			} else {
-			console.log("userData পাওয়া যায়নি।");
+			displayElement.innerHTML = `0 <span>coins</span>`;
 			}
 			});
-
+		
 
 
 
