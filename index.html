@@ -608,6 +608,8 @@
 			document.getElementById('total-refer').innerText = data.ref;
 			document.getElementById('refer-income').innerText = data.comm;
 			document.getElementById('refer-link').value = `https://t.me/gritorax_bot/app?startapp=${userid}`;
+			// ১. ব্যালেন্স লোকাল স্টোরেজে সেভ করুন (যাতে অন্য পেজে পাওয়া যায়)
+			localStorage.setItem('user_balance', data.bal);
 
 			let percentage = (data.bal / 100000) * 100;
 			document.getElementById('progress-value').innerText = `${data.bal} / 100,000`;
@@ -618,8 +620,8 @@
 			if(tg) tg.expand();
 			}
 
-			
-		
+
+
 
 
 
