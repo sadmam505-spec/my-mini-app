@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MrBeast $100 Giveaway</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background: #000; color: #fff; text-align: center; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
+        h1 { color: #ff0000; text-transform: uppercase; font-size: 2.5rem; animation: pulse 2s infinite; }
+        .gift-img { width: 100%; border-radius: 15px; margin: 20px 0; border: 3px solid #ffcc00; }
+        .btn { display: block; background: #ffcc00; color: #000; padding: 20px; font-size: 1.5rem; font-weight: bold; text-decoration: none; border-radius: 50px; margin: 30px 0; transition: transform 0.3s; box-shadow: 0 0 20px #ffcc00; }
+        .btn:hover { transform: scale(1.05); }
+        .counter { background: #333; padding: 15px; border-radius: 10px; font-size: 1.2rem; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>MrBeast Giveaway!</h1>
+    <p>Congratulations! You have been selected to receive <b>$100</b>!</p>
+    
+    <img src="YOUR_IMAGE_LINK_HERE" class="gift-img" alt="Giveaway">
+    
+    <p>Verify your identity and withdraw your funds instantly to your preferred wallet.</p>
+
+    <a href="YOUR_LOCKER_OR_SMARTLINK_URL_HERE" class="btn">WITHDRAW $100 NOW</a>
+
+    <div class="counter">
+        Last 1 hour withdraws: <b id="count">3,482</b> people
+    </div>
+</div>
+
+<script>
+    // ডাইনামিক কাউন্টার যা ইউজারকে ক্লিক করতে উৎসাহিত করবে
+    let count = 3482;
+    setInterval(() => {
+        count += Math.floor(Math.random() * 5);
+        document.getElementById('count').innerText = count.toLocaleString();
+    }, 3000);
+</script>
+
+</body>
+</html>
